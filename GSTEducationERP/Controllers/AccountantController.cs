@@ -1505,5 +1505,12 @@ namespace GSTEducationERP.Controllers
             }
         }
         #endregion
+
+        #region
+        public void test()
+        {
+
+        }
+        #endregion
     }
 }

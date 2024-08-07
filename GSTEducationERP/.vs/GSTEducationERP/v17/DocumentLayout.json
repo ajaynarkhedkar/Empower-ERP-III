@@ -1,49 +1,49 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\",
+  "WorkspaceRootPath": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|d:\\vishal\u0027s project\\projects\\git by branch\\gsteduerp\\empower-erp-iii\\gsteducationerp\\controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|g:\\git branch\\empower-erp-iii\\gsteducationerp\\views\\accountant\\cashreceiptlistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashreceiptlistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\cashreceiptlistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashexpencelistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashexpencelistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\cashexpencelistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashrecievedviewan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashrecievedviewan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\cashrecievedviewan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashexpenseviewan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashexpenseviewan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\cashexpenseviewan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashtransactionsasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\cashtransactionsasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\cashtransactionsasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\bankaccountstatementasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\bankaccountstatementasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\bankaccountstatementasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\bankaccounttransactiondetailsasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\bankaccounttransactiondetailsasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\bankaccounttransactiondetailsasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\bankaccountlistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\accountant\\bankaccountlistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\bankaccountlistasyncan.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\placement\\listallcompanyasyncpb.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\placement\\listallcompanyasyncpb.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\placement\\listallcompanyasyncpb.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\views\\shared\\_layouterp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\views\\shared\\_layouterp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\shared\\_layouterp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
@@ -69,11 +69,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AccountantController.cs",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Controllers\\AccountantController.cs",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Controllers\\AccountantController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountantController.cs",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Controllers\\AccountantController.cs",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Controllers\\AccountantController.cs",
               "RelativeToolTip": "Controllers\\AccountantController.cs",
-              "ViewState": "AQIAAF0EAAAAAAAAAAAgwGsEAAAZAAAA",
+              "ViewState": "AQIAABEAAAAAAAAAAAAAwOcFAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-03T16:47:49.359Z",
               "IsPinned": true,
@@ -91,12 +91,16 @@
               "IsPinned": true
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "CashRecievedViewAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashRecievedViewAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashRecievedViewAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\CashRecievedViewAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashRecievedViewAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashRecievedViewAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\CashRecievedViewAN.cshtml",
               "ViewState": "AQIAAMUAAACAmZmZmZkVwM0AAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -106,9 +110,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "CashExpenseViewAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenseViewAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenseViewAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\CashExpenseViewAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenseViewAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenseViewAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\CashExpenseViewAN.cshtml",
               "ViewState": "AQIAACgAAAAAAAAAAAAAwDoAAABCAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -128,9 +132,9 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "CashExpenceListAsyncAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenceListAsyncAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenceListAsyncAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\CashExpenceListAsyncAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenceListAsyncAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashExpenceListAsyncAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\CashExpenceListAsyncAN.cshtml",
               "ViewState": "AQIAAIYAAACAZmZmZmYswI8AAABLAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -140,22 +144,21 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "CashReceiptListAsyncAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashReceiptListAsyncAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashReceiptListAsyncAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\CashReceiptListAsyncAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashReceiptListAsyncAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashReceiptListAsyncAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\CashReceiptListAsyncAN.cshtml",
               "ViewState": "AQIAACsAAADAMzMzMzMrwGcAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-08-06T10:17:31.857Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-08-06T10:17:31.857Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "CashTransactionsAsyncAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashTransactionsAsyncAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashTransactionsAsyncAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\CashTransactionsAsyncAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashTransactionsAsyncAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\CashTransactionsAsyncAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\CashTransactionsAsyncAN.cshtml",
               "ViewState": "AQIAAJ8AAAAAAAAAAACEvbYBAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -165,9 +168,9 @@
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "_LayoutERP.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Shared\\_LayoutERP.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Shared\\_LayoutERP.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_LayoutERP.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Shared\\_LayoutERP.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Shared\\_LayoutERP.cshtml",
               "RelativeToolTip": "Views\\Shared\\_LayoutERP.cshtml",
               "ViewState": "AQIAAKoAAAAAAAAAAAAgwLMAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -177,9 +180,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "BankAccountStatementAsyncAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountStatementAsyncAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountStatementAsyncAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\BankAccountStatementAsyncAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountStatementAsyncAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountStatementAsyncAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\BankAccountStatementAsyncAN.cshtml",
               "ViewState": "AQIAAHAAAAAAOjMzMzMLwH8AAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -189,9 +192,9 @@
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "ListAllCompanyAsyncPB.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Placement\\ListAllCompanyAsyncPB.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Placement\\ListAllCompanyAsyncPB.cshtml",
               "RelativeDocumentMoniker": "Views\\Placement\\ListAllCompanyAsyncPB.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Placement\\ListAllCompanyAsyncPB.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Placement\\ListAllCompanyAsyncPB.cshtml",
               "RelativeToolTip": "Views\\Placement\\ListAllCompanyAsyncPB.cshtml",
               "ViewState": "AQIAAIkAAAAANDMzMzMbwJIAAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -211,9 +214,9 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "BankAccountListAsyncAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountListAsyncAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountListAsyncAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\BankAccountListAsyncAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountListAsyncAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountListAsyncAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\BankAccountListAsyncAN.cshtml",
               "ViewState": "AQIAALIAAACAZmZmZmYkwLIAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -223,9 +226,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "BankAccountTransactionDetailsAsyncAN.cshtml",
-              "DocumentMoniker": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountTransactionDetailsAsyncAN.cshtml",
+              "DocumentMoniker": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountTransactionDetailsAsyncAN.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\BankAccountTransactionDetailsAsyncAN.cshtml",
-              "ToolTip": "G:\\Git Branch\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountTransactionDetailsAsyncAN.cshtml",
+              "ToolTip": "D:\\Vishal\u0027s Project\\projects\\Git by branch\\GSTEduERP\\Empower-ERP-III\\GSTEducationERP\\Views\\Accountant\\BankAccountTransactionDetailsAsyncAN.cshtml",
               "RelativeToolTip": "Views\\Accountant\\BankAccountTransactionDetailsAsyncAN.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
