@@ -1,0 +1,177 @@
+﻿
+@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    var currency = Html.Raw(ViewBag.Currency);
+    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Management</title>
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.TransactionCode)</th>
+                        <th>Expense Type</th>
+                        @if (Model.ExpID == "3")
+                        {
+                            <th>Reference By Name</th>
+                            <th>Reference To Name</th>
+                        }
+                        @if (Model.ExpID == "2")
+                        {
+                            <th>Full Name</th>
+                        }
+                        @if (Model.ExpID == "1")
+                        {
+                            <th>Vendor Name</th>
+                        }
+                    <th>Transaction Date</th>
+                        
+                        <th>Amount(@currency)</th>
+                        <th>Balance Amount(@currency)</th>
+                        <th>Total Amount(@currency) </th>
+                        <th>Description </th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstRegularExpense)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ExpenseType)</td>
+                            @if (Model.ExpID == "3")
+                            {
+                                <td>@Html.DisplayFor(modelItem => item.ReferenceByName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ReferenceToName)</td>
+                            }
+                            @if (Model.ExpID == "2")
+                            {
+                                <td>@Html.DisplayFor(modelItem => item.VendorName)</td>
+                            }
+                            @if (Model.ExpID == "1")
+                            {
+                                <td>@Html.DisplayFor(modelItem => item.VendorName)</td>
+                            }
+
+
+                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                           
+                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                            <td>
+                                @if (item.Status == "Pending")
+                                {
+                                    <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                }
+                                else
+                                {
+
+                                    <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Status == "Completed")
+                                {
+                                    <!-- Icon for viewing performance -->
+                                    <a href="#" id="Viewicon" class="Viewicon" data-id="@item.TransactionCode "  data-expid="@Model.ExpID" data-action="@Url.Action("ViewTransactionAsyncMB", "Accountant", new { TCode = item.TransactionCode ,ExpId=item.ExpID})">
+                                      
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <!-- Icon for Match Vouchers -->
+                                    <a href="#" class="Matchicon" data-id="@item.TransactionCode" data-action="@Url.Action("ExpenseMatchVoucherAsyncVM", "Accountant", new { TCode = item.TransactionCode ,Amount = item.Balance })"
+                                       data-toggle="modal" data-target="#MatchVoucherModal" title="View performance">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Edit.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+
+                                    <!-- Icon for viewing performance -->
+                                    <a href="#" id="Viewicon" class="Viewicon" data-id="@item.TransactionCode"  data-expid="@Model.ExpID" data-action="@Url.Action("ViewTransactionAsyncMB", "Accountant", new { TCode = item.TransactionCode ,ExpId=item.ExpID })"
+                                       >
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                }
+
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade custom-modal-width" id="MatchVoucherModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:30vw;">
+                <div class="modal-body">
+                    <!-- Content for Schedule Modal -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+
+            $('#example1').on('click', '.Matchicon', function () {
+                var ExpCode = $(this).data('id');
+                var url = $(this).data('action');
+                jQuery.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+
+                        jQuery('#MatchVoucherModal .modal-content').html(data);
+                        jQuery('#MatchVoucherModal').modal('show');
+                    }
+                });
+            });
+
+
+            $('#example1').on('click', '.Viewicon', function () {
+                debugger;
+                var tCode = this.getAttribute('data-id');
+                var expId = this.getAttribute('data-expid');
+
+                var url = '@Url.Action("ViewTransactionAsyncMB", "Accountant")';
+                window.location.href = url + '?TCode=' + encodeURIComponent(tCode) + '&ExpId=' + encodeURIComponent(expId);
+            });
+
+
+        });
+    </script>
+
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,474 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    ViewBag.Title = "ExpenseDashboardAsyncMB";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<h2>ExpenseDashboard</h2>
+
+<html lang="en" style="height: auto;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap and other styles/scripts -->
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!-- Include jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 8px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            /*margin-top: -40px !important;*/
+        }
+
+        div.dt-buttons {
+            /*margin-top: -20px !important;*/
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+            /*margin-top: -20px !important;*/
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: #64bbc9;
+            border-color: #007bff;
+        }
+
+      
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    @using (Html.BeginForm("UpdateTheVoucherAmountAsyncMB", "Accountant"))
+    {
+        <br />
+        <div class="card" style="padding-top:0px;">
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="RegularExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Regular Expense</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="ReferenceExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Reference Expense</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="RefundExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Refund Expense</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="OtherExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Other Expense</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-11">
+
+                </div>
+                <div class="col-md-1">
+                    <div class="justify-content-center" style="padding-right:10px;">
+                        <a id="AddExpenseLink" title="Add New Expense">
+                            <img src="~/Content/Admin/icon/Add.jpeg" style="height:30px; width:30px;" />
+                        </a>
+                    </div>
+                    <!-- Align items to the right -->
+
+
+                </div>
+            </div>
+
+
+
+            <div class="row">
+
+                <div class="col-md-2 form-group" style="width:fit-content;display:flex">
+                    <label style="padding-right: 10px; padding-left: 10px ">Status</label>
+                    <select id="statusFilter" class="form-control">
+                        <option value="SelectAll">SelectAll</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <div class="input-group">
+                        <label for="startDate" class="label-control">Start Date</label>
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" class="form-control col-md-6" id="startDateFilter" name="startDate">
+                    </div>
+                </div>
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <div class="input-group">
+                        <label for="endDate">End Date   </label>
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" class="form-control col-md-6" id="endDateFilter" name="endDate">
+                    </div>
+                </div>
+              
+            </div>
+            <br />
+
+
+            <div id="ExpenseList"></div>
+
+        </div>
+
+
+    }
+
+
+
+
+    <!-- Other necessary scripts -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/moment/moment.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
+
+
+
+    <script type="text/javascript">
+
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+
+            loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 1);
+
+            function filterPurchases(status, startDate, endDate) {
+                var url = '@Url.Action("Filterforlist", "Accountant")' +
+                    '?status=' + encodeURIComponent(status) +
+                    '&startDate=' + encodeURIComponent(startDate) +
+                    '&endDate=' + encodeURIComponent(endDate);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#ExpenseList').html(data);
+                        initializeDataTable();
+                    },
+                    error: function () {
+                        alert('Error loading filtered content.');
+                    }
+                });
+            }
+
+            function loadTabContent(tabContentUrl, statusId) {
+
+                $.ajax({
+                    url: tabContentUrl,
+                    data: { id: statusId },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#ExpenseList').html(data);
+                        initializeDataTable();
+                    },
+                    error: function () {
+                        alert('Error loading content.');
+                    }
+                });
+            }
+
+            function initializeDataTable() {
+
+                var table = $('#ExpenseList table').DataTable({
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "stateSave": true,
+                    "dom": 'Bfrtip',
+                    "buttons": [
+                        {
+                            extend: 'copy',
+                            text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend: 'csv',
+                            text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="20" width="20" />',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend: 'pdf',
+                            text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                            titleAttr: 'PDF'
+                        },
+                        {
+                            extend: 'print',
+                            text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                            titleAttr: 'Print'
+                        },
+                        {
+                            extend: 'colvis',
+                            text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                            titleAttr: 'Columns'
+                        }
+                    ]
+                });
+                table.buttons().container().appendTo('#ExpenseList .col-md-6:eq(0)');
+            }
+
+            function initializeFilterEventHandlers() {
+
+                var status = $('#statusFilter').val();
+                var startDate = $('#startDateFilter').val();
+                var endDate = $('#endDateFilter').val();
+
+                $('#statusFilter').off('change').on('change', function () {
+                    status = $(this).val();
+                    filterPurchases(status, startDate, endDate);
+                });
+
+                $('#startDateFilter').off('change').on('change', function () {
+                    startDate = $(this).val();
+                    filterPurchases(status, startDate, endDate);
+                });
+
+                $('#endDateFilter').off('change').on('change', function () {
+                    endDate = $(this).val();
+                    filterPurchases(status, startDate, endDate);
+                });
+            }
+
+
+            // Initialize filter event handlers
+            initializeFilterEventHandlers();
+
+            function refreshFilter() {
+                
+                $('#statusFilter').val("SelectAll");
+                $('#startDateFilter').val(null);
+                $('#endDateFilter').val(null);
+                
+            }
+
+
+             /// Here when we click on RegularExpenseTab then we have open the Regular view ////
+
+            $("#RegularExpenseTab").click(function () {
+                refreshFilter();
+                loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")',1);
+               
+            });
+
+
+            /// Here when we click on ReferenceExpenseTab then we have open the reference view open////
+
+            $("#ReferenceExpenseTab").click(function () {
+                refreshFilter();
+                loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 3);
+               
+            });
+
+            /// Here when we click on RefundExpenseTab then we have open the Refund view  open////
+
+            $("#RefundExpenseTab").click(function () {
+                refreshFilter();
+                loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 2);
+                
+            });
+
+            $("#OtherExpenseTab").click(function () {
+                refreshFilter();
+                loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 5);
+               
+
+             });
+
+
+
+            /// Here when we click on AddExpenseLink then we have open the Add Espense view open ////
+            $("#AddExpenseLink").click(function () {
+
+                redirectToAddExpence();
+            });
+            function redirectToAddExpence() {
+                // Define the base URL of Controller
+                var baseUrl = '/Accountant/';
+
+                // Define the action names for AddExpence view
+                var internalAction = 'AddExpensesAsyncMB';
+
+                // Construct the URL based on the condition
+                var url = baseUrl + internalAction;
+
+                // Set the modal body content based on the URL
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#NewExpenseModal .modal-body').html(data);
+                        // Show the modal
+                        $('#NewExpenseModal').modal('show');
+                    },
+                    error: function () {
+                        alert('Error loading content.');
+                    }
+                });
+            }
+
+
+            $('#AddPaymentDetails').click(function (event) {
+                debugger;
+                // Prevent the default form submission
+                event.preventDefault();
+                var voucherCode = $("#VoucherCode").val();
+                var amount = parseFloat($("#MatchAmount").val()); // Ensure amount is a float
+
+                $.ajax({
+                    url: '@Url.Action("UpdateTheVoucherAmountAsyncMB", "Accountant")',
+                    type: 'POST',
+                    data: { VoucherCode: voucherCode, Amount: amount },
+                    success: function (response) {
+                        if (response.success) {
+                            console.log("Voucher updated successfully.");
+                        } else {
+                            console.error("Error: Unable to update voucher amount.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed: ", status, error);
+                    }
+                });
+            });
+
+        });
+
+    </script>
+   
+    <div class="modal fade" id="NewExpenseModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="background-color: white; width: 40vw;">
+
+                <div class="modal-body">
+                    <!-- Content for Schedule Modal -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
