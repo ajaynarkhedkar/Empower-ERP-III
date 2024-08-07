@@ -3,6 +3,7 @@
     ViewBag.Title = "View purchase invoice";
     var currency = Html.Raw(ViewBag.Currency);
     var mode = ViewBag.Mode;
+    var lsttransaction = ViewBag.transactionList;
 }
 
 <!DOCTYPE html>
@@ -11,16 +12,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Purchase | Invoice</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
+    <!-- Font Awesome-->
     <link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     @*<link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css">*@
     <style>
         a {
             color: #33CCCC;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+            align-content:center;
+            text-align:center;
         }
     </style>
 </head>
@@ -31,7 +40,7 @@
             <div class="row">
                 <div class="col-12">
                     <h4>
-                        <img src="~/Content/Admin/img/GyaSoftLogo.png" height="35" /> GyaSoft, Limited.
+                        <img src="~/Content/Admin/img/GyaSoftLogo.png" height="35" /> GayaSoft, Limited.
                         <small class="float-right">Date: @ViewBag.TransactionDate</small>
                     </h4>
                 </div>
@@ -81,8 +90,8 @@
                                 <th>Quantity (units)</th>
                                 <th>Unit Price (@currency)</th>
                                 <th>Discount(%)</th>
-                                <th>Tax(%)</th>
                                 <th>Discount Amount (@currency)</th>
+                                <th>Tax(%)</th>
                                 <th>Tax Amount (@currency)</th>
                                 <th>Total Price (@currency)</th>
                             </tr>
@@ -108,10 +117,10 @@
                                             @Html.DisplayFor(modelItem => item.Discount)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Tax)
+                                            @Html.DisplayFor(modelItem => item.Balance)<!--this is discounted price-->
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Balance)<!--this is discounted price-->
+                                            @Html.DisplayFor(modelItem => item.Tax)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.AppliedTax)<!--this is applied tax amount calculation -->
@@ -120,6 +129,7 @@
                                             @Html.DisplayFor(modelItem => item.TransactionAmount)<!--this is total amount for the total item price-->
                                         </td>
                                     </tr>
+
                                 }
                             }
                         </tbody>
@@ -132,8 +142,7 @@
             <div class="row">
                 <!-- accepted payments column -->
                 <div class="col-6">
-                    <p class="lead">Payment Methods:</p>
-                    <p>@ViewBag.PaymentMode</p>
+
                     @*<img src="../../dist/img/credit/visa.png" alt="Visa">
                         <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
                         <img src="../../dist/img/credit/american-express.png" alt="American Express">
@@ -145,7 +154,6 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-6">
-                    <p class="lead">Amount Due @ViewBag.TransactionDate</p>
 
                     <div class="table-responsive">
                         <table class="table">
@@ -171,96 +179,43 @@
                 </div>
                 <!-- /.col -->
             </div>
-            <!--div for transactions here -->
-            <div class="card" id="divtransaction">
-                <!--show the transactions in table -->
-                <div class="card-title">
-                    <p>Transactions </p>
-                </div>
-                <div class="card-body">
-                    <table class="table" id="tbltransactions">
-                        <thead>
-                            <tr>
-                                <th>Date </th>
-                                <th>Voucher Code</th>
-                                <th>Payment Mode</th>
-                                @if (mode == "BANK")
-                                {
-                                    <th>TransactionId/Cheque No.</th>
 
-                                }
-                                else if (mode == "CHEQUE")
-                                {
-                                    <th>TransactionId/Cheque No.</th>
-                                    <th>Cheque Date</th>
-                                    <th>Cheque Clearence Date</th>
-                                }
-
-                                <th>Amount Paid (@currency)</th>
-                                <th>Balance Amount (@currency)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null && Model.lstTransactionVP != null)
-                            {
-                                for (int i = 0; i < Model.lstTransactionVP.Count; i++)
-                                {
-                                    var item = Model.lstTransactionVP[i];
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TransactionDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.VoucherCode)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.PaymentMode)
-                                        </td>
-                                        @if (mode == "BANK")
-                                        {
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.TranId_CheqNo)
-                                            </td>
-                                        }
-                                        else if (mode == "CHEQUE")
-                                        {
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.TranId_CheqNo)
-                                            </td>
-
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ChequeDate)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ChequeClearenceDate)
-                                            </td>
-                                        }
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TransactionAmount)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.BalanceAmount)
-                                        </td>
-                                    </tr>
-                                }
-                             }
-                             else
-                             {
-                                <tr>
-                                    No data found...
-                                </tr>
-                             }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
             <!-- this row will not appear when printing -->
             <div class="row no-print">
                 <div class="col-12">
                     <input type="button" href="ViewPurchaseFormAsyncVP.cshtml" value="Print this page" onClick="printForm('ViewPurchaseFormAsyncVP')">
 
-                    
+
                 </div>
+            </div>
+        </div>
+        <!--div for transactions here -->
+        <div class="card" id="divtransaction">
+            <!--show the transactions in table -->
+            <div class="card-title">
+                <h2>
+                    Transactions
+                </h2>
+            </div>
+            <hr />
+            <div class="card-body">
+                <table class="table" id="tbltransactions">
+                    <thead>
+                        <tr>
+                            <th>Date </th>
+                            <th>Voucher Code</th>
+                            <th>Payment Mode</th>
+                            <th>TransactionId/Cheque No.</th>
+                            <th hidden>Cheque Date</th>
+                            <th hidden>Cheque Clearence Date</th>
+                            <th>Paid (@currency)</th>
+                            <th>Remaning(@currency)</th>
+                            <th>Total Amount (@currency)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </form>
@@ -269,7 +224,7 @@
     <!--scripts for pdf-->
     <script src="~/Content/plugins/pdfmake/pdfmake.js"></script>
     <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -294,6 +249,7 @@
                 $('.lbldiscountedAmount').text(discountTotal.toFixed(2));
                 $('.lbltaxAmount').text(taxTotal.toFixed(2));
                 $('.lblsubtotalAmount').text((transactionTotal - discountTotal - taxTotal).toFixed(2));
+                totalamt = transactionTotal.toFixed(2);
                 $('.lbltotalAmount').text(transactionTotal.toFixed(2));
             }
 
@@ -303,16 +259,15 @@
     </script>
     <!--script for the print button-->
     <script>
-        window.onload = function () {
-            // Print button
-            document.getElementById('printButton').addEventListener('click', function (event) {
+        $(document).ready(function () {
+            $('#printButton').on('click', function (event) {
                 event.preventDefault();
                 var printWindow = window.open(window.location.href, '_blank', 'noopener,noreferrer');
                 printWindow.addEventListener('load', function () {
                     printWindow.print();
                 });
             });
-        };
+        });
         function printForm(divName) {
             debugger;
             var printContents = document.getElementById(divName).innerHTML;
@@ -322,6 +277,53 @@
             w.close();
         }
     </script>
-  
+    <!--script for table of transaction-->
+    <script>
+        $(document).ready(function () {
+            // Replace 'transactionList' with the actual data from ViewBag.transactionList
+            var transactionList = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.transactionList));
+            var currency = "@currency";
+
+            function formatDate(dateString) {
+                var date = new Date(dateString);
+                var day = ("0" + date.getDate()).slice(-2);
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                var year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
+
+            function addTransactionRows(transactionList) {
+                var tbody = $('#tbltransactions tbody');
+                tbody.empty(); // Clear existing rows
+
+                var totalAmount = parseFloat($('.lbltotalAmount').text()) || 0;
+                var remainingAmount = totalAmount;
+
+                if (transactionList && transactionList.length > 0) {
+                    transactionList.forEach(function (item) {
+                        remainingAmount -= item.TransactionAmount;
+                        var row = '<tr>' +
+                            '<td>' + formatDate(item.TransactionDate) + '</td>' +
+                            '<td>' + item.VoucherCode + '</td>' +
+                            '<td>' + item.PaymentMode + '</td>' +
+                            '<td>' + (item.TranId_CheqNo || '') + '</td>' +
+                            '<td hidden>' + (item.ChequeDate ? formatDate(item.ChequeDate) : '') + '</td>' +
+                            '<td hidden>' + (item.ChequeClearenceDate ? formatDate(item.ChequeClearenceDate) : '') + '</td>' +
+                            '<td>' + item.TransactionAmount.toFixed(2) + '</td>' +
+                            '<td>' + remainingAmount.toFixed(2) + '</td>' +
+                            '<td>' + totalAmount.toFixed(2) + '</td>' +
+                            '</tr>';
+
+                        tbody.append(row);
+                    });
+                } else {
+                    tbody.append('<tr><td colspan="9">No data found...</td></tr>');
+                }
+            }
+
+            // Call the function to add rows on page load
+            addTransactionRows(transactionList);
+        });
+    </script>
 </body>
 </html>
