@@ -1,0 +1,117 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+<div id="accordion">
+    <div class="card card-primary">
+        <div class="card-header" style="background-color:#33cccc;">
+            <h4 class="card-title w-100">
+                <a class="d-block w-100" data-toggle="collapse" href="#collapseOne">
+                    Personal Details
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="collapse show" data-parent="#accordion">
+            <div class="card-body">
+                <div style="display: flex;">
+                    <div style="width: 53%;">
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125); "><b>Staff Name: </b><span style="color: #33CCCC;"> @Model.StaffName </span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Staff Position: </b><span style="color: #33CCCC;"> @Model.StaffPosition</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Joining Date: </b><span style="color: #33CCCC;"> @Model.JoiningDate</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Course Name: </b><span style="color: #33CCCC;"> @Model.CourseName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>DOB: </b><span style="color: #33CCCC;"> @Model.DOB</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Phone Number: </b><span style="color: #33CCCC;"> @Model.PhoneNo</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Email: </b><span style="color: #33CCCC;"> @Model.EMail</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Current Address: </b><span style="color: #33CCCC;"> @Model.CurrentAddress, @Model.currentCity, @Model.CurrentPinCode</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Permanent Address: </b><span style="color: #33CCCC;"> @Model.PermanentAddress, @Model.PermanentCity, @Model.PermanentPinCode</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Marital Status: </b><span style="color: #33CCCC;"> @Model.MaritalStatus</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Nationality: </b><span style="color: #33CCCC;"> @Model.Nationality</span></p>
+                    </div>
+                    <div style="width: 47%;">
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Blood Group: </b><span style="color: #33CCCC;"> @Model.BloodGroup</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Gender: </b><span style="color: #33CCCC;"> @Model.Gender</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Aadhar Card No: </b><span style="color: #33CCCC;"> @Model.AadharCardNo</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Pan Card No: </b><span style="color: #33CCCC;"> @Model.PanCardNo</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Emergency Contact Name: </b><span style="color: #33CCCC;"> @Model.EmergencyContactName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Emergency Contact No: </b><span style="color: #33CCCC;"> @Model.EmergencyContactNo</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Emergency Contact Address: </b><span style="color: #33CCCC;"> @Model.EmergencyContactAddress</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Father's Name: </b><span style="color: #33CCCC;"> @Model.FatherName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Father's Contact No: </b><span style="color: #33CCCC;"> @Model.FatherContactNo</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Mother's Name: </b><span style="color: #33CCCC;"> @Model.MotherName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Mother's Contact No: </b><span style="color: #33CCCC;"> @Model.MotherContactNo</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-danger">
+        <div class="card-header" style="background-color:#33cccc;">
+            <h4 class="card-title w-100">
+                <a class="d-block w-100" data-toggle="collapse" href="#collapseTwo">
+                    Qualification Details & Experience Details
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                <div style="display:flex;">
+                    <div style="width:53%;">
+                        @*<h2>Qualification Details</h2>
+                        <br>*@
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>SSC Year: </b><span style="color: #33CCCC;"> @Model.SSCYear</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>HSC Year: </b><span style="color: #33CCCC;"> @Model.HSCYear</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Diploma Year: </b><span style="color: #33CCCC;"> @Model.DiplomaYear</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Graduation Name: </b><span style="color: #33CCCC;"> @Model.GraduationName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Graduation Year: </b><span style="color: #33CCCC;"> @Model.GraduationYear</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Post Graduation Name: </b><span style="color: #33CCCC;"> @Model.PostGraduationName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Post Graduation Year: </b><span style="color: #33CCCC;"> @Model.PostGraduationYear</span></p>
+                    </div>
+                    <div style="width:47%;">
+                        @*<h2>Experience Details</h2>
+                        <br>*@
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Industry Name: </b><span style="color: #33CCCC;"> @Model.IndustryName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Designation Name: </b><span style="color: #33CCCC;"> @Model.DesignationName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Department Name: </b><span style="color: #33CCCC;"> @Model.DepartmentName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>CTC: </b><span style="color: #33CCCC;"> @Model.CTC</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Experience: </b><span style="color: #33CCCC;"> @Model.Experience</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Total Experience Of Designation: </b><span style="color: #33CCCC;"> @Model.TotalExperienceOfDesignation</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Job Type: </b><span style="color: #33CCCC;"> @Model.JobType</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Company Name: </b><span style="color: #33CCCC;"> @Model.CompanyName</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-success">
+        <div class="card-header" style="background-color:#33cccc;">
+            <h4 class="card-title w-100">
+                <a class="d-block w-100" data-toggle="collapse" href="#collapseThree">
+                    Bank Details & Login Details
+                </a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="collapse" data-parent="#accordion">
+            <div class="card-body">
+                <div style="display:flex;">
+                    <div style="width:53%;">
+                        @*<h2>Bank Details</h2>
+                        <br>*@
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Bank Name: </b><span style="color: #33CCCC;"> @Model.BankName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Account Holder Name: </b><span style="color: #33CCCC;"> @Model.AccountHolderName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Account Number: </b><span style="color: #33CCCC;"> @Model.AccountNumber</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Bank Branch Name: </b><span style="color: #33CCCC;"> @Model.BankBranchName</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>IFSC Code: </b><span style="color: #33CCCC;"> @Model.IFSCCode</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>MICR Code: </b><span style="color: #33CCCC;"> @Model.MICRCode</span></p>
+
+                    </div>
+                    <div style="width: 47%;">
+                        @*<h2>Login Details</h2>
+                        <br>*@
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Official Email ID: </b><span style="color: #33CCCC;"> @Model.OfficialEmailId</span></p>
+                        <p style="border-bottom: 1px solid rgba(0,0,0,.125);"><b>Password: </b><span style="color: #33CCCC;"> @Model.Password</span></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        

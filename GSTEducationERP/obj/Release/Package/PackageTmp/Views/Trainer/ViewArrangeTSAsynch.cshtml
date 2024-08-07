@@ -1,0 +1,66 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@*@{
+        ViewBag.Title = "ViewPendingTSAsynch";
+        Layout = "~/Views/Shared/_LayoutTrainer.cshtml";
+    }*@
+
+<h2> Pending Test Details</h2>
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt align="center">
+            <label class="control-label">Course Name:</label>
+           
+        </dt>
+
+        <dd align="center">
+            @Html.DisplayFor(model => model.CourseName)
+        </dd>
+
+
+        <dt align="center">
+            Test Name
+           
+        </dt>
+
+        <dd align="center">
+            @Html.DisplayFor(model => model.TestName)
+        </dd>
+        <dt align="center">
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+
+        <dd align="center">
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+        <dt align="center">
+            Test Date
+           
+        </dt>
+
+        <dd align="center">
+            @Html.DisplayFor(model => model.TestTime)
+        </dd>
+        <dt align="center">
+            Test Time
+          
+        </dt>
+
+        <dd align="center">
+            @Html.DisplayFor(model => model.TestDate)
+        </dd>
+
+        <dt align="center">
+            Total Marks
+           
+        </dt>
+
+        <dd align="center">
+            @Html.DisplayFor(model => model.TotalMarks)
+        </dd>
+
+</div>
+

@@ -1,0 +1,269 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<style>
+    h2 {
+        color: #64bbc9;
+        font-weight: bold;
+        font-size: 30px;
+        margin-left: 17px;
+        margin-bottom: -10px;
+        font-family: sans-serif;
+    }
+
+    a {
+        color: #01a6a6;
+    }
+
+    img {
+        color: #64bbc9;
+        font-weight: bold;
+        font-size: 30px;
+        margin-left: 17px;
+        margin-bottom: -10px;
+        font-family: sans-serif;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="card " style="padding: 15px; margin-right: -330px; margin-left: -180px; margin-top: 15px; width: 700px">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SelectBatch, "Select Batch")
+                        @Html.DropDownListFor(model => model.SelectBatch, new SelectList(ViewBag.Batch, "Value", "Text"), "--- Select ---", new { @class = "form-control form-select", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.SelectBatch, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SelectNoOfStudent, "Select Batch NoOfStudent")
+                        @Html.EditorFor(model => model.SelectNoOfStudent, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.SelectNoOfStudent, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AddBatch, "Add Batch")
+                        <select id="AddBatch" name="AddBatch" class="form-control"></select>
+                        @Html.ValidationMessageFor(model => model.AddBatch, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label> Added Batch Student </label>
+                        @Html.EditorFor(model => model.AddNoOfStudent, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.AddNoOfStudent, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LabCapacity, "Lab Capacity")
+                        @Html.EditorFor(model => model.LabCapacity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.LabCapacity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12 text-center">
+                    <input type="submit" style="margin-top: 50px;" value="Save" class="btn btn-success btn-sm" id="MargeBatchSave" />
+                    <input type="button" style="margin-top: 50px;" value="Cancel" id="cancelButton" class="btn btn-danger btn-sm" onclick="showCancelConfirmation()" />
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; margin-block-start: 0px;" onclick="location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")'">
+                    <video width="35" height="35" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                    </video>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+}
+<script>
+    function showCancelConfirmation() {
+        // Using SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            //text: 'You will not be able to undo this action!',
+            icon: 'warning',
+            //showCancelButton: true,
+            confirmButtonColor: '#d33',
+            //cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Add any form cancellation logic here if needed
+
+                // Redirect to the specified URL
+                window.location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")';
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#SelectBatch").change(function () {
+            var batchcode = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "/Bind/ValidationStudCountLabCapacityAsyncST",
+                data: { batchcode: batchcode },
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    document.getElementById('SelectNoOfStudent').value = data.NoOfStudent;
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#AddBatch").change(function () {
+            var batchcode = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "/Bind/ValidationStudCountLabCapacityAsyncST",
+                data: { batchcode: batchcode },
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    document.getElementById('LabCapacity').value = data.LabCapacity;
+                    document.getElementById('AddNoOfStudent').value = data.NoOfStudent;
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+<script>
+        $(document).ready(function () {
+            $('#MargeBatchSave').click(function (e) {
+                e.preventDefault();
+                // Validate Batch and Course Name
+                var SelectBatch = $('#SelectBatch').val();
+                var AddBatch = $('#LabCapacity').val();
+
+                if (!SelectBatch || !AddBatch) {
+                    Swal.fire({
+                        title: 'Validation Error',
+                        text: 'Please select both Batches .',
+                        icon: 'error'
+                    });
+                    return false;
+                }
+                // Serialize form data
+                var formData = $('form').serialize();
+                var SelectNoOfStudent = $('#SelectNoOfStudent').val();
+                var AddNoOfStudent =$('#AddNoOfStudent').val();
+                var Count = parseInt(SelectNoOfStudent) + parseInt(AddNoOfStudent);
+                var LabCapacity = parseInt($('#LabCapacity').val());
+
+                if (Count > LabCapacity) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'You can not merge batch because Lab Capacity not match to student count.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("MergeBatchToBatchStudentAsyncST")',
+                        data: formData,
+                        success: function (result) {
+                            if (result.success) {
+                                // Show success SweetAlert
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: result.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(function () {
+                                    // Redirect or perform any other action after success
+                                    window.location.href = '@Url.Action("ListAllBatchAsyncST")';
+                                });
+                            } else {
+                                // Show error SweetAlert
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: result.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        },
+                        error: function () {
+                            // Show error SweetAlert for unexpected errors
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An unexpected error occurred',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                }
+            });
+            function showErrorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+                });
+            }
+        });
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#SelectBatch").change(function () {
+            var id = $(this).val();
+            $("#AddBatch").empty();
+            $.post("/Bind/ValidationBatchAsyncST", { SelectBatchCode: id }, function (data) {
+                var v = "<option>-----Select Batch-------</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#AddBatch").html(v);
+            });
+        });
+    });
+</script>
+
+
+

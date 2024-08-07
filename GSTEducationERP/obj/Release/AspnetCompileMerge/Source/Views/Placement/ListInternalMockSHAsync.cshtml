@@ -1,0 +1,173 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/Admin/js/Icon.js"></script>
+
+
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function ($) {
+        $('#ListStudent').on('click', '.icon, .icon1, .icon2', function () {
+            var MockId = $(this).data('id');
+            var url = $(this).data('action');
+            jQuery.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    jQuery('#PerformanceModal .modal-content').html(data);
+                    jQuery('#PerformanceModal').modal('show');
+                }
+            });
+        });
+    });
+</script>
+
+<div class="card">
+    <div class="card-body">
+        <table id="ListStudent" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.MockId)
+                    </th>
+                    <th>
+                        Course Name
+                    </th>
+                    <th>
+                        Batch Name
+                    </th>
+                    <th>
+                        Mock Name
+                    </th>
+                    <th>
+                        Lab Name
+                    </th>
+                    <th>
+                        Mock Date
+                    </th>
+                    <th>
+                        Mock Time
+                    </th>
+                    <th>
+                        interviewer Name
+                    </th>
+                    <th hidden>
+                    </th>
+                    <th hidden>
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.lstInternalMock)
+                {
+                    <tr>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.MockId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CourseName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BatchName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MockName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LabName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InterviewrName)
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.StatusId)
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td style="text-align: center;">
+                            @if (item.StatusId == 35 || item.StatusId == 6)
+                            {
+
+                                <a href="#" class="icon2" data-id="@item.MockId" data-action="@Url.Action("UpdateIntMockSHAsync", "Placement", new { MockId = item.MockId })"
+                                   data-toggle="modal" data-target="#PerformanceModal" title="Edit">
+                                    <video width="20" height="20" playsinline loop>
+                                        <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+                                    </video>
+                                </a>
+                            }
+                            @if (item.StatusId == 13)
+                            {
+                                if (item.Status == "View")
+                                {
+
+                                    <!-- Icon for viewing performance -->
+                                    <a href="#" class="icon" data-id="@item.MockId" data-action="@Url.Action("ViewIntMockPerformanceSHAsync", "Placement", new { MockId = item.MockId })"
+                                       data-toggle="modal" data-target="#PerformanceModal" title="View performance">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+
+                                }
+                                else if (item.Status == "Add")
+                                    {
+                                        //Second Icon
+                                        <a href="#" class="icon1" data-id="@item.MockId" data-action="@Url.Action("AddInternalMockPerformanceSHAsync", "Placement", new { MockId = item.MockId })"
+                                           data-toggle="modal" data-target="#PerformanceModal" title="Add performance">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/add-file.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+
+                                    }
+                                    else if (item.Status == "Add and View")
+                                    {
+                                        //Second Icon
+                                        <a href="#" class="icon1" data-id="@item.MockId" data-action="@Url.Action("AddInternalMockPerformanceSHAsync", "Placement", new { MockId = item.MockId })"
+                                           data-toggle="modal" data-target="#PerformanceModal" title="Add performance">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/add-file.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+
+                                        <a href="#" class="icon" data-id="@item.MockId" data-action="@Url.Action("ViewIntMockPerformanceSHAsync", "Placement", new { MockId = item.MockId })"
+                                           data-toggle="modal" data-target="#PerformanceModal" title="View performance">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+
+                                    }
+                            }
+                        </td>
+                      
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade custom-modal-width" id="PerformanceModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- Content for Schedule Modal -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

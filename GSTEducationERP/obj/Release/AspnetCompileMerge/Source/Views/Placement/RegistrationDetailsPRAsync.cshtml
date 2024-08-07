@@ -1,0 +1,793 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+@{
+    ViewBag.Title = "RegistrationDetailsPRAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- BS Stepper -->
+    <link rel="stylesheet" href="~/Content/plugins/bs-stepper/css/bs-stepper.min.css">
+    <!-- BS-Stepper -->
+    <script src="~/Content/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+    <link href="~/Content/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js" defer></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2-bootstrap4.min.css">
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/moment/moment.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <style>
+        .dropdown-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group select {
+            margin-right: 10px;
+        }
+
+        .dropdown-container {
+            width: 300px;
+            margin-bottom: 10px;
+        }
+
+            .dropdown-container label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .dropdown-container select {
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+            }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+    </style>
+
+    <style>
+
+        .stepper {
+            margin: auto;
+        }
+
+        #step1 {
+            height: 380px;
+            overflow: auto;
+        }
+
+        .step {
+            float: left;
+            width: 100%;
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+            box-sizing: border-box;
+            display: none;
+        }
+
+            .step.active {
+                display: block;
+                width: 100%;
+            }
+
+            .step h2 {
+                margin-top: 0;
+            }
+
+            .step button {
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #4CAF50;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+                .step button:hover {
+                    background-color: #45a049;
+                }
+
+                .step button:disabled {
+                    background-color: #cccccc;
+                    cursor: not-allowed;
+                }
+
+        th, td {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <div class="card" style=" padding-left:10px">
+        <h2>Registration </h2>
+        <hr />
+        <div class="card-body">
+            <div class="row justify-content-center ">
+                <div class="dropdown-container col-md-4 mb-4">
+                    <label for="CourseName" class="control-label">COURSE NAME: </label>
+                    <div class="col-md-10" style="width:100px;">
+                        @Html.DropDownList("Course", (IEnumerable<SelectListItem>)ViewBag.CourseList, "Select Course", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="dropdown-container col-md-4 mb-4">
+                    <label for="BatchName" class="control-label">BATCH NAME: </label>
+                    <div class="col-md-10" style="width:100px;">
+                        <select id="batch" name="batch" class="form-control"></select>
+                        @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="dropdown-container col-md-4 mb-4">
+                    <label for="StudentName" class="control-label">STUDENT NAME: </label>
+                    <div class="col-md-10" style="width:100px;">
+                        <select id="student" name="student" class="form-control">
+                            <!-- Your options for students go here -->
+                        </select>
+                        @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="stepper">
+                <!-- Step 1 -->
+                <div class="step active" id="step1">
+                    <div id="studentDetailsContainer">
+                        <!-- This container will hold the fetched student details -->
+                    </div>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <form id="yourFormId" action="/Placement/RegistrationDetailsPRAsync" method="post" enctype="multipart/form-data">
+                <div class="step" id="step2">
+                    <div class="row">
+                        <div class="input-group col-md-6">
+                            <div class="form-group">
+                                <div>
+                                    <label for="resumeInput">Upload Resume:</label>
+                                    <input type="file" name="Resume" accept=".pdf">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group col-md-6">
+                            <label for="SkillId">Skills:</label>
+                            <div class="col-md-9">
+                                <select id="SkillId" name="SkillId1[]" multiple="multiple" class="form-control" style="width: 100%;">
+                                    @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.Skill)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(model => model.SkillId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group col-md-6">
+                            <label for="ProjectCode">Project:</label>
+                            <div class="col-md-8">
+                                <select id="ProjectCode" name="ProjectCode1[]" multiple="multiple" class="form-control" style="width: 100%;">
+                                    @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.Project)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(model => model.ProjectCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="input-group col-md-6">
+                            <label for="TechnolgyId">Technolgy:</label>
+                            <div class="col-md-8">
+                                <select id="TechnolgyId" name="TechnolgyId1[]" multiple="multiple" class="form-control" style="width:100%">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 20px; padding-top: 10px;">
+                        <div class="col-md-3" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                            <div style="margin-right: 20px; padding-left: 150px;">
+                                @Html.DisplayNameFor(model => model.Photograph)
+                                <div id="photograph" style="padding-left: 20px;">
+                                    <img id="photographImage" src="" alt="Photograph" height="100" width="100">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                            <div style="margin-right: 20px; padding-left: 150px;">
+                                @Html.DisplayNameFor(model => model.AadharCard)
+                                <div id="aadharcard" style="padding-left: 20px;">
+                                    <img id="aadharcardImage" src="" alt="Photograph" height="100" width="100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+                            <div style="margin-right: 20px; padding-left: 150px;">
+                                @Html.DisplayNameFor(model => model.PanCard)
+                                <div id="pancard" style="padding-left: 20px;">
+                                    <img id="pancardImage" src="" alt="Photograph" height="100" width="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Step 3 -->
+                <div class="step" id="step3">
+                    <h2>Add Experience</h2>
+                    <div class="card py-4 col-md-10 mx-auto">
+                        <div class="row mb-4">
+                            <div class="input-group col-md-6">
+                                @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.DropDownList("Company", (IEnumerable<SelectListItem>)ViewBag.CompanyList, "Select Company", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="input-group col-md-6">
+                                @Html.LabelFor(model => model.InduastryName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.DropDownList("Induastry", (IEnumerable<SelectListItem>)ViewBag.InduastryList, "Select Induastry", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.InduastryName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="input-group col-md-6">
+                                @Html.LabelFor(model => model.DesignationName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.DropDownList("Designation", (IEnumerable<SelectListItem>)ViewBag.DesignationList, "Select Designation", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DesignationName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="input-group col-md-6">
+                                @Html.LabelFor(model => model.CTC, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <input type="text" id="CTC" name="CTC" class="form-control">
+                                    <span class="text-danger" data-valmsg-for="CTC" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group col-md-6">
+                                @Html.LabelFor(model => model.Experience, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <input type="text" id="Experience" class="form-control">
+                                    <span class="text-danger" data-valmsg-for="Experience" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="input-group col-md-6">
+                                @Html.LabelFor(model => model.JobType, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <select id="JobType" class="form-control">
+                                        <option value="FullTime">FullTime</option>
+                                        <option value="PartTime">PartTime</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <input type="button" class="btn-primary btn-sm" value="Add" id="addexpbutton" />
+                        </div>
+                        <br />
+                        <table class="table table-bordered" id="studentTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Comapany Name</th>
+                                    <th scope="col">Industry Name</th>
+                                    <th scope="col">Designation Name</th>
+                                    <th scope="col">CTC</th>
+                                    <th scope="col">Experience</th>
+                                    <th scope="col">JobType</th>
+                                    <th scope="col" style="display:none;">CandidateCode</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- /card-body End -->
+                </div>
+            </form>
+        </div>
+        <div style="text-align: center; margin-top: 20px; padding-bottom:30px">
+            <input type="button" class="btn-secondary btn-sm" value="Previous" style="margin-right: 10px;" onclick="prevStep()" />
+            <input type="button" class="btn-secondary btn-sm" value="Next" style="margin-right: 10px;" onclick="nextStep()" />
+            <input type="button" class="btn-success btn-sm" value="Save" onclick="submitForm()" />
+        </div>
+    </div>
+</body>
+</html>
+
+@*------------------------------------------------------Script Section------------------------------------------------------------------------*@
+
+<script>
+    $(document).ready(function () {
+        $("#student").change(function () {
+            var selectedStudentId = $(this).val();
+            $.ajax({                                       // Make an AJAX request to the server to fetch student details
+                url: '/Placement/RegistrationDetailsShowPRAsync',
+                type: 'GET',
+                data: { CandidateCode: selectedStudentId },
+                success: function (data) {
+                    // Update the student details container with the fetched details
+                    $("#studentDetailsContainer").html(`
+
+                                                                                                        <table class="table">
+                                                                                                            <tbody>
+                                                                                                           <td colspan="4">
+                                                                                                 <h4>Personal Details:</h4>
+                                                                                            </td>
+                                                                                                                <tr>
+                                                                                            <th>First Name:</th>
+                                                                                            <td data-display="FirstName"></td>
+                                                                                            <th>Middle Name:</th>
+                                                                                            <td data-display="MiddleName"></td>
+</tr>
+<tr>
+                                                                                            <th>Last Name:</th>
+                                                                                            <td data-display="LastName"></td>
+                                                                                            <th>Mobile No:</th>
+                                                                                            <td data-display="MobileNo"></td>
+</tr>
+<tr>
+                                                                                            <th>Alternate Contact:</th>
+                                                                                            <td data-display="AlternateContact"></td>
+                                                                                            <th>Email ID:</th>
+                                                                                            <td data-display="EmailId"></td>
+</tr>
+<tr>
+                                                                                            <th>Gender:</th>
+                                                                                            <td data-display="Gender"></td>
+                                                                                            <th>Registration Date:</th>
+                                                                                            <td data-display="RegistrationDate"></td>
+</tr>
+<tr>
+                                                                                            <th>Father Name:</th>
+                                                                                            <td data-display="FatherName"></td>
+                                                                                            <th>Contact No:</th>
+                                                                                            <td data-display="ContactNo"></td>
+</tr>
+<tr>
+                                                                                            <th>Mother Name:</th>
+                                                                                            <td data-display="MotherName"></td>
+                                                                                            <th>Contact No:</th>
+                                                                                            <td data-display="MContactNo"></td>
+</tr>
+<tr>
+                                                                                            <th>Local Address:</th>
+                                                                                            <td data-display="LocalAddr"></td>
+                                                                                            <th>Permanent Address:</th>
+                                                                                            <td data-display="PermanantAddress"></td>
+</tr>
+<tr>
+                                                                                            <th>City:</th>
+                                                                                            <td data-display="CityName"></td>
+                                                                                            <th>Pin:</th>
+                                                                                            <td data-display="Pin"></td>
+</tr>
+<tr>
+                                                                                            <td colspan="4">
+                                                                                                <h4>Educational Details:</h4>
+                                                                                            </td>
+</tr>
+<tr>
+                                                                                            <th>SSC Year:</th>
+                                                                                            <td data-display="SSCYear"></td>
+                                                                                            <th>HSC Year:</th>
+                                                                                            <td data-display="HSCYear"></td>
+</tr>
+<tr>
+                                                                                            <th>Diploma Year:</th>
+                                                                                            <td data-display="DiplomaYear"></td>
+                                                                                            <th>Graduation Year:</th>
+                                                                                            <td data-display="GraduationYear"></td>
+</tr>
+<tr>
+                                                                                            <th>Post Graduation Year:</th>
+                                                                                            <td data-display="PostGraduationYear"></td>
+                                                                                            <th>Course Name:</th>
+                                                                                            <td data-display="CourseName"></td>
+</tr>
+
+                                                                                                            </tbody>
+                                                                                                            </table>
+                                                                                            `);
+
+                    $("#studentDetailsContainer").find("[data-display]").each(function () {
+                        var propertyName = $(this).data("display");
+                        // Check if the property is a date and format it
+                        if (propertyName.toLowerCase().includes("date")) {
+                            var dateValue = new Date(parseInt(data[propertyName].substr(6)));
+                            var formattedDate = dateValue.getFullYear() + '-' +
+                                ('0' + (dateValue.getMonth() + 1)).slice(-2) + '-' +
+                                ('0' + dateValue.getDate()).slice(-2);
+                            $(this).text(formattedDate);
+                        } else {
+                            $(this).text(data[propertyName]);
+                        }
+                    });
+                    var currentSrc = "/Content/Counseller/img/";
+                    var newSrc = currentSrc + data.Photograph;
+                    $("#photographImage").attr("src", newSrc);
+
+                    currentSrc = "/Content/Counseller/docs/";
+                    newSrc = currentSrc + data.AadharCard;
+                    $("#aadharcardImage").attr("src", newSrc);
+
+                    currentSrc = "/Content/Counseller/docs/";
+                    newSrc = currentSrc + data.PanCard;
+                    $("#pancardImage").attr("src", newSrc);
+                    console.log('Student details updated successfully.');
+                },
+                error: function () {
+                    console.log('Error fetching student details.');
+                }
+            });
+        });
+    });
+</script>
+<script>
+    let currentStep = 1;
+    function nextStep() {
+        if (currentStep < 3) {
+            // Disable dropdowns when moving to the next step
+            disableDropdowns();
+            // Update step classes
+            $(`#step${currentStep}`).removeClass('active');
+            currentStep++;
+            $(`#step${currentStep}`).addClass('active');
+        }
+    }
+    function prevStep() {
+        if (currentStep > 1) {
+            // Update step classes
+            $(`#step${currentStep}`).removeClass('active');
+            currentStep--;
+            // Enable or disable dropdowns based on the current step
+            if (currentStep === 1) {
+                enableDropdowns();
+            } else if (currentStep === 2) {
+                disableDropdowns();
+            }
+            $(`#step${currentStep}`).addClass('active');
+        }
+    }
+    function disableDropdowns() {
+        // Disable dropdowns
+        $(".dropdown-container select").prop('disabled', true);
+    }
+    function enableDropdowns() {
+        // Enable dropdowns
+        $(".dropdown-container select").prop('disabled', false);
+    }
+    function updateButtonState() {
+        const saveButton = $(".btn-success");
+        saveButton.prop('disabled', currentStep !== 3);
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#CTC').on('input', function () {
+            var enteredValue = $(this).val();
+            // Remove non-numeric characters except for the decimal point
+            var numericValue = enteredValue.replace(/[^\d.]/g, '');
+
+            // Limit numeric value to 99
+            numericValue = Math.min(parseFloat(numericValue), 99);
+
+            // Update the CTC input field with the limited value
+            $(this).val(numericValue > 0 ? numericValue + ' LPA' : '');
+
+            // Update the hidden input with the numeric value
+            $('#numericCTC').val(numericValue);
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#Experience').on('input', function () {
+            var enteredValue = $(this).val();
+            // Remove non-numeric characters except for the decimal point
+            var numericValue = enteredValue.replace(/[^\d.]/g, '');
+
+            // Update the CTC input field with the entire value (including "LPA") only if there is a non-empty numeric value
+            $('#Experience').val(numericValue !== '' ? numericValue + ' Year' : '');
+
+            // Update the hidden input with the numeric value
+            $('#numericCTC').val(numericValue);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#Course").change(function () {
+            var id = $(this).val();
+            $("#batch").empty();
+            $.get("/Placement/Batch_BindPRAsync", { coursecode: id }, function (data) {
+                var v = "<option>---Select---</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#batch").html(v);
+            });
+        });
+
+        $("#batch").change(function () {
+            var id = $(this).val();
+            $("#student").empty();
+            $.get("/Placement/Student_BindPRAsync", { batchcode: id }, function (data) {
+                var v = "<option>---Select---</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#student").html(v);
+            });
+        });
+
+        function updateStudentDetails(candidateCode) {
+            // Your implementation here
+            // This function should handle the update of student details
+        }
+        $("#student").change(function () {
+            // Check if the dropdowns are disabled
+            if ($(".dropdown-container select").prop('disabled')) {
+                return; // Exit the function if the dropdowns are disabled
+            }
+
+            var CandidateCode = $(this).val();
+            // Call a function to update student details based on the selected value
+            updateStudentDetails(CandidateCode);
+            console.log('Candidate Code:', CandidateCode);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#SkillId').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select Skills',
+            allowClear: true
+        });
+        $('#ProjectCode').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select Project',
+            allowClear: true
+        });
+
+        $('#TechnolgyId').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select Technology',
+            allowClear: true,
+        });
+
+
+        $('#SkillId').on('change', function () {
+            updateTechnologyDropdown();
+        });
+
+
+        // Function to update the technology dropdown based on selected skills
+        function updateTechnologyDropdown() {
+            // Clear existing options
+            $('#TechnolgyId').empty();
+
+            // Get selected skills
+            var selectedSkills = $('#SkillId option:selected');
+            // Add selected skills to the technology dropdown
+            if (selectedSkills.length > 0) {
+                selectedSkills.each(function () {
+                    var skillName = $(this).text(); // Get the text (SkillName) of the selected option
+                    var skillValue = $(this).val(); // Get the value (SkillId) of the selected option
+
+                    // Append option to the technology dropdown
+                    $('#TechnolgyId').append($('<option>', {
+                        value: skillValue,
+                        text: skillName
+                    }));
+                });
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    var studentDetailsModels = []; // Declare the array globally
+    $(document).ready(function () {
+        $("#addexpbutton").click(function () {
+            SaveExperience();
+            updateButtonState(); // Enable the Save button after calling SaveExperience
+        });
+    });
+
+    function SaveExperience() {
+        // Get values from modal form
+        var CompanyName = $("#Company option:selected").text();
+        var IndustryId = $('#Induastry').val();
+        var DesignationId = $('#Designation').val();
+        var CTC = $('#CTC').val();
+        var Experience = $('#Experience').val();
+        var JobType = $('#JobType').val();
+
+        // Validation for required fields
+        if (!CompanyName || !IndustryId || !DesignationId || !CTC || !Experience || !JobType) {
+            // Show validation error
+            Swal.fire({
+                title: 'Validation Error',
+                text: 'Please fill in all the required fields.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        // Append a row to the table
+        var serialNumber = $("#studentTable tbody tr").length + 1;
+        $("#studentTable tbody").append(
+            '<tr>' +
+            '<td>' + serialNumber + '</td>' +
+            '<td class="company">' + CompanyName + '</td>' +
+            '<td class="Induastry">' + IndustryId + '</td>' +
+            '<td class="designation">' + DesignationId + '</td>' +
+            '<td class="CTC">' + CTC + '</td>' +
+            '<td class="Experience">' + Experience + '</td>' +
+            '<td class="JobType">' + JobType + '</td>' +
+            '</tr>'
+        );
+
+        // Clear the input fields
+        $('#Induastry').val("");
+        $('#Company').val("");
+        $('#Designation').val("");
+        $("#CTC").val("");
+        $("#Experience").val("");
+        $("#JobType").val("");
+    }
+
+    function submitForm() {
+        // Show confirmation alert before proceeding
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to submit the form data?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, submit it!',
+            cancelButtonText: 'No, cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var studentDetailsModels = [];
+                $("#studentTable tbody tr").each(function () {
+                    var CompanyName = $(this).find(".company").text();
+                    var IndustryId = $(this).find(".Induastry").text();
+                    var DesignationId = $(this).find(".designation").text();
+                    var CTC = $(this).find(".CTC").text();
+                    var Experience = $(this).find(".Experience").text();
+                    var JobType = $(this).find(".JobType").text();
+                    var CandidateCode = $('#student').val();
+
+                    var studentData = {
+                        CandidateCode: CandidateCode,
+                        CompanyName: CompanyName,
+                        InduastryId: IndustryId,
+                        DesignationId: DesignationId,
+                        CTC: CTC,
+                        Experience: Experience,
+                        JobType: JobType
+                    };
+
+                    studentDetailsModels.push(studentData);
+                });
+                var formData = new FormData(document.getElementById('yourFormId'));
+                var selectedValues = $('#ProjectCode').val();
+                formData.append('CandidateCode', $('#student').val());
+                formData.append('selectedProjects', JSON.stringify(selectedValues));
+                // Create an array to store the promises
+                var promises = [];
+                // Check if both form data and JSON data are filled
+                if (jsonDataNotEmpty(studentDetailsModels)) {
+                    console.log("Form Data:", formData);
+                    console.log("JSON Data:", studentDetailsModels);
+
+                    // First AJAX call
+                    var ajax1 = $.ajax({
+                        type: 'POST',
+                        url: '/Placement/RegistrationDetailsPRAsync',
+                        data: formData,
+                        contentType: false,
+                        processData: false
+                    });
+                    promises.push(ajax1);
+
+                    // Second AJAX call
+                    var ajax2 = $.ajax({
+                        url: '/Placement/RegistrationDetailsShowPRAsync',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ studentDetailsModels: studentDetailsModels })
+                    });
+                    promises.push(ajax2);
+
+                    // Use Promise.all to wait for both promises to complete
+                    Promise.all(promises)
+                        .then(function (responses) {
+                            // Handle success for both AJAX calls
+                            var response1 = responses[0];
+                            var response2 = responses[1];
+
+                            console.log('Form submitted successfully:', response1);
+                            console.log(response2);
+
+                            // Display success SweetAlert
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Registration Completed successfully.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Optionally, you can redirect the user or perform other actions here
+                                    // For example, you can reload the page
+                                    location.reload();
+                                }
+                            });
+                        })
+                        .catch(function (error) {
+                            // Handle errors
+                            console.error('Error submitting form:', error);
+                            // Display error SweetAlert
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Registration failed. Please try again.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                } else {
+                    // Show validation error
+                    Swal.fire({
+                        title: 'Validation Error',
+                        text: 'Please fill in the required fields.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+
+    // Function to check if JSON data is not empty
+    function jsonDataNotEmpty(studentDetailsModels) {
+        return studentDetailsModels.length > 0;
+    }
+</script>
+
+
+

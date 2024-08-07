@@ -1,0 +1,66 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "listStudentResultTSAsynch";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+</head>
+<body>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Result List</h2>
+        </div>
+        <!-- /.card-header -->
+
+        <table id="resultTable" class="table">
+            <thead>
+                <tr class="bg-primary text-light">
+                    <th>@Html.DisplayNameFor(model => model.StudentName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Attendance)</th>
+                    <th>@Html.DisplayNameFor(model => model.ObtainedMarks)</th>
+                    <th>@Html.DisplayNameFor(model => model.Result)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="InfoTBody">
+                @foreach (var item in Model.ResultList)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Attendance)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ObtainedMarks)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Result)</td>
+                        <td>@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>
+    
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+
+
+        <script type="text/javascript">
+            $('#resultTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+            });
+        </script>
+</body>
+</html>

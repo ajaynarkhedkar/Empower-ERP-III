@@ -1,0 +1,54 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+@using (Html.BeginForm())
+{
+    <div class="card-body">
+        <h2 style="text-align:center">Change Status</h2>
+        <hr />
+        <div class="card">
+            @Html.HiddenFor(model => model.StudentCode)
+
+            <div style="padding-left:20px">
+                <br>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Student Name:</label>
+                    <div class="col-md-6">
+                        @Model.StudentName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Course Name:</label>
+                    <div class="col-md-6">
+                        @Model.CourseName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Batch Name:</label>
+                    <div class="col-md-6">
+                        @Model.BatchName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Evaluation:</label>
+                    <div class="col-md-6">
+                        @Model.StatusId
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12 text-center">
+                <input type="submit" class="btn btn-success" id="saveButton" value="Release" style="margin-bottom: 10px;" />
+            </div>
+        </div>
+    </div>
+   
+    <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+
+
+
+}
+
+
+

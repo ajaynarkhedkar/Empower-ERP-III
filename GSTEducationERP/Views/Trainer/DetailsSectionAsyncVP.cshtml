@@ -1,0 +1,416 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "DetailsSectionAsyncVP";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html lang="en" style="height: auto;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @*<link href="~/Content/Admin/css/Loading.css" rel="stylesheet" />*@
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: large;
+            color: #33CCCC;
+            margin-left: 15px;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            /*margin-top: -40px !important;*/
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+            /* margin-top: -20px !important;*/
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            color: #33CCCC;
+            text-align: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            border: 2px solid #428bca;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-body {
+            font-family: 'Times New Roman';
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <br />
+    <div class="card " style="padding:5px;margin-right:20px;margin-left:10px; margin-top:-15px">
+        <h2>Section List</h2>
+        <div class="add-buttons" style="margin-top:-40px">
+            @*<button class="btn btn-custom" style="font-weight:bold; float:right" onclick="location.href='@Url.Action("RegisterTopicAsyncVP", "Trainer")'">
+                    <img src="~/Content/Admin/img/add-button.png" title="Add Topic" alt="view" height="30" width="30" /> TOPIC
+                </button>*@
+            <button class="btn btn-custom" style="font-weight:bold; float:right" id="AddTopic">
+                <img src="~/Content/Admin/img/add-button.png" title="Add Topic" alt="view" height="30" width="30" /> TOPIC
+            </button>
+            <button class="btn btn-custom" style="font-weight:bold; float:right" id="AddSection">
+                <img src="~/Content/Admin/img/add-button.png" title="Add Section" alt="view" height="30" width="30" /> SECTION
+            </button>
+        </div>
+        <hr />
+        <div class="card-body" style="padding-top:-;">
+            <table id="example1" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.SectionId)
+                        </th>
+                        <th>
+                            Course Name
+                        </th>
+                        <th>
+                            Section Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.lstSectionGRid)
+                    {
+                        <tr>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.SectionId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SectionName)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("DetailsTopicAsyncVP", "Trainer", new { id = item.SectionId })" class="icon" title="VIEW TOPICS">
+                                    <video width="25" height="25" playsinline loop>
+                                        <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                    </video>
+                                </a>
+                                <a href="#" class="sectionEditLink" data-id="@item.SectionId" data-url="@Url.Action("UpdateSectionAsyncVP", "Trainer", new { sectionId = item.SectionId })" data-toggle="modal" data-target="#SectionModal" title="EDIT">
+                                    <video width="25" height="25" playsinline loop>
+                                        <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+                                    </video>
+                                </a>
+                                <a href="#" class="delete-button" data-id="@item.SectionId" title="DELETE">
+                                    <video width="25" height="25" playsinline loop>
+                                        <source src="~/Content/Admin/icon/Delete 2.mp4" type="video/mp4">
+                                    </video>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="resultContainer"></div>
+    <div class="modal fade" id="SectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Section Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="TopicModal" tabindex="-1" role="dialog" aria-labelledby="TopicModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TopicModalLabel">Add Topic</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- DataTables  & Plugins -->
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
+    @*<script src="~/Content/Admin/js/Icon.js"></script>*@
+    <script>
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+        $(document).ready(function () {
+            $('#example1').on('click', '.delete-button', function () {
+                var id = $(this).data('id');
+                swalWithBootstrapButtons.fire({
+                    title: 'Delete Section',
+                    text: 'Are you sure you want to delete this Section?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Trainer/Trainerdeletesection/' + id,
+                            type: 'POST',
+                            success: function (data) {
+                                if (data.success) {
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Deleted!',
+                                        text: data.message,
+                                        icon: 'success'
+                                    }).then(function () {
+                                        location.reload();
+                                    });
+                                } else {
+                                    swalWithBootstrapButtons.fire('This content is related and cannot be deleted.', data.message, 'error');
+                                }
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelled',
+                            text: "Your imaginary file is safe :)",
+                            icon: 'error'
+                        });
+                    }
+                });
+            });
+
+            //$('.delete-button').mouseenter(function () {
+            //    $(this).find('video')[0].play();
+            //    $(this).addClass('running');
+            //});
+
+            //$('.delete-button').mouseleave(function () {
+            //    var video = $(this).find('video')[0];
+            //    video.pause();
+            //    video.currentTime = 0;
+            //    $(this).removeClass('running');
+            //});
+        });
+    </script>
+
+    <script>
+    jQuery.noConflict();
+    jQuery(document).ready(function ($) {
+        $("#AddSection").click(function () {
+            $.ajax({
+                url: '@Url.Action("RegisterSectionAsyncVP", "Trainer")',
+                type: 'GET',
+                success: function (result) {
+                    $("#SectionModal").find(".modal-body").html(result);
+                    $("#SectionModal").modal('show');
+                }
+            });
+        });
+        $("#AddTopic").click(function () {
+            $.ajax({
+                url: '@Url.Action("RegisterTopicAsyncVP", "Trainer")',
+                type: 'GET',
+                success: function (result) {
+                    $("#TopicModal").find(".modal-body").html(result);
+                    $("#TopicModal").modal('show');
+                }
+            });
+        });
+        $('#example1').on('click', '.sectionEditLink', function () {
+            var sectionId = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    $("#SectionModal").find(".modal-body").html(response);
+                    $("#SectionModal").modal('show');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+        //$('.sectionEditLink').mouseenter(function () {
+        //    $(this).find('video')[0].play();
+        //    $(this).addClass('running');
+        //});
+
+        //$('.sectionEditLink').mouseleave(function () {
+        //    var video = $(this).find('video')[0];
+        //    video.pause();
+        //    video.currentTime = 0;
+        //    $(this).removeClass('running');
+        //});
+        var table = $('#example1').DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false, "stateSave": true,
+            "buttons": [
+                {
+                    extend: 'copy',
+                    text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'Copy'
+                },
+                {
+                    extend: 'csv',
+                    text: '<img src="/Content/Admin/icon/csv.jpg" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: '<img src="/Content/Admin/icon/xls-file.png" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<img src="/Content/Admin/icon/pdf-file.png" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'PDF'
+                },
+                {
+                    extend: 'print',
+                    text: '<img src="/Content/Admin/icon/printer.png" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'Print'
+                },
+                {
+                    extend: 'colvis',
+                    text: '<img src="/Content/Admin/icon/column.jpg" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'Columns'
+                }
+            ]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+    </script>
+</body>
+</html>
+
+

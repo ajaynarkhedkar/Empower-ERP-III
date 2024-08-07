@@ -1,0 +1,385 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <html>
+    <body>
+        <div class="form-container">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.TaskId)
+                @Html.HiddenFor(model => model.TaskCode)
+
+                @if (Model.AllowUpdate)
+                {
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="TaskName" class="control-label">Task Name </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control", required = "required", maxlength = 50 } })
+                                @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="AssignToStaffCode" class="control-label">Assign To </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.DropDownListFor(model => model.AssignToStaffCode, new SelectList(ViewBag.combinedReportingList, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.AssignToStaffCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="TaskStartDate" class="control-label col-md-4">Start Date </label>
+                                <div class="col-md-8">
+                                    <div class="input-group date" id="datepicker" data-target-input="nearest">
+                                        <input type="text" name="TaskStartDate" class="form-control datetimepicker-input" data-target="#datepicker" value="@Model.TaskStartDate.ToString("yyyy-MM-dd")" required />
+                                        <div class="input-group-append" data-target="#datepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="TaskStartTime" class="control-label col-md-4">Start Time </label>
+                                <div class="col-md-8">
+                                    <div class="input-group date" id="startTimepicker" data-target-input="nearest">
+                                        <input type="text" name="TaskStartTime" class="form-control datetimepicker-input" data-target="#startTimepicker" value="@Model.TaskStartTime.ToString("HH:mm")" required />
+                                        <div class="input-group-append" data-target="#startTimepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.TaskStartTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="TaskEndDate" class="control-label col-md-4">End Date </label>
+                                <div class="col-md-8">
+                                    <div class="input-group date" id="endDatepicker" data-target-input="nearest">
+                                        <input type="text" name="TaskEndDate" class="form-control datetimepicker-input" data-target="#endDatepicker" value="@Model.TaskEndDate.ToString("yyyy-MM-dd")" required />
+                                        <div class="input-group-append" data-target="#endDatepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label for="TaskEndTime" class="control-label col-md-4">End Time </label>
+                                <div class="col-md-8">
+                                    <div class="input-group date" id="endTimepicker" data-target-input="nearest">
+                                        <input type="text" name="TaskEndTime" class="form-control datetimepicker-input" data-target="#endTimepicker" value="@Model.TaskEndTime.ToString("HH:mm")" required />
+                                        <div class="input-group-append" data-target="#endTimepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.TaskEndTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TaskDescription" class="control-label">Descriptions </label>
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.TaskDescription, new { @class = "form-control", rows = 3, required = "required" })
+                            @Html.ValidationMessageFor(model => model.TaskDescription, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Priority" class="control-label">Priority </label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(model => model.Priority, new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "High", Value = "High" },
+                                        new SelectListItem { Text = "Low", Value = "Low" }
+                                    }, new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Status" class="control-label">Status </label>
+                                <div class="col-md-10">
+                                    @Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.TaskStatusName, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <div class="col-md-12">
+                            <input type="submit" value="UPDATE" class="btn btn-success btn-sm" onclick="showUpdateConfirmation(event)" title="update data" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="TaskName" class="control-label">Task Name </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="AssignByStaffCode" class="control-label">Assign By Staff Code </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.StaffName, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.HiddenFor(model => model.AssignByStaffCode, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.AssignByStaffCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="TaskStartDate" class="control-label">Task Start Date </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.TaskStartDate, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.TaskStartDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="TaskStartTime" class="control-label">Task Start Time </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.TaskStartTime, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.TaskStartTime, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="TaskEndDate" class="control-label">Task End Date </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.TaskEndDate, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.TaskEndDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="TaskEndTime" class="control-label">Task End Time </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.TaskEndTime, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.TaskEndTime, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="TaskDescription" class="control-label">Descriptions </label>
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.TaskDescription, new { @class = "form-control", rows = 2, required = "required", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.TaskDescription, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="Priority" class="control-label">Task Priority </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.EditorFor(model => model.Priority, new { htmlAttributes = new { @class = "form-control", required = "required", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Status" class="control-label">Status </label>
+                            <div class="col-md-10" style="width:370px">
+                                @Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.TaskStatusName, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <div class="col-md-12">
+                            <input type="submit" value="UPDATE" class="btn btn-success btn-sm" onclick="showUpdateConfirmation(event)" title="Update data" />
+                        </div>
+                    </div>
+                }
+                <a href="@Url.Action("ListTaskManagementAsyncPG","Bind")" class="back-link" title="Back to List">
+                    <video width="45" height="45" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                    </video>
+                </a>
+            </div>
+        </div>
+
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Content/plugins/moment/moment.min.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+        <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#startTimepicker').datetimepicker({
+                    format: 'LT',
+                    defaultDate: moment().startOf('minute'), // Set default time to current hour and minute
+                    icons: {
+                        time: 'far fa-clock',
+                        date: 'far fa-calendar',
+                        up: 'fas fa-chevron-up',
+                        down: 'fas fa-chevron-down',
+                        previous: 'fas fa-chevron-left',
+                        next: 'fas fa-chevron-right',
+                        today: 'fas fa-crosshairs',
+                        clear: 'far fa-trash-alt',
+                        close: 'far fa-times'
+                    }
+                });
+
+                // End Timepicker
+                $('#endTimepicker').datetimepicker({
+                    format: 'LT',
+                    defaultDate: moment().startOf('minute'),
+                    icons: {
+                        time: 'far fa-clock',
+                        date: 'far fa-calendar',
+                        up: 'fas fa-chevron-up',
+                        down: 'fas fa-chevron-down',
+                        previous: 'fas fa-chevron-left',
+                        next: 'fas fa-chevron-right',
+                        today: 'fas fa-crosshairs',
+                        clear: 'far fa-trash-alt',
+                        close: 'far fa-times'
+                    }
+                });
+
+                $('#datepicker, #endDatepicker').datetimepicker({
+                    format: 'YYYY-MM-DD', // Adjust the date format as needed
+                    icons: {
+                        time: 'far fa-clock',
+                        date: 'far fa-calendar',
+                        up: 'fas fa-chevron-up',
+                        down: 'fas fa-chevron-down',
+                        previous: 'fas fa-chevron-left',
+                        next: 'fas fa-chevron-right',
+                        today: 'fas fa-crosshairs',
+                        clear: 'far fa-trash-alt',
+                        close: 'far fa-times'
+                    }
+                });
+
+                // Event listener to set minimum end date based on start date
+                $('#datepicker').on('change.datetimepicker', function (e) {
+                    $('#endDatepicker').datetimepicker('minDate', e.date);
+                    validateEndDate();
+                });
+
+                // Event listener to set minimum end time based on start time
+                $('#startTimepicker').on('change.datetimepicker', function (e) {
+                    $('#endTimepicker').datetimepicker('minDate', e.date);
+                    validateEndDate();
+                });
+
+                // Custom validation for end date
+                function validateEndDate() {
+                    var startDate = moment($('#datepicker').datetimepicker('viewDate'), 'YYYY-MM-DD');
+                    var endDate = moment($('#endDatepicker').datetimepicker('viewDate'), 'YYYY-MM-DD');
+
+                    if (endDate.isBefore(startDate)) {
+                        $('#endDatepicker').addClass('is-invalid');
+                    } else {
+                        $('#endDatepicker').removeClass('is-invalid');
+                    }
+                }
+            });
+        </script>
+        <script>
+    function showUpdateConfirmation(event) {
+        event.preventDefault();
+        if (validateForm()) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to update the form.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, update it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: event.target.form.action,
+                        type: event.target.form.method,
+                        data: $(event.target.form).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Data updated successfully!',
+                                    icon: 'success'
+                                }).then(() => {
+                                    // Redirect to another page
+                                    window.location.href = '@Url.Action("ListTaskManagementAsyncPG", "Bind")';
+                                });
+                            } else {
+                                // Show error message if update fails
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: response.error,
+                                    icon: 'error'
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred: ' + xhr.responseText,
+                                icon: 'error'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function validateForm() {
+        var isValid = true;
+        $('.form-control[required]').each(function () {
+            if ($.trim($(this).val()) === '') {
+                isValid = false;
+                $(this).addClass('is-invalid');
+            }
+        });
+        // Remove any previous error message
+        $('#taskNameError').text('');
+
+        var taskName = $('#TaskName').val();
+        var maxLength = 50;
+        if (taskName.length > maxLength) {
+            $('#taskNameError').text('Task Name must be at most ' + maxLength + ' characters long.');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+        </script>
+    </body>
+</html>
+}

@@ -1,0 +1,165 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+<div class="card">
+
+	<div class="card-body">
+		<table id="internalConductedExams" class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th hidden>
+						@Html.HiddenFor(model => model.AssignExamId)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.CourseName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.BatchName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.ExamName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.SupervisorName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.LabName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.TimeString)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.DateString)
+					</th>
+					<th>
+						Duration(hh:mm)
+						@*@Html.DisplayNameFor(model => model.FormattedDuration)*@
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.TotalMarks)
+					</th>
+					<th>
+						Result
+					</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				@if (Model != null && Model.lstConductedExams != null)
+				{
+					for (int i = 0; i < Model.lstConductedExams.Count; i++)
+					{
+						var item = Model.lstConductedExams[i];
+						<tr>
+							<td hidden>
+								@Html.HiddenFor(modelItem => item.AssignExamId)
+							</td>
+
+							<td>
+								@Html.DisplayFor(modelItem => item.CourseName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.BatchName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.ExamName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.SupervisorName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.LabName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.TimeString)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.DateString)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.FormattedDuration)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.TotalMarks)
+							</td>
+
+							<td style="text-align: center;">
+								@if (item.Status == "0")
+								{
+									<a href="#" class="icon" data-toggle="modal" data-target="#resultModal" data-id="@item.AssignExamId" data-action="View Result" title="View Result">
+										<!-- Embed the video element -->
+										<video width="25" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/viewEye.mp4" type="video/mp4">
+										</video>
+									</a>
+								}
+								else
+								{
+									<a href="#" class="icon1" data-toggle="modal" data-target="#resultModal" data-id="@item.AssignExamId" data-action="Add Result" title="Add Result">
+										<!-- Embed the video element -->
+										<video width="25" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/score.mp4" type="video/mp4">
+										</video>
+									</a>
+								}
+							</td>
+						</tr>
+					}
+
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+	<div class="modal-dialog mx-auto" role="document">
+		<div class="modal-content" style="width:700px !important;">
+			<div class="modal-header text-center" style="text-align: center;">
+				<h3 class="modal-title" id="resultModalLabel">Result</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="background-color:transparent">
+
+				<!-- Result form content will be loaded here -->
+			</div>
+		</div>
+	</div>
+</div>
+<script src="~/Content/Admin/js/Icon.js"></script>
+<script>
+		$(document).ready(function () {
+			$('.icon, .icon1').click(function () {
+				// Reset the modal title to the default value
+				$('#resultModalLabel').text('Result');
+
+				console.log('Icon clicked');
+				var action = $(this).data('action');
+				var id = $(this).data('id');
+
+				console.log('ID:', id);
+
+				// Update modal title
+				$('#resultModalLabel').text(action);
+
+				// Load partial view into modal body
+				var url = action === "View Result"
+					? '/Placement/ViewResultInternalStudentsAsyncSN?id=' + id
+					: '/Placement/DetailConductedExamIntStuAsyncSN?id=' + id;
+
+				// Clear previous content before loading new content
+				$('#resultModal .modal-body').empty();
+
+				// Load the new content into modal body
+				$('#resultModal .modal-body').load(url, function (response, status, xhr) {
+					console.log('Load Status:', status);
+					if (status === "error") {
+						console.log('Error:', xhr.status, xhr.statusText);
+					}
+				});
+			});
+		});
+
+</script>
+

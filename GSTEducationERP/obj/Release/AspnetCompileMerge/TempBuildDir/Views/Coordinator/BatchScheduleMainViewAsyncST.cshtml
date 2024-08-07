@@ -1,0 +1,241 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+@{
+    ViewBag.Title = "BatchScheduleMainViewAsyncST";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<html>
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            margin-top: -5px !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+            margin-top: 10px !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="card " style="padding: 10px; /*margin-left: -50px; margin-right: -50px;*/ margin-top: 10px ">
+        <h2>Batch Schedule</h2>
+        <hr />
+       
+        <div class="container" style="margin-left:-10px">
+            <div class="row">
+                <div class="col-7">
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="As" data-toggle="pill" href="@Url.Action("ListScheduledBatchAsyncST","Coordinator")" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Scheduled Batch</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="AssingList" data-toggle="pill" href="@Url.Action("ListAssignBatchAsyncST","Coordinator")" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Assign Schedule </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="PenddingList" data-toggle="pill" href="@Url.Action("ListPenddingBatchAsyncST","Coordinator")" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Pending Schedule</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="custom-tabs-one-tabContent">
+
+            <div class="tab-pane fade show active" id="AsTab" role="tabpanel" aria-labelledby="Lab List">
+
+            </div>
+
+        </div>
+
+        <div class="tab-content" id="custom-tabs-one-tabContent">
+            <div id="BatchList"></div>
+        </div>
+
+    </div>
+ 
+
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+    jQuery(document).ready(function ($) {
+        function loadTabContent(tabContentUrl) {
+            $.ajax({
+                url: tabContentUrl,
+                type: 'GET',
+                success: function (data) {
+                    $('#BatchList').html(data);
+                    var table = $('#BatchList table').DataTable({
+                        "responsive": true,
+                        "lengthChange": false,
+                        "autoWidth": true,
+                        "stateSave": true,
+                        "buttons": [{
+                            extend: 'copy',
+                            text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                            titleAttr: 'Copy'
+                        },
+                            {
+                                extend: 'csv',
+                                text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                                titleAttr: 'CSV'
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                                titleAttr: 'Excel'
+                            },
+                            {
+                                extend: 'pdf',
+                                text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                                titleAttr: 'PDF'
+                            },
+                            {
+                                extend: 'print',
+                                text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                                titleAttr: 'Print'
+                            },
+                            {
+                                extend: 'colvis',
+                                text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="25" width="25" />',
+                                titleAttr: 'Columns'
+                            }]
+                    });
+                    table.buttons().container().appendTo('#BatchList .col-md-6:eq(0)');
+                },
+                error: function () {
+                    alert('Error loading content.');
+                }
+            });
+        }
+        $('#custom-tabs-four-tab').on('click', '.nav-link', function (e) {
+            e.preventDefault();
+            var tabContentUrl = $(this).attr('href');
+            loadTabContent(tabContentUrl);
+        });
+        var defaultTabUrl = '@Url.Action("ListScheduledBatchAsyncST", "Coordinator")';
+        loadTabContent(defaultTabUrl);
+    });
+    </script>
+
+</body>
+</html>
+

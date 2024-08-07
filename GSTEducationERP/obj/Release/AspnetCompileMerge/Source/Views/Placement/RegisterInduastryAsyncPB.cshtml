@@ -1,0 +1,115 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+<html>
+<head>
+    <style>
+        .timer {
+            position: absolute;
+            left: calc(50% - 120px / 2);
+            width: 120px;
+            height: 120px;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("SaveInduastryAsyncPB", "Placement", new { @id = "form1", @enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-12 form-group" style="font:xx-small; display:flex;">
+                <label class="col-md-4">Induastry Name</label>
+                <input class="form-control col-md-6 " type="text" name="InduastryName" id="InduastryName" required />
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" name="submit" id="submit" class="btn btn-sm btn-success toastrDefaultSuccess" >Save</button>
+        </div>
+        <div class="text-left mb-2">
+            <a href="/Placement/RegisterCompanyAsyncPB" class="icon">
+                <video width="25" height="25" playsinline loop>
+                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                </video>
+            </a>
+        </div>
+    }
+
+
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+
+    <script type="text/javascript">
+        $('#submit').hide();
+        $('#InduastryName').on('change', function (e) {
+            var industry = $('#InduastryName').val();
+
+            $.ajax({
+                url: "/Placement/ValidationIndustryNamePB",
+                type: 'Post',
+                data: {
+                    IndustryName: industry
+                },
+                success: function (responce) {
+
+                    var result = JSON.parse(responce);
+                    if (result.length !== 0) {
+                        if (industry == result[0]["InduastryName"]) {
+                            Swal.fire({
+                                title: "<span style='font-size: smaller;'>Record Exits.</span>",
+                                showConfirmButton: true,
+                               
+                            });
+                            
+                            /*alert("Record Exits")*/
+                            $('#InduastryName').val('');
+                        }
+                        $('#submit').hide();
+                    }
+                    else {
+                        $('.toastrDefaultSuccess').click(function () {
+                            toastr.success('Save Successfully.')
+                        });
+                    }
+                }
+            });
+        });
+
+        document.getElementById("InduastryName").addEventListener("keypress", function (event) {
+            if ("abcdefghijklmnopqrstuvwxyz".indexOf(event.key.toLowerCase()) < 0) {
+                event.preventDefault();
+            }
+        });
+
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+            });
+        }
+
+        $(function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            //$('.toastrDefaultSuccess').click(function () {
+            //    toastr.success('Save Successfully.')
+            //});
+        });
+    </script>
+
+</body>
+</html>

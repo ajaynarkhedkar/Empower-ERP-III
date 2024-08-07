@@ -1,0 +1,106 @@
+﻿@model IEnumerable<GSTEducationERPLibrary.Placement.Placement>
+
+<style>
+    /* Custom CSS to override table row striping */
+    .table tbody tr:nth-child(even) {
+        background-color: inherit !important; /* Set background color to match the card background */
+    }
+
+    .table tbody tr td {
+        padding: 8px !important; /* Adjust the padding to increase row height */
+    }
+</style>
+
+
+<div class="card-body">
+    <h2>Mock Performance</h2>
+    <hr />
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">Course:</label>
+                    @Html.DisplayFor(model => model.FirstOrDefault().CourseName)
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">Batch:</label>
+                    @Html.DisplayFor(model => model.FirstOrDefault().BatchName)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">Mock Name:</label>
+                    @Html.DisplayFor(model => model.FirstOrDefault().MockName)
+                </div>
+                <div class="col-md-6">
+                    <label class="control-label">Mock Date:</label>
+                    @Html.DisplayFor(model => model.FirstOrDefault().MDate)
+                </div>
+            </div>
+            <br />
+
+            <div class="table-responsive">
+                <div style="height: 250px; overflow-y: auto;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Student Name
+                                </th>
+                                <th>
+                                    Attendance
+                                </th>
+                                <th>
+                                    Performance
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StudentName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Attendance)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PerformanceStatus)
+                                    </td>
+                                    @*<td>
+                                            @if (item.PerformanceStatus == "Best")
+                                            {
+                                                <span class="badge bg-success">@Html.DisplayFor(modelItem => item.PerformanceStatus)</span>}
+                                            @if (item.PerformanceStatus == "Better")
+                                            {
+                                                <span class="badge bg-success">@Html.DisplayFor(modelItem => item.PerformanceStatus)</span>}
+                                            @if (item.PerformanceStatus == "Good")
+                                            {
+                                                <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.PerformanceStatus)</span>}
+                                            @if (item.PerformanceStatus == "Average")
+                                            {
+                                                <span class="badge bg-warning">@Html.DisplayFor(modelItem => item.PerformanceStatus)</span>}
+                                            @if (item.PerformanceStatus == "Low")
+                                            {
+                                                <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.PerformanceStatus)</span>}
+
+                                        </td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+<button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+<a href="@Url.Action("ListAllMock")" class="back-link">
+    <video width="45" height="45" playsinline loop>
+        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+    </video>
+</a>
+

@@ -1,0 +1,83 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<table id="conduct" class="table table-bordered" >
+    <thead>
+        <tr>
+            <th hidden>
+                AssignTestId
+            </th>
+            <th>
+                Course Name
+            </th>
+
+            <th>
+                Batch Name
+            </th>
+            <th>
+                Test Name
+            </th>
+            <th>
+                Test Date
+            </th>
+            <th>
+                Test Time
+            </th>
+            <th>
+                Complete Till Date
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Total Marks
+            </th>
+            <th>
+                Supervisor Name
+            </th>
+            <th>
+                Lab Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.lstCouductedTestGrid)
+        {
+            <tr>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.AssignTestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TestName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TestDateVP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TestTimeMAnage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompleteTillDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalMarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StaffName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LabName)
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

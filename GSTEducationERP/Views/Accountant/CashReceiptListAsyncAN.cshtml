@@ -1,0 +1,113 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<script src="~/Content/Admin/js/Icon.js"></script>
+
+
+
+
+<div class="card">
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.ExpID)
+                        </th>*@
+                    <th>
+                        Receipt No.
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Student Name
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+
+
+            @foreach (var item in Model.lstCashList)
+            {
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FeeCollectionCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StudentName)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>*@
+                        <td>
+                            @(String.Format("{0:N2} ₹", item.Amount))
+                        </td>
+                        <td style="text-align: center;">
+                            <a href="#" class="icon bank-transaction" data-bank-id="@item.FeeCollectionCode" title="View Cash Details">
+                                <video width="25" height="25" playsinline loop muted>
+                                    <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                </video>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            }
+
+
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="CashHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Cash Recieved</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.bank-transaction', function (e) {
+            e.preventDefault();
+            var transactionid = $(this).data('bank-id');
+            console.log("Transaction ID: " + transactionid);
+
+            $.ajax({
+                url: '/Accountant/CashRecievedViewAN',
+                type: 'GET',
+                data: { TransactionId: transactionid },
+                success: function (data) {
+                    console.log("Data received:", data);
+                    $('#CashHistory .modal-body').html(data);
+                    $('#CashHistory .modal-header h5').text('Cash Recieved');
+                    $('#CashHistory').modal('show');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error: " + textStatus, errorThrown);
+                    alert("An error occurred while fetching bank details.");
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
+

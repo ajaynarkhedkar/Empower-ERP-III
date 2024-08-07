@@ -1,0 +1,738 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{ ViewBag.Title = "AddEventPCAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml"; }
+<head>
+    <link rel="stylesheet" href="~/Content/Coordinator/CSS/_forms.scss" />
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/moment/moment.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet"   />
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+</head>
+<style>
+    h2 {
+        padding-top: 10px;
+        margin-bottom: 10px;
+        font-family: Verdana;
+        font-weight: bold;
+        font-size: medium;
+        color: #33CCCC;
+    }
+
+    table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .form-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        height: 38px;
+    }
+
+    .col-md-10 {
+        margin-top: 5px;
+    }
+
+    .row .form-group {
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    .bootstrap-duallistbox-container {
+        margin-top: 20px;
+    }
+
+    .box1, .box2 {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .info {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .btn-sm {
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .filter {
+        margin-bottom: 10px;
+    }
+
+    .buttons {
+        margin-top: 10px;
+    }
+
+    .btn-custom {
+        font-size: 16px;
+        height: 40px;
+        width: 100px;
+    }
+
+    .spacer {
+        margin-left: 10px;
+    }
+
+    .form-group.text-center {
+        text-align: center;
+    }
+
+        .form-group.text-center .col-md-6 {
+            display: inline-block;
+        }
+
+    .form-group label {
+        margin-bottom: 5px;
+    }
+
+    .date-input {
+        width: 200px;
+        margin-right: 20px;
+    }
+
+    .date-picker {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .highlight {
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .radio-button {
+        width: 20px; /* Adjust size as needed */
+        height: 20px; /* Adjust size as needed */
+    }
+
+    .form-control {
+        width: 100%;
+        height: 38px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+</style>
+<body style="margin: 0; padding: 0;">
+    <form id="EventForm" action="/Coordinator/AddEventPCAsync" method="post" enctype="multipart/form-data">
+        @using (Html.BeginForm(new { id = "myFormId" }))
+        {
+@Html.AntiForgeryToken()
+                <div class="form-container" id="">
+                    <div class="form-horizontal">
+                        <div class="form-horizontal" style="text-align: center;">
+                            <h2 style="margin-right: 20px;">Add Event</h2>
+                        </div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EventName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Event Organizer" class="control-label">Event Organizer Name:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.EventOrgnaizerCode, new SelectList(ViewBag.EventOrgnaizerCode, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.EventOrgnaizerCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.NoOfParticipants, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.NoOfParticipants, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.NoOfParticipants, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            @*<div class="col-md-6">
+                                 @Html.LabelFor(model => model.StartDate, "Start Date")
+                                 @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "StartDate", min = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                </div>*@
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="EventStartDate" class="control-label col-md-4">Start Date:</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group date" id="datepicker" data-target-input="nearest">
+                                            <input type="text" name="TaskStartDate" class="form-control datetimepicker-input" data-target="#datepicker" required />
+                                            <div class="input-group-append" data-target="#datepicker" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-danger" data-valmsg-for="EventStartDate"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="EventStartTime" class="control-label col-md-4">Start Time:</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group date" id="startTimepicker" data-target-input="nearest">
+                                            <input type="text" name="TaskStartTime" class="form-control datetimepicker-input" data-target="#startTimepicker" required />
+                                            <div class="input-group-append" data-target="#startTimepicker" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-danger" data-valmsg-for="EventStartTime"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="EventEndDate" class="control-label col-md-4">End Date:</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group date" id="endDatepicker" data-target-input="nearest">
+                                            <input type="text" name="TaskEndDate" class="form-control datetimepicker-input" data-target="#endDatepicker" required />
+                                            <div class="input-group-append" data-target="#endDatepicker" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-danger" id="endDateValidationMsg"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="EventEndTime" class="control-label col-md-4">End Time:</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group date" id="endTimepicker" data-target-input="nearest">
+                                            <input type="text" name="TaskEndTime" class="form-control datetimepicker-input" data-target="#endTimepicker" required />
+                                            <div class="input-group-append" data-target="#endTimepicker" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                            </div>
+                                        </div>
+                                        <span class="text-danger" id="endTimeValidationMsg"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Event Arranged By" class="control-label">Event Arranged By:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.EventArrangedBy, new SelectList(ViewBag.EventOrgnaizerCode, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.EventArrangedBy, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Addevent" class="control-label">Event Type</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.EventType, new List<SelectListItem>
+                                                                                                                                                                                                                                                                                                                                                                                   { new SelectListItem{Text="Level0",Value="0"},
+                             new SelectListItem{Text="Level1",Value="1"}
+                           }, new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.EventType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 4, required = "required" })
+
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Status" class="control-label">Status:</label>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.eventStatusName, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Select Candidates</label>
+                                <select name="field2" id="field2" class="form-control" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3" onchange="updateCombinedValues()">
+                                    @foreach (System.Data.DataRow data in ViewBag.Batch.Tables[0].Rows)
+                                    {
+                    <option value="@data["CandidateCodes"]">@data["BatchName"]</option>}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Select Staff</label>
+                                <select name="field3" id="field3" multiple class="form-control" onchange="updateCombinedValues()">
+                                    @foreach (System.Data.DataRow data in ViewBag.Staff.Tables[0].Rows)
+                                    {
+                    <option value="@data["StaffCode"]">@data["StaffPosition"]</option>}
+                                </select>
+                            </div>
+                            <br />
+
+                            @Html.TextBoxFor(model => model.InvitationToSend, new { id = "combinedValues", @class = "form-control", @readonly = "readonly" })
+
+                        </div>
+                        <!--Multiselect Dropdown-->
+                    </div>
+                    <br />
+                    <div class="form-group text-center">
+                        <div class="col-md-6">
+                            <input type="submit" value="Save" class="btn-success btn-sm" id="SaveButton">
+                            <span class="spacer"></span>
+                            <input type="reset" value="CLEAR" class="btn-warning btn-sm" id="btnClear" onclick="clearForm()" />
+                        </div>
+                    </div>
+                    <a href="@Url.Action("ListAllEventPCAsync")" class="back-link">
+                        <video width="45" height="45" playsinline loop>
+                            <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                        </video>
+                    </a>
+                </div>}
+    </form>
+    <script>
+        $(document).ready(function () {
+            
+                $("#EventForm").submit(function (e) {
+                    e.preventDefault(); // Prevent the default form submission
+                    // Show confirmation dialog
+                    Swal.fire({
+                        title: 'Confirmation',
+                        text: 'Are you sure you want to Add this Event?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Perform form submission via AJAX
+                            $.ajax({
+                                url: $(this).attr("action"),
+                                type: $(this).attr("method"),
+                                data: new FormData(this),
+                                processData: false,
+                                contentType: false,
+                                success: function (response) {
+                                   if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Data saved successfully!',
+                                    icon: 'success'
+                                }).then(() => {
+                                    // Redirect to another page
+                                    window.location.href = '@Url.Action("ListAllEventPCAsync")';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An error occurred: ' + response.errorMessage,
+                                    icon: 'error'
+                                });
+                            }
+                                },
+                                error: function () {
+                                    // Show error message if the AJAX request fails
+                                    toastr.error('An error occurred. Please try again later.', 'Error');
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+    </script>
+    <script>
+        function updateCombinedValues() {
+            var selectedCandidates = Array.from(document.getElementById('field2').selectedOptions).map(option => option.value).join(', ');
+            var selectedStaff = Array.from(document.getElementById('field3').selectedOptions).map(option => option.value).join(', ');
+            var combinedValues = selectedCandidates + ', ' + selectedStaff;
+            document.getElementById('combinedValues').value = combinedValues;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Datepicker
+            $('#startDatepicker, #endDatepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+                icons: {
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar',
+                    up: 'fas fa-chevron-up',
+                    down: 'fas fa-chevron-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'fas fa-crosshairs',
+                    clear: 'far fa-trash-alt',
+                    close: 'far fa-times'
+                }
+            });
+            Timepicker
+            $('#startTimepicker, #endTimepicker').datetimepicker({
+                format: 'YYYY- MM - DD',
+                icons: {
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar',
+                    up: 'fas fa-chevron-up',
+                    down: 'fas fa-chevron-down',
+                    previous: 'fas fa-chevron-left',
+                    next: 'fas fa-chevron-right',
+                    today: 'fas fa-crosshairs',
+                    clear: 'far fa-trash-alt',
+                    close: 'far fa-times'
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Initialize start time picker
+            $('#startTimepicker').datetimepicker({
+                format: 'LT'
+            });
+
+            // Initialize end time picker
+            $('#endTimepicker').datetimepicker({
+                format: 'LT'
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#datepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+                minDate: moment().startOf('day') // Set minimum date to today
+            });
+
+            // Start Timepicker
+            $('#startTimepicker').datetimepicker({
+                format: 'LT',
+                defaultDate: moment().startOf('hour') // Set default time to current hour and minute
+            });
+
+            // End Datepicker
+            $('#endDatepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+                minDate: moment().startOf('day') // Set minimum date to today
+            });
+
+            // End Timepicker
+            $('#endTimepicker').datetimepicker({
+                format: 'LT',
+                defaultDate: moment().startOf('hour') // Set default time to current hour and minute
+            });
+
+            // Set minimum end date based on start date
+            $('#datepicker').on('change.datetimepicker', function (e) {
+                $('#endDatepicker').datetimepicker('minDate', e.date);
+            });
+
+            // Set minimum end time based on start time
+            $('#startTimepicker').on('change.datetimepicker', function (e) {
+                $('#endTimepicker').datetimepicker('minDate', e.date);
+            });
+
+            // Prevent selecting past dates for start date
+            $('#datepicker').on('change.datetimepicker', function (e) {
+                var currentDate = moment().startOf('day');
+                var selectedDate = e.date;
+
+                if (selectedDate.isBefore(currentDate)) {
+                    $('#datepicker').datetimepicker('date', currentDate);
+                }
+
+                // Update minimum end date
+                $('#endDatepicker').datetimepicker('minDate', selectedDate);
+            });
+
+            // Prevent selecting past time for start time
+            $('#startTimepicker').on('change.datetimepicker', function (e) {
+                var currentTime = moment().startOf('minute');
+                var selectedTime = e.date;
+
+                if (selectedTime.isBefore(currentTime)) {
+                    $('#startTimepicker').datetimepicker('date', currentTime);
+                }
+            });
+
+            // Prevent selecting past time for end time
+            $('#endTimepicker').on('change.datetimepicker', function (e) {
+                var currentTime = moment().startOf('minute');
+                var selectedTime = e.date;
+
+                if (selectedTime.isBefore(currentTime)) {
+                    $('#endTimepicker').datetimepicker('date', currentTime);
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script>
+        var style = document.createElement('style');
+        style.setAttribute("id", "multiselect_dropdown_styles");
+        style.innerHTML = `
+.multiselect-dropdown{
+                                                                  display: inline-block;
+                                                                  padding: 2px 5px 0px 5px;
+                                                                  border-radius: 4px;
+                                                                  border: solid 1px #ced4da;
+                                                                  background-color: white;
+                                                                  position: relative;
+                                                                  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+                                                                  background-repeat: no-repeat;
+                                                                  background-position: right .75rem center;
+                                                                  background-size: 16px 12px;
+}
+.multiselect-dropdown span.optext, .multiselect-dropdown span.placeholder{
+                                                                  margin-right:0.5em;
+                                                                  margin-bottom:2px;
+                                                                  padding:1px 0;
+                                                                  border-radius: 4px;
+                                                                  display:inline-block;
+}
+.multiselect-dropdown span.optext{
+                                                                  background-color:lightgray;
+                                                                  padding:1px 0.75em;
+}
+.multiselect-dropdown span.optext .optdel {
+                                                                  float: right;
+                                                                  margin: 0 -6px 1px 5px;
+                                                                  font-size: 0.7em;
+                                                                  margin-top: 2px;
+                                                                  cursor: pointer;
+                                                                  color: #666;
+}
+.multiselect-dropdown span.optext .optdel:hover { color: #c66;}
+.multiselect-dropdown span.placeholder{
+                                                                  color:#ced4da;
+}
+.multiselect-dropdown-list-wrapper{
+                                                                  box-shadow: gray 0 3px 8px;
+                                                                  z-index: 100;
+                                                                  padding:2px;
+                                                                  border-radius: 4px;
+                                                                  border: solid 1px #ced4da;
+                                                                  display: none;
+                                                                  margin: -1px;
+                                                                  position: absolute;
+                                                                  top:0;
+                                                                  left: 0;
+                                                                  right: 0;
+                                                                  background: white;
+}
+.multiselect-dropdown-list-wrapper .multiselect-dropdown-search{
+                                                                  margin-bottom:5px;
+}
+.multiselect-dropdown-list{
+                                                                  padding:2px;
+                                                                  height: 15rem;
+                                                                  overflow-y:auto;
+                                                                  overflow-x: hidden;
+}
+.multiselect-dropdown-list::-webkit-scrollbar {
+                                                                  width: 6px;
+}
+.multiselect-dropdown-list::-webkit-scrollbar-thumb {
+                                                                  background-color: #bec4ca;
+                                                                  border-radius:3px;
+}
+
+.multiselect-dropdown-list div{
+                                                                  padding: 5px;
+}
+.multiselect-dropdown-list input{
+                                                                  height: 1.15em;
+                                                                  width: 1.15em;
+                                                                  margin-right: 0.35em;
+}
+.multiselect-dropdown-list div.checked{
+}
+.multiselect-dropdown-list div:hover{
+                                                                  background-color: #ced4da;
+}
+.multiselect-dropdown span.maxselected {width:100%;}
+.multiselect-dropdown-all-selector {border-bottom:solid 1px #999;}
+`;
+        document.head.appendChild(style);
+
+        function MultiselectDropdown(options) {
+            var config = {
+                search: true,
+                height: '15rem',
+                placeholder: 'select',
+                txtSelected: 'selected',
+                txtAll: 'All',
+                txtRemove: 'Remove',
+                txtSearch: 'search',
+                ...options
+            };
+            function newEl(tag, attrs) {
+                var e = document.createElement(tag);
+                if (attrs !== undefined) Object.keys(attrs).forEach(k => {
+                    if (k === 'class') { Array.isArray(attrs[k]) ? attrs[k].forEach(o => o !== '' ? e.classList.add(o) : 0) : (attrs[k] !== '' ? e.classList.add(attrs[k]) : 0) }
+                    else if (k === 'style') {
+                        Object.keys(attrs[k]).forEach(ks => {
+                            e.style[ks] = attrs[k][ks];
+                        });
+                    }
+                    else if (k === 'text') { attrs[k] === '' ? e.innerHTML = '&nbsp;' : e.innerText = attrs[k] }
+                    else e[k] = attrs[k];
+                });
+                return e;
+            }
+            document.querySelectorAll("select[multiple]").forEach((el, k) => {
+
+                var div = newEl('div', { class: 'multiselect-dropdown', style: { width: config.style?.width ?? el.clientWidth + 'px', padding: config.style?.padding ?? '' } });
+                el.style.display = 'none';
+                el.parentNode.insertBefore(div, el.nextSibling);
+                var listWrap = newEl('div', { class: 'multiselect-dropdown-list-wrapper' });
+                var list = newEl('div', { class: 'multiselect-dropdown-list', style: { height: config.height } });
+                var search = newEl('input', { class: ['multiselect-dropdown-search'].concat([config.searchInput?.class ?? 'form-control']), style: { width: '100%', display: el.attributes['multiselect-search']?.value === 'true' ? 'block' : 'none' }, placeholder: config.txtSearch });
+                listWrap.appendChild(search);
+                div.appendChild(listWrap);
+                listWrap.appendChild(list);
+
+                el.loadOptions = () => {
+                    list.innerHTML = '';
+
+                    if (el.attributes['multiselect-select-all']?.value == 'true') {
+                        var op = newEl('div', { class: 'multiselect-dropdown-all-selector' })
+                        var ic = newEl('input', { type: 'checkbox' });
+                        op.appendChild(ic);
+                        op.appendChild(newEl('label', { text: config.txtAll }));
+
+                        op.addEventListener('click', () => {
+                            op.classList.toggle('checked');
+                            op.querySelector("input").checked = !op.querySelector("input").checked;
+
+                            var ch = op.querySelector("input").checked;
+                            list.querySelectorAll(":scope > div:not(.multiselect-dropdown-all-selector)")
+                                .forEach(i => { if (i.style.display !== 'none') { i.querySelector("input").checked = ch; i.optEl.selected = ch } });
+
+                            el.dispatchEvent(new Event('change'));
+                        });
+                        ic.addEventListener('click', (ev) => {
+                            ic.checked = !ic.checked;
+                        });
+                        el.addEventListener('change', (ev) => {
+                            let itms = Array.from(list.querySelectorAll(":scope > div:not(.multiselect-dropdown-all-selector)")).filter(e => e.style.display !== 'none')
+                            let existsNotSelected = itms.find(i => !i.querySelector("input").checked);
+                            if (ic.checked && existsNotSelected) ic.checked = false;
+                            else if (ic.checked == false && existsNotSelected === undefined) ic.checked = true;
+                        });
+
+                        list.appendChild(op);
+                    }
+                    Array.from(el.options).map(o => {
+                        var op = newEl('div', { class: o.selected ? 'checked' : '', optEl: o })
+                        var ic = newEl('input', { type: 'checkbox', checked: o.selected });
+                        op.appendChild(ic);
+                        op.appendChild(newEl('label', { text: o.text }));
+
+                        op.addEventListener('click', () => {
+                            op.classList.toggle('checked');
+                            op.querySelector("input").checked = !op.querySelector("input").checked;
+                            op.optEl.selected = !!!op.optEl.selected;
+                            el.dispatchEvent(new Event('change'));
+                        });
+                        ic.addEventListener('click', (ev) => {
+                            ic.checked = !ic.checked;
+                        });
+                        o.listitemEl = op;
+                        list.appendChild(op);
+                    });
+                    div.listEl = listWrap;
+
+                    div.refresh = () => {
+                        div.querySelectorAll('span.optext, span.placeholder').forEach(t => div.removeChild(t));
+                        var sels = Array.from(el.selectedOptions);
+                        if (sels.length > (el.attributes['multiselect-max-items']?.value ?? 5)) {
+                            div.appendChild(newEl('span', { class: ['optext', 'maxselected'], text: sels.length + ' ' + config.txtSelected }));
+                        }
+                        else {
+                            sels.map(x => {
+                                var c = newEl('span', { class: 'optext', text: x.text, srcOption: x });
+                                if ((el.attributes['multiselect-hide-x']?.value !== 'true'))
+                                    c.appendChild(newEl('span', { class: 'optdel', text: '🗙', title: config.txtRemove, onclick: (ev) => { c.srcOption.listitemEl.dispatchEvent(new Event('click')); div.refresh(); ev.stopPropagation(); } }));
+
+                                div.appendChild(c);
+                            });
+                        }
+                        if (0 == el.selectedOptions.length) div.appendChild(newEl('span', { class: 'placeholder', text: el.attributes['placeholder']?.value ?? config.placeholder }));
+                    };
+                    div.refresh();
+                }
+                el.loadOptions();
+
+                search.addEventListener('input', () => {
+                    list.querySelectorAll(":scope div:not(.multiselect-dropdown-all-selector)").forEach(d => {
+                        var txt = d.querySelector("label").innerText.toUpperCase();
+                        d.style.display = txt.includes(search.value.toUpperCase()) ? 'block' : 'none';
+                    });
+                });
+
+                div.addEventListener('click', () => {
+                    div.listEl.style.display = 'block';
+                    search.focus();
+                    search.select();
+                });
+
+                document.addEventListener('click', function (event) {
+                    if (!div.contains(event.target)) {
+                        listWrap.style.display = 'none';
+                        div.refresh();
+                    }
+                });
+            });
+        }
+        window.addEventListener('load', () => {
+            MultiselectDropdown(window.MultiselectDropdownOptions);
+        });
+    </script>
+</body>

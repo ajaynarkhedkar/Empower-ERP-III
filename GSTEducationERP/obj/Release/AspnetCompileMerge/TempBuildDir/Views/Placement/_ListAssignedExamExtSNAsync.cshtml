@@ -1,0 +1,565 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+	<style>
+		.card-header {
+			cursor: pointer;
+		}
+
+		.input-group label,
+		.input-group select,
+		.input-group input {
+			font-size: 16px;
+		}
+
+		.scrollable-label {
+			max-height: 100px; /* Set a maximum height for the label */
+			overflow-y: auto; /* Enable vertical scrollbar if needed */
+		}
+
+		.datetimepicker-input {
+			pointer-events: none;
+		}
+	</style>
+
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- Bootstrap 4 -->
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="~/Content/plugins/moment/moment.min.js"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+	<script src="~/Content/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+	<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+	<script src="~/Content/Admin/js/Icon.js"></script>
+
+</head>
+
+<body>
+
+
+	@using (Html.BeginForm())
+	{
+		@Html.AntiForgeryToken()
+	<div class="card card-default ">
+		<div class="card-header" style="background-color: #33CCCC">
+			<h4 class="card-title">Assign Exam</h4>
+
+		
+		</div>
+		<div class="card-body collapse">
+			<div class="row">
+				<div class="input-group col-md-4">
+					@Html.LabelFor(model => model.StudentCode, "Candidate Name", htmlAttributes: new { @class = "control-label col-md-4" })
+					<div class="col-md-8">
+						@Html.DropDownListFor(model => model.StudentCode, new SelectList(ViewBag.Student, "Value", "Text"), "---Select Candidate--- ", new { @class = "form-control col-md-12", id = "CandidateDropdown" })
+						@Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+					</div>
+				</div>
+
+				<div class="input-group col-md-4">
+					@Html.LabelFor(model => model.ExamName, htmlAttributes: new { @class = "control-label col-md-4" })
+					<div class="col-md-8">
+						@Html.DropDownListFor(model => model.ExamName, new SelectList(Enumerable.Empty<SelectListItem>()), "-----Select Exam----", new { @class = "form-control col-md-12", id = "ExamName" })
+						@Html.ValidationMessageFor(model => model.ExamName, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<div class="input-group col-md-4">
+					@Html.LabelFor(model => model.SDuration, "Duration", htmlAttributes: new { @class = "control-label col-md-4" })
+					<div class="col-md-8">
+						<label class="form-control col-md-12" id="Duration"></label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-group col-md-4">
+					@Html.LabelFor(model => model.SkillName, "Candidate Skill", htmlAttributes: new { @class = "control-label col-md-4" })
+					<div class="col-md-8">
+						<label class="form-control col-md-12 scrollable-label" id="CandidateSkillLabel"></label>
+					</div>
+				</div>
+				<div class="input-group col-md-4">
+					<label class="col-md-4">Technology</label>
+					<div class="col-md-8">
+						<label class="form-control col-md-12 scrollable-label" id="ExamSkillLabel"></label>
+
+					</div>
+				</div>
+
+
+				<div class="input-group col-md-4">
+					<label class="col-md-4">Exam Date</label>
+					<div class="col-md-8">
+
+						@Html.EditorFor(model => model.ExamDate, new { htmlAttributes = new { @class = "form-control datepicker col-md-12" } })
+
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- time Picker -->
+				<div class="col-md-4">
+					<div class="bootstrap-timepicker">
+						<div class="input-group">
+							<label class="col-md-4">Exam Time</label>
+							<div class="col-md-8">
+								<div class="input-group date" data-target-input="nearest">
+									<input type="text" name="ExamTime" id="timepicker" class="form-control col-md-12 datetimepicker-input" data-target="#timepicker" />
+									<div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="far fa-clock"></i></div>
+									</div>
+								</div>
+								<!-- /.input group -->
+							</div>
+						</div>
+						@Html.HiddenFor(model => model.EndTime, new { id = "endTime" })
+					</div>
+				</div>
+				<div class="input-group col-md-4">
+					@Html.LabelFor(model => model.SupervisorName, htmlAttributes: new { @class = "control-label col-md-4" })
+					<div class="col-md-8">
+						@Html.DropDownListFor(model => model.SupervisorName, new SelectList(ViewBag.Trainer, "Value", "Text"), "-----Select Supervisor----", new { @class = "form-control col-md-12" })
+						@Html.ValidationMessageFor(model => model.SupervisorName, "", new { @class = "text-danger" })
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="input-group">
+						<label class="control-label col-md-4">Lab Name </label>
+						<select id="LabCode" name="LabCode" class="form-control col-md-8" required> </select>
+						@Html.ValidationMessageFor(model => model.LabCode, "", new { @class = "text-danger" })
+
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="input-group justify-content-center ">
+					<div class="col-md-offset-2 col-md-1">
+						<button type="button" class="btn btn-block bg-gradient-success btn-block" onclick="validateForm()">Save</button>
+					</div>
+					<div class="col-md-1">
+						<button type="button" class="btn btn-block bg-gradient-danger btn-block" onclick="resetFormElements()">Clear</button>
+					</div>
+				</div>
+			</div>
+			<br />
+		</div>
+	</div>
+	}
+	<div class="card">
+		<div class="card-body">
+
+			<table id="ExternalAssignedExams" class="table table-bordered table-striped">
+				<thead>
+
+					<tr>
+
+						<th hidden></th>
+						<th>
+							@Html.DisplayNameFor(model => model.StudentName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.ExamName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.SupervisorName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.LabName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TimeString)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.DateString)
+						</th>
+						<th>
+							Duration(hh:mm)
+							@*@Html.DisplayNameFor(model => model.FormattedDuration)*@
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TotalMarks)
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@if (Model != null && Model.lstExams != null)
+					{
+						for (int i = 0; i < Model.lstExams.Count; i++)
+						{
+							var item = Model.lstExams[i];
+							<tr>
+
+								<td hidden>
+									@Html.HiddenFor(modelItem => item.AssignExamId)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.StudentName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ExamName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.SupervisorName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.LabName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.TimeString)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DateString)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.FormattedDuration)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.TotalMarks)
+								</td>
+								<td style="text-align: center;">
+									<a href="#" class="icon" data-toggle="modal" data-target="#resultModal" data-id="@item.AssignExamId" data-action="Edit Assigned Exam" title="Edit">
+										<!-- Embed the video element -->
+										<video width="25" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4">
+										</video>
+									</a>
+									@*<a href="@Url.Action("UpdateAssignExamExternalAsyncSN", new { id = item.AssignExamId })">
+											<img src="~/Content/Placement/img/pen (1).png"
+												 data-toggle="tooltip"
+												 data-placement="top"
+												 title="Edit"
+												 alt="Edit"
+												 style="width: 25px; height: 25px; border: 0;"
+												 id="EditExam">
+										</a>*@
+								</td>
+
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="resultModalLabel">Edit Assigned Exam</h3>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="background-color:transparent">
+
+					<!-- Result form content will be loaded here -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+    $(document).ready(function () {
+		$("#CandidateDropdown").change(function () {
+			$("#ExamSkillLabel").text("");
+			$("#Duration").text("");
+			var candidateCode = $(this).val();
+
+            // Find the selected student in the ViewBag.Student array
+            var selectedStudent = $.grep(@Html.Raw(Json.Encode(ViewBag.Student)), function (student) {
+                return student.Value === candidateCode;
+            })[0];
+
+            if (selectedStudent) {
+                // Update the CandidateSkill label with the fetched skills and add a class for highlighting
+                var candidateSkillLabel = $("#CandidateSkillLabel");
+                candidateSkillLabel.text(selectedStudent.CandidateSkill);
+
+               $.ajax({
+    type: 'GET',
+    url: '@Url.Action("ListExamExternalStudentsSN", "Placement")',
+    data: { StudentCode: candidateCode },
+    success: function (data) {
+		var examDropdown = $("#ExamName");
+
+        examDropdown.empty();
+        examDropdown.append('<option value="">-----Select Exam----</option>');
+        $.each(data, function (i, exam) {
+			examDropdown.append('<option value="' + exam.Value + '" data-exam-skill="' + exam.ExamSkill + '"data-exam-duration="' + exam.Duration + '">' + exam.Text + '</option>');
+        });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+        console.error('Error during Ajax request:', textStatus, errorThrown);
+    }
+});
+
+            }
+        });
+
+        // Event handler for ExamName change
+        $("#ExamName").change(function () {
+            var selectedExam = $(this).find(':selected');
+            var examSkillLabel = $("#ExamSkillLabel");
+			var examDuration = $("#Duration");
+            // Update the ExamSkill label with the selected exam's skill
+			examSkillLabel.text(selectedExam.attr('data-exam-skill'));
+			examDuration.text(selectedExam.attr('data-exam-duration'));
+
+        });
+    });
+	</script>
+	<script>
+
+		$(document).ready(function () {
+
+			$('#timepicker').datetimepicker({
+				format: 'LT',
+
+			})
+
+			$('#ExamDate').datetimepicker({
+				format: 'YYYY-MM-DD',
+				minDate: moment().startOf('day')
+			});
+			$('#timepicker').on('change.datetimepicker', function (e) {
+                calculateEndTime();
+
+            });
+			$('#ExamDate').on('change.datetimepicker', function (e) {
+				var examTime = $('#timepicker').val();
+				var firstExam = $('#ExamName option:first-child');
+				if (!examTime || examTime.trim() === '') {
+					// Display an alert if the time is not selected
+					Swal.fire({
+						title: 'Please select the Exam Time',
+						icon: 'warning',
+						confirmButtonText: 'OK'
+					});
+				}
+				else if (firstExam.val() === '') {
+					Swal.fire({
+						title: 'Please select the first exam',
+						icon: 'warning',
+						confirmButtonText: 'OK'
+					});
+				}
+				else {
+					getLabDetails();
+				}
+            });
+
+
+			// Usage in your existing function
+			function calculateEndTime() {
+
+				var startTime = $('#timepicker').datetimepicker('date');
+				var durationString = $('#Duration').text();
+
+                // Extract numeric value from the duration string
+                var durationValue = parseInt(durationString.split(' ')[0]);
+
+                // Check if duration is in minutes or hours
+                var isHours = durationString.includes('Hour');
+
+                var duration = isHours ? 'Hour' : 'minute';
+
+                if (startTime && durationValue) {
+                    var startTimeMoment = moment(startTime, 'LT');
+                    var endTimeMoment = startTimeMoment.clone().add(durationValue, duration);
+
+                    $('#endTime').text(endTimeMoment.format('LT'));
+                    $('#endTime').val(endTimeMoment.format('LT'));
+                    getLabDetails();
+                } else {
+                    $('#endTime').text('');
+                }
+            }
+
+
+			function getLabDetails() {
+
+	var startDate = $('#ExamDate').val();
+    var StartTime = $('#timepicker').val();
+    var EndTime = $('#endTime').text();
+
+    $.ajax({
+        url: '@Url.Action("ReadAvailableLabBatch_Bind", "Placement")',
+        type: 'POST',
+        data: {
+            startDate: startDate,
+            StartTime: StartTime,
+            EndTime: EndTime
+        },
+        success: function (data) {
+            try {
+                var result = JSON.parse(data);
+                var v = "<option>---Select---</option>";
+                $.each(result, function (i, item) {
+                    v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+                });
+                $("#LabCode").html(v);
+            } catch (e) {
+                console.error('Error parsing JSON data:', e);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX request failed:', status, error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while fetching lab details.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+		});
+
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.card-header').click(function () {
+				var cardBody = $(this).closest('.card').find('.card-body:first');
+				cardBody.slideToggle();
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			// Initialize jQuery Validate
+			$.validator.unobtrusive.parse('form');
+
+			// Handle form submission
+			$('form').submit(function (e) {
+				// Your custom validation logic
+				if (!validateForm()) {
+					e.preventDefault(); // Prevent form submission if validation fails
+				}
+			});
+		});
+		function resetFormElements() {
+			// Reset form fields
+			$('form')[0].reset();
+
+			// Clear additional labels or elements if needed
+			$("#CandidateSkillLabel").text("");
+			$("#ExamSkillLabel").text("");
+			$("#Duration").text("");
+			$('#LabCode').val(""); // Clear LabCode dropdown selection
+			$('#CandidateDropdown').val(""); // Clear CandidateDropdown selection
+			$('#ExamName').val(""); // Clear ExamName selection
+			$('#SupervisorName').val(""); // Clear LabCode dropdown selection
+			$('#ExamDate').val("");
+			$('#timepicker').val("");
+
+		}
+
+		function validateForm() {
+			// Your custom validation logic
+			var isValid = true;
+			// Example: Validate StudentCode
+			var studentCode = $('#CandidateDropdown').val();
+			if (!studentCode || studentCode.trim() === '') {
+				isValid = false;
+				// Display an error message or perform any desired UI action
+				toastr.error("Select Candidate!");
+			}
+
+			// Example: Validate ExamName
+			var examName = $('#ExamName').val();
+			if (!examName || examName.trim() === '') {
+				isValid = false;
+				// Display an error message or perform any desired UI action
+				toastr.error("Select Exam!");
+			}
+			// Example: Validate ExamName
+			var examTime = $('#timepicker').val();
+			if (!examTime || examTime.trim() === '') {
+				isValid = false;
+				// Display an error message or perform any desired UI action
+				toastr.error("Select Time!");
+			}
+
+			// Add more validation logic for other fields as needed
+			if (isValid) {
+				confirmAssign();
+			}
+			return isValid;
+
+		}
+	</script>
+	<script>
+		function confirmAssign() {
+
+        Swal.fire({
+            title: 'Are you sure you want to assign the exam?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, assign it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User confirmed, submit the form
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AssignExamExternalStudentSNAsync", "Placement")', // Update the URL as needed
+                    data: $('form').serialize(),
+                    success: function (data) {
+                        // Display a success message
+                        Swal.fire({
+                            title: 'Assign Successful',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Redirect to the ListAllAssignedExamSNAsync action
+                            window.location.href = '@Url.Action("ListAllAssignedExamSNAsync", "Placement")'; // Update the URL as needed
+                        });
+                    },
+                    error: function (error) {
+                        // Handle error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while assigning the exam.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
+    }
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.icon, .icon1').click(function () {
+
+				var id = $(this).data('id');
+
+				// Load partial view into modal body
+				var url = '/Placement/UpdateAssignExamExternalAsyncSN?id=' + id;
+
+				// Clear previous content before loading new content
+				$('#resultModal .modal-body').empty();
+
+				// Load the new content into modal body
+				$('#resultModal .modal-body').load(url, function (response, status, xhr) {
+					console.log('Load Status:', status);
+					if (status === "error") {
+						console.log('Error:', xhr.status, xhr.statusText);
+					}
+				});
+			});
+		});
+
+	</script>
+</body>
+</html>

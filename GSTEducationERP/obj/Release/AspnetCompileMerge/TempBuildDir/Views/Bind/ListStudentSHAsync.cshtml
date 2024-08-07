@@ -1,0 +1,171 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+<html>
+<head>
+
+    @*<link href="~/Content/Admin/css/UI.css" rel="stylesheet" />*@
+    <style>
+        .custom-modal-header .close {
+            font-size: 2.5rem; /* Set the font size */
+            padding: 15px; /* Increase padding to increase overall size */
+            transition: color 0.3s; /* Add transition effect for smooth hover */
+        }
+
+            .custom-modal-header .close:hover {
+                color: red; /* Change the color on hover */
+            }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+
+            <table id="StudentList" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th hidden>
+                          Studet Code
+                        </th>
+                        <th>
+                          Course Name
+                        </th>
+                        <th>
+                          Batch Name
+                        </th>
+                        <th>
+                          Student Name
+                        </th>
+                        <th>
+                          Contact Number
+                        </th>
+                        <th>
+                           Email Id
+                        </th>
+                        <th>
+                            Admission Date
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.StudentList)
+                    {
+                        <tr>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.StudentCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BatchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StudentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ContactNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmailId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MDate)
+                            </td>
+                            <td>
+                                @if (Session["StaffPositionId"].ToString() == "3")
+                                {
+                                    if (item.StatusId == 4 || item.StatusId == 8 || item.StatusId == 22)
+                                    {
+                                        <a href="#" class="icon" data-id="@item.StudentCode" data-url="@Url.Action("UpdateStudStatusSHAsync", "Bind", new { StudentCode = item.StudentCode })" data-toggle="modal" data-target="#StatusModal" title="Update Status">
+                                            <video id="myVideo" width="20" height="20" playsinline loop>
+                                                <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+                                    }
+                                    else if (item.StatusId == 54)
+                                    {
+                                        <a href="#" class="Release" data-id="@item.StudentCode" data-url="@Url.Action("ListReleaseStudentSHAsync", "Bind", new { StudentCode = item.StudentCode })" data-toggle="modal" data-target="#StatusModal">Release</a>
+                                    }
+                                }
+                                else if (Session["StaffPositionId"].ToString() == "2")
+                                {
+                                    if (item.StatusId == 4 || item.StatusId == 8 || item.StatusId == 22)
+                                    {
+                                        <a href="#" class="icon" data-id="@item.StudentCode" data-url="@Url.Action("UpdateStudStatusSHAsync", "Bind", new { StudentCode = item.StudentCode })" data-toggle="modal" data-target="#StatusModal" title="Update Status">
+                                            <video id="myVideo" width="20" height="20" playsinline loop>
+                                                <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+    <div class="madal fade modal" id="StatusModal">
+        <div class="modal-dialog" style="background-color: transparent;">
+            <div class="modal-content" style="background-color: white;">
+                @*<h1 class="text-info modal-title">Edit</h1>*@
+                @*<button class="close text-danger" data-dismiss="modal">&times;</button>*@
+            </div>
+
+        </div>
+    </div>
+
+    <!--<div class="madal fade modal" id="ReleaseModal">
+        <div class="modal-dialog" style="background-color: transparent;">
+            <div class="modal-content" style="background-color: white;">-->
+                @*<h1 class="text-info modal-title">Edit</h1>*@
+                @*<button class="close text-danger" data-dismiss="modal">&times;</button>*@
+            <!--</div>
+
+        </div>
+    </div>-->
+    @*<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>*@
+    @*<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>*@
+    @*<script src="~/Content/Admin/js/Icon.js"></script>*@
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            $('#StudentList').on('click', '.icon', function () {
+                var StudentCode = $(this).data('id');
+                var url = $(this).data('url');
+                jQuery.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $("#StatusModal").find(".modal-content").html(data);
+                        $("#StatusModal").modal('show');
+
+                    }
+                });
+            });
+
+
+            $('#StudentList').on('click', '.Release', function () {
+                var StudentCode = $(this).data('id');
+                var url = $(this).data('url');
+                jQuery.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $("#StatusModal").find(".modal-content").html(data);
+                        $("#StatusModal").modal('show');
+                    }
+                });
+            });
+
+           
+
+        });
+    </script>
+
+</body>
+</html>

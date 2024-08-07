@@ -1,0 +1,153 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+</head>
+<body>
+
+    @using (Html.BeginForm("ListDemoAttendanceStudentKKAsync", "Trainer", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.BatchCode)
+        @Html.HiddenFor(model => model.StartDate)
+        @Html.HiddenFor(model => model.StartTime)
+        @*@Model.BatchCode @Model.StartDate @Model.StartTime*@
+        <div class="container-fluid">
+            <br />
+            <div class="card pl-4 mx-auto col-md-12">
+                <div class="form-horizontal">
+                    <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+                    <h2>Student Attendance</h2>
+                    <hr />
+
+                    @for (int i = 0; i < Model.lstNoofstudent.Count; i++)
+                    {
+                        var student = Model.lstNoofstudent[i];
+                        <div class="card student-card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    @(i + 1).@Html.DisplayFor(modelItem => student.StudentName)
+                                    @Html.HiddenFor(modelItem => student.StudentCode)
+                                    @Html.HiddenFor(modelItem => student.AttendanceStatusId)
+
+                                </h5>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="attendanceData[@i].AttendanceStatusId" id="present-@(i)" value="30">
+                                    <label class="form-check-label text-success" for="present-@(i)">Present</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="attendanceData[@i].AttendanceStatusId" id="absent-@(i)" value="31">
+                                    <label class="form-check-label text-danger" for="absent-@(i)">Absent</label>
+                                </div>
+                                <!-- Add hidden input for StudentCode -->
+                                <input type="hidden" name="attendanceData[@i].StudentCode" value="@student.StudentCode" />
+                            </div>
+                        </div>
+                    }
+                    <div class="text-center">
+                        <!-- Centering container -->
+                        <button type="submit" class="btn btn-success" id="save-button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Bootstrap JS and Popper.js -->
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+    $(document).ready(function() {
+        $("#save-button").click(function () {
+            var isValid = true;
+            $(".student-card").each(function () {
+                var selectedOption = $(this).find("input[type='radio'][name^='attendanceData']:checked").val();
+                if (!selectedOption) {
+                    isValid = false;
+                    return false;
+                }
+            });
+
+            if (!isValid) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please select either Present or Absent for all students.",
+                    icon: "warning",
+                    showCancelButton: false,
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            @*var formData = $("form").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ListDemoAttendanceStudentKKAsync", "Trainer")",
+                data: formData,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Attendance saved successfully.",
+                            icon: "success",
+                            showCancelButton: false,
+                            confirmButtonColor: "#3085d6",
+                            confirmButtonText: "OK"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "@Url.Action("ListDemoArrangedKKAsync", "Trainer")";
+                            }
+                        });*@
+                //<!--//    } else {
+                ////        Swal.fire({
+                //            title: "Error!",
+                //            text: "An error occurred while saving attendance.",
+                //            icon: "error",
+                //            showCancelButton: false,
+                //            confirmButtonColor: "#d33",
+                //            confirmButtonText: "OK"
+                //        });
+                //    }
+                //},
+            //    error: function(xhr, status, error) {
+            //        Swal.fire({
+            //            title: "Error!",
+            //            text: "An unexpected error occurred.",
+            //            icon: "error",
+            //            showCancelButton: false,
+            //            confirmButtonColor: "#d33",
+            //            confirmButtonText: "OK"
+            //        });
+            //    }
+           /* });*/
+        });
+    });
+    </script>
+    <script>
+    $(document).ready(function() {
+        // Check if SuccessMessage exists in TempData
+        var successMessage = '@TempData["SuccessMessage"]';
+        if (successMessage) {
+            // Display success message using SweetAlert2
+            Swal.fire({
+                title: 'Success!',
+                text: successMessage,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+    </script>
+
+
+
+</body>
+</html>

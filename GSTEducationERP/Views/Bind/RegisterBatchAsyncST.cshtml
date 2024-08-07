@@ -1,0 +1,377 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+
+<head>
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        img {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+        .scrollable-container {
+            max-height: 200px; /* Set the maximum height for the container */
+            overflow-y: auto; /* Enable vertical scrollbar */
+        }
+    </style>
+</head>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br>
+    <div class="container-fluid">
+        <div class="card " style=" margin-top:-15px">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row col-md-12">
+                <div class="col-md-6">
+                    <label class="col-md-12">Batch Name</label>
+                    @Html.HiddenFor(model => model.StudentCode)
+                    @Html.HiddenFor(model => model.NoOfStudent)
+                    @Html.EditorFor(model => model.BatchName, new { htmlAttributes = new { @class = "form-control", @required = "required", maxlength = "200", oninput = "convertToUpperCase(this)" } })
+                    <span id="BatchNameValidation" class="text-danger"></span>
+                    @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="col-md-12">Course</label>
+                    @Html.DropDownListFor(model => model.CourseCode, new SelectList(ViewBag.Course, "Value", "Text"), "Select", new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+                    <div class="col-md-6"></div>
+
+                    <div class="col-md-6">
+                        <label class="col-md-12">New Admitted Student</label>
+                        <div class="card scrollable-container mx-auto" style="width: 300px;  margin-top: 20px; border-radius: 10px; box-shadow: 20px 10px 10px lightgrey; background-color: whitesmoke; ">
+                            <div id="AdmittedStudent"></div>
+                            @Html.ValidationMessageFor(model => model.SelectStudent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="form-group col-md-12 text-center">
+                        <div class="col-md-offset-3 col-md-12">
+                            <input type="submit" value="Save" class="btn btn-success btn-sm" id="BatchSave" />
+                            <input type="button"  value="Cancel" id="cancelButton" class="btn btn-danger btn-sm" onclick="showCancelConfirmation()" />
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; margin-block-start: 0px;" onclick="location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")'">
+                            <video width="35" height="35" playsinline loop>
+                                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                            </video>
+                        </a>
+                    </div>
+               
+            </div>
+    </div>
+
+}
+
+<script>
+    function showCancelConfirmation() {
+        // Using SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            //text: 'You will not be able to undo this action!',
+            icon: 'warning',
+            //showCancelButton: true,
+            confirmButtonColor: '#d33',
+            //cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Add any form cancellation logic here if needed
+
+                // Redirect to the specified URL
+                window.location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")';
+            }
+        });
+    }
+</script>
+
+<script>
+    function convertToUpperCase(input) {
+        input.value = input.value.toUpperCase();
+    }
+</script>
+
+<script>
+		$(document).ready(function () {
+            // Attach event handler to ExamName input field on keyup
+            $('#BatchName').on('keyup', function () {
+                validateBatchName();
+            });
+		});
+
+		function validateBatchNameOnCourseChange() {
+			var BatchName = $('#BatchName').val();
+			if (BatchName) {
+				$('#BatchName').val('');
+				$('#BatchNameValidation').text(''); // Clear the validation message
+			}
+		}
+
+           function validateBatchName() {
+        var BatchName = $('#BatchName').val();
+		if (BatchName) {
+			$('#BatchNameValidation').text('Please select a course before entering the Batch name.');
+            $('#BatchNameValidation').text('');
+        }
+
+        if (BatchName) {
+            // Perform AJAX check to see if the Batch name already exists
+            $.ajax({
+                url: '@Url.Action("IsBatchAvilableAsyncST", "Bind")',
+                type: 'POST',
+                data: { BatchName: BatchName},
+                success: function (data) {
+                    if (data.isAvailable===false) {
+                        // Batch name is available
+                        $('#BatchNameValidation').text('');
+                        $('#BatchSave').prop('disabled', false);
+                    } else {
+                        // Batch name already exists
+						$('#BatchNameValidation').text('Batch name already exists. Please choose another name.');
+                        $('#BatchSave').prop('disabled', true);
+
+                    }
+                },
+                error: function () {
+                    // Handle error
+                    console.error('Error checking Batch name availability.');
+                }
+            });
+        }
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $("#CourseCode").change(function () {
+
+            var id = $(this).val();
+            $("#AdmittedStudent").empty();
+            $.ajax({
+                url: "/Bind/GetAdmittedStudentAsyncST",
+                type: "GET",
+                data: { CourseCode: id },
+                success: function (data) {
+                    var SelectStudent = $("#AdmittedStudent");
+                    SelectStudent.empty();
+                    $.each(data, function (index, v1) {
+
+                        $("#AdmittedStudent")
+                            .append(`<input type="checkbox" id="${v1.Value}" name="${v1.Text}" value="${v1.Value}" Text="${v1.Text}"/*style=" visibility: hidden;"*/>`)
+                            .append(`<label value="${v1.Value}">${v1.Text}</label></div>`)
+                            .append(`<br>`);
+                    });
+                }
+            });
+        });
+
+        $('#BatchSave').on('click', function () {
+
+            var BatchName = $('#BatchName').val();
+            var CourseCode = $('#CourseCode').val();
+            var student = "";
+            var count = 0;
+            if (!BatchName || !CourseCode) {
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'Please select Batch Name and Course before saving.',
+                    icon: 'error'
+                });
+                return false;
+            }
+            $('#AdmittedStudent input[type="checkbox"]:checked').each(function () {
+
+                student += $(this).val() + ',';
+                count++;
+            });
+
+            //if (count === 0) {
+            //    Swal.fire({
+            //        title: 'Validation Error',
+            //        text: 'Please select at least five students before saving.',
+            //        icon: 'error'
+            //    });
+            //    return false;
+            //}
+            if (count < 5) { // Minimum count check
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'Please select at least five students before saving.',
+                    icon: 'error'
+                });
+                return false;
+            }
+
+            if (count > 2000) { // Maximum count check
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'You can only select up to 200 students. Please unselect some students.',
+                    icon: 'error'
+                });
+                return false;
+            }
+            // Check if the count is less than or equal to 5
+            if (count <= 200) {
+                // Proceed with the AJAX call
+                $.ajax({
+                    url: "/Bind/RegisterBatchAsyncST",
+                    type: "POST",
+                    data: {
+                        BatchName: BatchName,
+                        CourseCode: CourseCode,
+                        StudentCode: student,
+                        NoOfStudent: count
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            // Show success SweetAlert
+                            Swal.fire({
+                                title: 'Success',
+                                text: result.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                // Redirect or perform any other action after success
+                                window.location.href = '/Bind/ListAllBatchAsyncST/';
+                            });
+                        } else {
+                            // Show error SweetAlert
+                            Swal.fire({
+                                title: 'Error',
+                                text: result.message,
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error if needed
+                        console.error(xhr, status, error);
+                    }
+                });
+            } else {
+                // Show alert if count is greater than 5
+                Swal.fire({
+                    title: 'Alert',
+                    text: 'You can only select up to 5 students. Please unselect some students.',
+                    icon: 'warning'
+                });
+
+            }
+            return false;
+        });
+
+    });
+
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+        //$('#BatchSave').on('click', function () {
+        //    debugger;
+        //    var BatchName = $('#BatchName').val();
+        //    var CourseCode = $('#CourseCode').val();
+        //    var student = "";
+        //    var count = 0;
+        //    if (!BatchName || !CourseCode) {
+        //        Swal.fire({
+        //            title: 'Validation Error',
+        //            text: 'Please select Batch Name and Course before saving.',
+        //            icon: 'error'
+        //        });
+        //        return false;
+        //    }
+        //    $('input[type="checkbox"]').each(function () {
+
+        //        if (this.checked) {
+        //            debugger;
+        //            student += $(this).val() + ',';
+        //            count++;
+        //        }
+        //    });
+        //    if (count === 0) {
+        //        Swal.fire({
+        //            title: 'Validation Error',
+        //            text: 'Please select at least one student before saving.',
+        //            icon: 'error'
+        //        });
+        //        return false;
+        //    }
+        //    // Check if the count is less than or equal to 5
+        //    if (count <= 5) {
+        //        debugger;
+        //        // Proceed with the AJAX call
+        //        $.ajax({
+        //            url: "/Bind/RegisterBatchAsyncST",
+        //            type: "POST",
+        //            data: {
+        //                BatchName: BatchName,
+        //                CourseCode: CourseCode,
+        //                StudentCode: student,
+        //                NoOfStudent: count
+        //            },
+        //            success: function (result) {
+        //                if (result.success) {
+        //                    // Show success SweetAlert
+        //                    Swal.fire({
+        //                        title: 'Success',
+        //                        text: result.message,
+        //                        icon: 'success',
+        //                        confirmButtonText: 'OK'
+        //                    }).then(function () {
+        //                        // Redirect or perform any other action after success
+        //                        window.location.href = '/Bind/ListAllBatchAsyncST/';
+        //                    });
+        //                } else {
+        //                    // Show error SweetAlert
+        //                    Swal.fire({
+        //                        title: 'Error',
+        //                        text: result.message,
+        //                        icon: 'error'
+        //                    });
+        //                }
+        //            },
+        //            error: function (xhr, status, error) {
+        //                // Handle error if needed
+        //                console.error(xhr, status, error);
+        //            }
+        //        });
+        //    } else {
+        //        // Show alert if count is greater than 5
+        //        Swal.fire({
+        //            title: 'Alert',
+        //            text: 'You can only select up to 5 students. Please unselect some students.',
+        //            icon: 'warning'
+        //        });
+
+        //    }
+        //    return false;
+        //});
+    });
+</script>

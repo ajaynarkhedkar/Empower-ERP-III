@@ -1,0 +1,311 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    position: absolute;
+}
+
+section {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-position: left;
+}
+
+    section .bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        background-position: left;
+    }
+
+.login {
+    position: relative;
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    width: 500px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+    margin: 40px;
+}
+
+    .login h2 {
+        position: relative;
+        top: -5px;
+        width: 100%;
+        text-align: center;
+        font-size: 2.5em;
+        font-weight: 600;
+        color: #fcb329;
+        margin-bottom: 10px;
+    }
+
+    .login .inputBox {
+        position: relative;
+    }
+
+        .login .inputBox input {
+            position: relative;
+            top: -20px;
+            width: 100%;
+            padding: 10px 15px;
+            padding-right: 20px;
+            outline: none;
+            font-size: 16px;
+            color: #000000;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            margin-bottom: 30px;
+        }
+
+.fa {
+    margin-right: 10px;
+}
+
+.eye {
+    position: absolute;
+    top: -18px;
+}
+
+#hide1 {
+    display: none;
+}
+
+.login .inputBox ::placeholder {
+    color: #000000;
+}
+
+.login .inputBox #btn {
+    position: relative;
+    border: none;
+    outline: none;
+    background: #8fabfe;
+    color: #fff;
+    cursor: pointer;
+    font-size: -2em;
+    font-weight: 500;
+    transition: 0.5s;
+}
+
+    .login .inputBox #btn:hover {
+        background: #1285c4;
+        margin-top: 20px;
+    }
+
+.login .group {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .login .group a {
+        font-size: 1em;
+        color: #8fabfe;
+        font-weight: 500;
+        text-decoration: none;
+        margin: auto;
+    }
+
+        .login .group a:hover {
+            color: #1285c4 !important;
+        }
+
+        .login .group a:nth-child(2) {
+            text-decoration: underline;
+        }
+
+
+
+.captchaField {
+    padding: 10px;
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+
+
+.CaptchaWrap {
+    display: flex;
+    align-items: center;
+}
+
+.CaptchaTxtField {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    display: block;
+    box-sizing: border-box;
+    color: #000000;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+#UserCaptchaCode {
+    margin-top: -20px;
+    padding: 10px;
+    outline: none;
+    font-size: 12px;
+    font-weight: normal;
+    width: 200px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #000000;
+}
+
+    #UserCaptchaCode::placeholder {
+        color: #000000;
+    }
+
+#CaptchaImageCode {
+    text-align: center;
+    margin-top: 10px;
+    padding: 0px 0;
+    width: 150px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.capcode {
+    font-size: 36px;
+    display: block;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+    letter-spacing: 0.5px;
+    color: #ccc;
+    font-family: 'Roboto Slab', serif;
+    font-weight: 100;
+    font-style: italic;
+    width: 150px;
+    height: 40px;
+}
+
+.ReloadBtn {
+    background: url('https://cdn3.iconfinder.com/data/icons/basic-interface/100/update-64.png') left top no-repeat;
+    background-size: 100%;
+    width: 24px;
+    height: 24px;
+    border: 0px;
+    outline: none;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.btnSubmit {
+    margin-top: 10px;
+    border: 0px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #8fabfe;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+    margin-top: -20px;
+    margin-right: 20px;
+}
+
+    .btnSubmit:hover {
+        background: #1285c4;
+    }
+
+.error {
+    color: red;
+    font-size: 12px;
+    display: none;
+}
+
+.success {
+    color: green;
+    font-size: 16px;
+    margin-bottom: 30px;
+    display: none;
+}
+
+
+
+.inputBox .strengthMeter {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: #222;
+}
+
+    .inputBox .strengthMeter::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 100%;
+        transition: 0.5s;
+        background: #f00;
+    }
+
+.inputBox.weak .strengthMeter::before {
+    width: 10%;
+    background: #f00;
+    filter: drop-shadow(0 0 5px #f00) drop-shadow(0 0 10px #f00) drop-shadow(0 0 20px #f00);
+}
+
+.inputBox.moderate .strengthMeter::before {
+    width: 70%;
+    background: #eedc3d;
+    filter: drop-shadow(0 0 5px #eedc3d) drop-shadow(0 0 10px #eedc3d) drop-shadow(0 0 20px #eedc3d);
+}
+
+.inputBox.strong .strengthMeter::before {
+    width: 100%;
+    background: #18e605;
+    filter: drop-shadow(0 0 5px #18e605) drop-shadow(0 0 10px #18e605) drop-shadow(0 0 20px #18e605);
+}
+
+.inputBox .strengthMeter::after {
+    position: absolute;
+    top: -45px;
+    left: 30px;
+    transition: 0.5s;
+    color: aliceblue;
+}
+
+.inputBox.inputBox.weak .strengthMeter::after {
+    content: "Weak Password";
+    color: #f00;
+    filter: drop-shadow(0 0 5px#f00);
+}
+
+.inputBox.inputBox.inputBox.moderate .strengthMeter::after {
+    content: "Moderate Password";
+    color: #eedc3d;
+    filter: drop-shadow(0 0 5px#eedc3d);
+}
+
+.inputBox.inputBox.inputBox.inputBox.strong .strengthMeter::after {
+    content: "Strong Password";
+    color: #18e605;
+    filter: drop-shadow(0 0 5px#18e605);
+}
+
+.body {
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

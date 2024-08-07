@@ -1,0 +1,232 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <style>
+
+
+        .receipt-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .receipt-header {
+            font-size: 24px;
+            color: green;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .receipt-header img {
+                margin-left: 10px;
+            }
+
+        .receipt-details {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+            .receipt-details p {
+                margin: 5px 0;
+            }
+
+        .receipt-buttons {
+            margin-top: 20px;
+        }
+
+            .receipt-buttons button {
+                padding: 10px 20px;
+                margin: 5px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .receipt-buttons .print-btn {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .receipt-buttons .close-btn {
+                background-color: #f44336;
+                color: white;
+            }
+
+
+        .success-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .checkmark {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease;
+        }
+
+            .checkmark::after {
+                content: '';
+                width: 50px;
+                height: 25px;
+                border-left: 6px solid white;
+                border-bottom: 6px solid white;
+                transform: rotate(-45deg);
+                animation: drawCheck 0.5s ease-in-out 0.5s forwards;
+            }
+
+        .message {
+            font-size: 20px;
+            color: #4CAF50;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        @@keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes drawCheck {
+            0% {
+                width: 0;
+                height: 0;
+            }
+
+            100% {
+                width: 50px;
+                height: 25px;
+            }
+        }
+
+        @@keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        strong {
+            text-align: left;
+            /*padding: 8px;*/
+        }
+
+            td p {
+                margin: 0;
+            }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .receipt-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px; 
+        }
+
+        .close-btn {
+            background-color: #ff4c4c; 
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .close-btn:hover {
+                background-color: #ff0000;
+            }
+    </style>
+    <script>
+        function closeView() {
+            if (window.opener) {
+                window.close();
+            } else {
+                @Url.Action("CashTransactionsAsyncAN","Accountant")
+            }
+        }
+    </script>
+</head>
+<body>
+    @*<div class="receipt-container">*@
+    <div class="success-container">
+        <div class="checkmark"></div>
+        <div class="message">Transaction Successful</div>
+    </div>
+    <div class="receipt-details">
+
+        <table>
+            <tr>
+                <td><p><strong>Full Name:</strong> @Model.StudentName</p></td>
+                <td><p><strong>Transaction Date:</strong> @Model.Date.ToString("MM/dd/yyyy")</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Transaction Code:</strong> @Model.TransactionCode</p></td>
+                <td><p><strong>Ammount:</strong> @Model.Amount</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Status:</strong> @Model.Status</p></td>
+                <td><p><strong>Payment Mode:</strong> @Model.PaymentMode</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Email Id:</strong> @Model.EmailId</p></td>
+                <td><p><strong>Description:</strong> @Model.Description</p></td>
+            </tr>
+        </table>
+    </div>
+    <div class="receipt-buttons">
+        <button class="close-btn" onclick="closeView()">CLOSE</button>
+    </div>
+
+    @*</div>*@
+</body>
+</html>
+

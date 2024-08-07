@@ -1,0 +1,263 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "ListDemoKKAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<html>
+<head>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            margin-top: -5px !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+            margin-top: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+    </style>
+
+
+</head>
+<body style="margin: 0; padding: 0;">
+
+    <br />
+    <br />
+
+    <div class="card" style="padding:5px;margin-right:20px;margin-left:10px; margin-top:-15px">
+        <div class="row">
+            <div class="col-6">
+                <h2>Demo List</h2>
+            </div>
+
+            <div class="col-6" style="text-align: right;">
+                <p>
+                    <i><img src="~/Content/Coordinator/img/add-button.png" data-toggle="tooltip" title="New Demo" onclick="location.href = '@Url.Action("AddDemoKKAsync","Coordinator")'" style="width:30px;height:30px" /></i>
+                </p>
+            </div>
+        </div>
+        <hr />
+        <div class="card-body">
+            <div class="container" style="margin-left:-10px">
+                <div class="row">
+                    <div class="col-10">
+                        <div class="card card-primary card-outline card-outline-tabs">
+                            <div class="card-header p-0 border-bottom-0">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="Conductedtab" data-toggle="tab" href="#Conducted" style="color:black">Conducted</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="Assignedtab" data-toggle="tab" href="#Assigned" style=" color:black">Arranged</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="Pendingtab" data-toggle="tab" href="#Pending" style="color:  black">Pending</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div id="Demo">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
+  
+    <script>
+    // Use jQuery instead of $
+    jQuery(document).ready(function ($) {
+        // DataTables initialization
+        $('#DemoList').DataTable({
+
+        });
+        // Ajax request function
+        function loadData(statusId) {
+            $.ajax({
+                url: '@Url.Action("ListAllDemoKKAsync", "Coordinator")',
+                type: 'GET',
+                data: { id: statusId },
+                success: function (data) {
+                    $("#Demo").html(data);
+                    $('#DemoList').DataTable({
+                        "responsive": true,
+                        "lengthChange": false,
+                        "autoWidth": false,
+                        "buttons": [
+                            {
+                                extend: 'copy',
+                                text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                                titleAttr: 'Copy'
+                            },
+                            {
+                                extend: 'csv',
+                                text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                                titleAttr: 'CSV'
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                                titleAttr: 'Excel'
+                            },
+                            {
+                                extend: 'pdf',
+                                text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                                titleAttr: 'PDF'
+                            },
+                            {
+                                extend: 'print',
+                                text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                                titleAttr: 'Print'
+                            },
+                            {
+                                extend: 'colvis',
+                                text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                                titleAttr: 'Columns'
+                            }
+
+
+                        ]
+                    }).buttons().container().appendTo('#DemoList_wrapper  .col-md-6:eq(0)');
+                }
+            });
+        }
+        $(document).ready(function () {
+            loadData(13); // Or whichever default statusId you want to load initially
+        });
+
+        // Load data when DemoRequest tab is clicked
+        $("#Conductedtab").click(function () {
+            loadData(13);
+        });
+        $("#Assignedtab").click(function () {
+            loadData(25);
+        });
+        $("#Pendingtab").click(function () {
+            loadData(6);
+        });
+    });
+    </script>
+
+
+
+</body>
+</html>
+
+

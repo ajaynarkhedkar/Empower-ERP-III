@@ -1,0 +1,88 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@using (Html.BeginForm())
+{
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            margin-left: 10px;
+            margin-bottom: -10px;
+            text-align: left;
+            font-family: Verdana;
+            font-size: medium;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="card mx-auto col-md-12">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label >Batch Code:</label>
+                        <span >@Model.BatchCode</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Batch Name:</label>
+                        <span>@Model.BatchName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Course Name:</label>
+                        <span>@Model.CourseName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Staff Name:</label>
+                        <span>@Model.StaffName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Lab Name:</label>
+                        <span>@Model.LabName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>NoOfStudent:</label>
+                        <span>@Model.NoOfStudent</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Schedule Date:</label>
+                        <span>@Model.BatchScheduleDate.ToString("dd-MM-yyyy")</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Start Date:</label>
+                        <span>@Model.StartDate.ToString("dd-MM-yyyy")</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>End Date:</label>
+                        <span>@Model.EndDate.ToString("dd-MM-yyyy")</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Start Time:</label>
+                        <span>@Html.Raw(@Model.StartTime.ToString("h:mm:ss tt"))</span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>End Time:</label>
+                        @{
+                            DateTime endTimeWithAdditional15Minutes = @Model.EndTime.AddMinutes(15);
+                        }
+                        <span>@Html.Raw(endTimeWithAdditional15Minutes.ToString("h:mm:ss tt"))</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Status:</label>
+                        <span>@Model.Status</span>
+                    </div>
+
+                    <div class="col-md-12 text-center">
+                        <input type="button" style="margin-top:50px" value="Close" id="cancelButton" class="btn btn-danger btn-sm" onclick="location.href = '@Url.Action("BatchScheduleMainViewAsyncST", "Coordinator")'" />
+
+                    </div>
+
+                </div>
+                <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; margin-left:-10px;" onclick="location.href = '@Url.Action("BatchScheduleMainViewAsyncST", "Coordinator")'">
+                    <video width="35" height="35" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                    </video>
+                </a>
+            </div>
+        </div>
+    </div>
+    }
+

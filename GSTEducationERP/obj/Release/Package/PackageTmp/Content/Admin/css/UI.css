@@ -1,0 +1,31 @@
+﻿body {
+
+}
+h2 {	/*margin-left: 60px;*/
+	padding-top: 10px;
+	margin-bottom: 10px;
+	font-family: Verdana;
+	font-weight: bold;
+	font-size: medium;
+	color: #33CCCC;
+}
+a {
+	color: #33CCCC;
+}
+.page-item.active .page-link {
+	background-color: #33CCCC;
+	border-color: #33CCCC;
+	color: #fff;
+}
+.table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before, table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+	background-color: #33CCCC;
+}
+.dropdown-item.active, .dropdown-item:active {
+	background-color: #33CCCC;
+}
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+	background-color: #33CCCC;
+}
+h3,h5 {
+	color: #33CCCC;
+}

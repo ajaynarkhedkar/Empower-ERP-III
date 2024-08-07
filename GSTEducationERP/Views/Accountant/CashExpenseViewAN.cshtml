@@ -1,0 +1,72 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Payment Successful</title>
+    <style>
+        .receipt-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .receipt-header {
+            font-size: 24px;
+            color: green;
+        }
+
+        .receipt-details {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+            .receipt-details p {
+                margin: 5px 0;
+            }
+
+        .receipt-buttons {
+            margin-top: 20px;
+        }
+
+            .receipt-buttons button {
+                padding: 10px 20px;
+                margin: 5px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .receipt-buttons .print-btn {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .receipt-buttons .close-btn {
+                background-color: #f44336;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="receipt-header">Payment successful</div>
+        <div class="receipt-details">
+            <p><strong>Vendor Name:</strong> @Model.VendorName</p>
+            <p hidden><strong>Transaction ID:</strong> @Model.TransactionCode</p>
+            <p><strong>Paid Date:</strong> @Model.Date</p>
+            <p><strong>Paid Amount:</strong> @Model.Amount</p>
+            <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Expense Category:</strong> @Model.ExpenseCategory</p>
+        </div>
+        <div class="receipt-buttons">
+            <button class="close-btn" onclick="window.close()">CLOSE</button>
+        </div>
+    </div>
+</body>
+</html>

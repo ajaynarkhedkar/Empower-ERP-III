@@ -1,0 +1,296 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+<html>
+<head>
+	@*<link rel="stylesheet" href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />*@
+	<style>
+		.datetimepicker-input {
+			pointer-events: none;
+		}
+	
+	</style>
+
+</head>
+<body>
+	@using (Html.BeginForm())
+	{
+
+		<div class="card p-2">
+			@Html.HiddenFor(model => model.AssignExamId)
+			@Html.HiddenFor(model => model.BatchCode)
+			@Html.HiddenFor(model => model.Description, new { id = "formattedDurationId" })
+			<div class="row ">
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.CourseName, "Course Name", htmlAttributes: new { @class = "control-label col-md-6" })
+						<div class="col-md-6">
+							@Model.CourseName
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.BatchName, "Batch	Name", htmlAttributes: new { @class = "control-label col-md-6" })
+						<div class="col-md-6">
+							@Model.BatchName
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.ExamName, "Exam", htmlAttributes: new { @class = "control-label col-md-5" })
+						<div class="col-md-7">
+							@Model.ExamName
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.Duration, htmlAttributes: new { @class = "control-label col-md-6" })
+						<div class="col-md-6">
+							@Html.DisplayFor(model => model.Duration, new { htmlAttributes = new { id = "Duration" } })
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body col-md-8 mx-auto">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title">@Html.DisplayNameFor(model => model.StudentName)</h5>
+					</div>
+					<div class="card-body"style="padding:5px;">
+						@if (Model != null && Model.lstExams != null)
+						{
+							foreach (var item in Model.lstExams)
+							{
+								<div class="card-text">
+									@Html.DisplayFor(modelItem => item.StudentName)
+								</div>
+							}
+						}
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.Date, "Date", htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control datepicker col-md-12", min = DateTime.Now.ToString("yyyy-MM-dd") } })
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="bootstrap-timepicker">
+						<div class="input-group">
+							@Html.LabelFor(model => model.StartTime, "Time", htmlAttributes: new { @class = "control-label col-md-4" })
+							<div class="col-md-8">
+								<div class="input-group date" data-target-input="nearest">
+									<input type="text" id="timepickerExam" name="StartTime" class="form-control col-md-12 datetimepicker-input" data-target="#timepickerExam" value="@Model.StartTime.ToString("HH:mm")" />
+									<div class="input-group-append" data-target="#timepickerExam" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="far fa-clock"></i></div>
+									</div>
+								</div>
+								<!-- /.input group -->
+							</div>
+							@Html.HiddenFor(model => model.Time, new { id = "Time" })
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.StaffCode, "Supervisor", htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.DropDownListFor(model => model.StaffCode, new SelectList(ViewBag.Trainer, "Value", "Text"), new { @class = "form-control col-md-12" })
+							@Html.ValidationMessageFor(model => model.StaffCode, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="input-group">
+						@Html.LabelFor(model => model.LabName, "Lab", htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.DropDownListFor(model => model.LabName, new SelectList(ViewBag.Lab, "Value", "Text"), new { @class = "form-control col-md-12" })
+							@Html.ValidationMessageFor(model => model.LabName, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="input-group col-md-6">
+				@Html.LabelFor(model => model.StatusId, "Status", htmlAttributes: new { @class = "control-label col-md-4" })
+				<div class="col-md-8">
+					@Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.Status, "Value", "Text"), new { @class = "form-control col-md-12" })
+					@Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<br />
+			<div class="form-group text-center">
+				<div class="col-md-offset-2 col-md-3 mx-auto">
+					<!-- Adjust the col-md-8 based on your layout -->
+					<button type="button" class="btn btn-sm btn-success" onclick="confirmUpdate()">Save</button>
+				</div>
+			</div>
+		</div>
+	}
+	@*<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+		<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="~/Content/plugins/moment/moment.min.js"></script>
+		<script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+		<script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>*@
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		$(document).ready(function () {
+			//$.noConflict();
+			//Timepicker
+
+			$('#timepickerExam').datetimepicker({
+				format: 'LT'
+			});
+			//calculateEndTime();
+
+
+			$('#Date').datetimepicker({
+				format: 'YYYY-MM-DD',
+				//minDate: moment().startOf('day')
+			});
+			$('#timepickerExam').on('change.datetimepicker', function (e) {
+                calculateEndTime();
+
+            });
+			$('#Date').on('change.datetimepicker', function (e) {
+                getLabDetails();
+            });
+
+
+
+			// Usage in your existing function
+			function calculateEndTime() {
+			
+				var startTime = $('#timepickerExam').datetimepicker('date');
+				var durationString = $('#formattedDurationId').val();
+				console.log('Duration String:', durationString);
+
+                // Extract numeric value from the duration string
+                var durationValue = parseInt(durationString.split(' ')[0]);
+
+                // Check if duration is in minutes or hours
+                var isHours = durationString.includes('Hour');
+
+                var duration = isHours ? 'Hour' : 'minute';
+
+                if (startTime && durationValue) {
+                    var startTimeMoment = moment(startTime, 'LT');
+                    var endTimeMoment = startTimeMoment.clone().add(durationValue, duration);
+
+					$('#Time').text(endTimeMoment.format('LT'));
+					$('#Time').val(endTimeMoment.format('LT'));
+                    getLabDetails();
+                } else {
+					$('#Time').text('');
+                }
+            }
+
+
+
+			function getLabDetails() {
+				var lastSelectedLab = '@Model.LabName';
+			
+    var Batchcode = $('#BatchCode').val(); // Corrected to use BatchName
+	var startDate = $('#Date').val();
+    var StartTime = $('#timepickerExam').val();
+				var EndTime = $('#Time').text();
+				debugger;
+    $.ajax({
+        url: '@Url.Action("ReadAvailableLabBatch_Bind", "Placement")',
+        type: 'POST',
+        data: {
+            Batchcode: Batchcode,
+            startDate: startDate,
+            StartTime: StartTime,
+            EndTime: EndTime
+        },
+        success: function (data) {
+			try {
+				var result = JSON.parse(data);
+				var v = "<option>---Select---</option>";
+				$.each(result, function (i, item) {
+					v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+				});
+
+				// Set the new lab list
+				$("#LabName").html(v);
+
+				// Set the last selected lab
+				$("#LabName").val(lastSelectedLab);
+			} catch (e) {
+				console.error('Error parsing JSON data:', e);
+			}
+		},
+        error: function (xhr, status, error) {
+            console.error('AJAX request failed:', status, error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while fetching lab details.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+		});
+	</script>
+	<script>
+
+        function confirmUpdate() {
+            Swal.fire({
+                title: 'Are you sure you want to update assigned exam?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, update it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // User confirmed, submit the form
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("UpdateAssignedExamIntStuAsyncSN", "Placement")',
+                        data: $('form').serialize(),
+                        success: function (data) {
+                            // Display a success message
+                            Swal.fire({
+                                title: 'Update Successful',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Redirect to the ListAllAssignedExamSNAsync action
+                                window.location.href = '@Url.Action("ListAllAssignedExamSNAsync", "Placement")';
+                            });
+                        },
+                        error: function (error) {
+                            // Handle error
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while assigning the exam.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@*@{
+        ViewBag.Title = "DetailsActiveLabAsyncVJ";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+<html>
+<head>
+
+    <script>
+        $(document).ready(function () {
+            // Attach a click event handler to the Close button
+            $('#closeButton').click(function () {
+                // Redirect to the previous page
+                window.history.back();
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>View Lab Schedule</h2>
+    <br />
+    <p hidden>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th align="center">
+                        @*@Html.DisplayNameFor(model => model.CourseName)*@
+                        <label>Course Name</label>
+                    </th>
+                    <th align="center">
+                        @*@Html.DisplayNameFor(model => model.BatchName)*@
+                        <label>Batch Name</label>
+                    </th>
+                    <th align="center">
+                        @*@Html.DisplayNameFor(model => model.NoOfStudent)*@
+                        <label>No Of Student</label>
+                    </th>
+                    <th align="center">
+                        @*@Html.DisplayNameFor(model => model.StartDate)*@
+                        <label>Start Date</label>
+                    </th>
+                    <th align="center">
+                        @*@Html.DisplayNameFor(model => model.ReleseDate)*@
+                        <label>Relese Date</label>
+                    </th>
+                    <!--<th align="center">-->
+                    @*@Html.DisplayNameFor(model => model.Time)*@
+                    <!--<label>Time</label>
+                    </th>-->
+
+                </tr>
+
+                @foreach (var item in Model.DetailsActiveLabAsyncVJ)
+                {
+                    <tr>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.CourseName)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.BatchName)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.NoOfStudent)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.ReleseDate)
+                        </td>
+                        @*<td align="center">
+                                @Html.DisplayFor(modelItem => item.Time)
+                            </td>*@
+                        <!--<td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ })-->
+                        @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                        <!--</td>-->
+                    </tr>
+                }
+
+
+
+            </table>
+
+        </div>
+        <div class="form-group" align="center">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Close" class="btn btn-danger btn-sm" id="closeButton" />
+            </div>
+        </div>
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "DetailsLabManagementAsyncVJ")
+    </div>
+</body>
+</html>

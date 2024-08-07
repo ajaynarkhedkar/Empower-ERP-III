@@ -1,0 +1,79 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.ScheduleId)
+
+  
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        #addAttendanceBtn {
+            border: none;
+            background: none;
+            padding: 0;
+            font: inherit;
+        
+        }
+    </style>
+   
+    <div class="container-fluid">
+        <br />
+
+        <div class="card mx-auto col-md-10">
+            <div class="form-horizontal">
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+                <h2>Demo Details</h2>
+                <hr />
+                <div class="input-group">
+                    <div class="col-md-6">
+                        <label>Demo Name:</label>
+                        <span>@Model.DemoName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Date:</label>
+                        <span>@Model.strtDate</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Start Time:</label>
+                        <span>@Model.StartTime.ToString("HH:mm:ss")</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>End Time:</label>
+                        <span>@Model.EndTime.ToString("HH:mm:ss")</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Lab Name:</label>
+                        <span>@Model.LabName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>NoOfStudent:</label>
+                        <span>@Model.NoOfStudent</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Demo Arranged By:</label>
+                        <span>@Model.StaffName</span>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Status:</label>
+                        <span>@Model.StatusName</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+
+

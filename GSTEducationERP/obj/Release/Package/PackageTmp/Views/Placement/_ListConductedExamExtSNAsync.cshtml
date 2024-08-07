@@ -1,0 +1,192 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<!-- Bootstrap 4 -->
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="~/Content/Admin/js/Icon.js"></script>
+</head>
+<body>
+	<div class="card">
+		<div class="card-body">
+			<table id="ExternalConductedExams" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th hidden></th>
+						<th>
+							@Html.DisplayNameFor(model => model.StudentName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.ExamName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.SupervisorName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.LabName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TimeString)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.DateString)
+						</th>
+						<th>
+							Duration(hh:mm)
+							@*@Html.DisplayNameFor(model => model.FormattedDuration)*@
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TotalMarks)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.ObtainedMarks)
+						</th>
+						<th>
+							Result
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@if (Model != null && Model.lstConductedExams != null)
+					{
+				
+							for (int i = 0; i < Model.lstConductedExams.Count; i++)
+							{
+								var item = Model.lstConductedExams[i];
+								<tr>
+									<td hidden>
+										@Html.HiddenFor(modelItem => item.AssignExamId)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.StudentName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.ExamName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.SupervisorName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.LabName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TimeString)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.DateString)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.FormattedDuration)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalMarks)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.ObtainedMarks)
+									</td>
+									<td style="text-align: center;">
+										@if (item.ResultStatus == "Result Added")
+										{
+											<a href="#" class="open-popup-link" data-action="ViewResultExternalStudentAsyncSN" data-id="@item.AssignExamId">
+												<img src="~/Content/Admin/img/eyeicon.jpg"
+													 data-toggle="tooltip"
+													 data-placement="top"
+													 title="ViewResult"
+													 alt="ViewResult"
+													 style="width: 25px; height: 25px; border: 0;"
+													 id="ViewResult">
+											</a>
+										}
+										else
+										{
+											<a href="#" class="open-popup-link" data-action="DetailConductedExamExtStuAsyncSN" data-id="@item.AssignExamId">
+												<img src="~/Content/Admin/img/add-button.png"
+													 data-toggle="tooltip"
+													 data-placement="top"
+													 title="AddResult"
+													 alt="AddResult"
+													 style="width: 25px; height: 25px; border: 0;"
+													 id="AddResult">
+											</a>
+										}
+									</td>
+
+								</tr>
+							}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="resultModalLabel">Result</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Result form content will be loaded here -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        // Attach click event to the "Add Result" link
+        $(".open-popup-link").click(function (e) {
+            e.preventDefault(); // Prevent the default behavior of the link
+
+            // Retrieve action and ID from data attributes
+            var action = $(this).data("action");
+            var id = $(this).data("id");
+
+            // Construct the URL based on action and ID
+            var url = '';
+
+            if (action === 'ViewResultExternalStudentAsyncSN') {
+                // Set the URL for the ViewResult action
+                url = '@Url.Action("ViewResultExternalStudentAsyncSN", "Placement")';
+            }
+            else if (action === 'DetailConductedExamExtStuAsyncSN') {
+                // Set the URL for the DetailConductedExamExtStuAsyncSN action
+                url = '@Url.Action("DetailConductedExamExtStuAsyncSN", "Placement")';
+            }
+
+            // Append the ID to the URL
+            url += "?id=" + id;
+
+            // Load the content of the action into the modal
+            $.get(url)
+                .done(function (data) {
+                    // Set the modal body content with the fetched HTML
+                    $("#resultModal .modal-body").html(data);
+
+                    // Show the modal
+                    $("#resultModal").modal("show");
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error loading content:", textStatus, errorThrown);
+                });
+        });
+
+        // Attach click event to the "Cancel" button in the modal
+        $("#cancel-button").click(function () {
+            // Hide the modal when "Cancel" button is clicked
+            $("#resultModal").modal("hide");
+        });
+    });
+</script>
+
+
+
+

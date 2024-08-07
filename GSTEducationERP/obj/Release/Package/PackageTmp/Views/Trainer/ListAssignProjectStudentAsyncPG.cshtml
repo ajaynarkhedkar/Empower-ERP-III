@@ -1,0 +1,70 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+<div class="form-container">
+    <div class="row">
+        <div class="col-md-6">
+            <h6>Batch Name:</h6>
+            <label class="bold-blue">
+                @if (Model.lstStudentList != null && Model.lstStudentList.Any())
+                {
+                    var firstStudent = Model.lstStudentList.First();
+                    <span>@firstStudent.BatchName</span>
+                }
+                else
+                {
+                    <span>No data available</span>
+                }
+            </label>
+        </div>
+        <div class="col-md-6">
+            <h6>Project Name:</h6>
+            <label class="bold-blue">
+                @if (Model.lstStudentList != null && Model.lstStudentList.Any())
+                {
+                    var projectName = Model.lstStudentList.First();
+                    <span>@projectName.ProjectName</span>
+                }
+                else
+                {
+                    <span>No data available</span>
+                }
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="display:none;">Assign Project ID</th>
+                        <th>SRNO</th>
+                        <th>Student Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 1;
+                    }
+                    @foreach (var item in Model.lstStudentList)
+                    {
+                        <tr>
+                            <td hidden>@Html.DisplayFor(modelItem => item.AssignProjectId)</td>
+                            <td>
+                                @counter
+                                @{
+                                    counter++;
+                                }
+                            </td>
+                            <td><label>@Html.DisplayFor(modelItem => item.StudentName)</label></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a href="@Url.Action("ListAllAssignedProjectAsyncPG")" class="back-link" title="Back to List">
+        <video width="45" height="45" playsinline loop>
+            <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+        </video>
+    </a>
+</div>

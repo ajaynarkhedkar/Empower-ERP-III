@@ -1,0 +1,69 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+
+        <table id="PlacedStudent" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+
+                    <th hidden>
+                        @Html.DisplayNameFor(model => model.StudentCode)
+                    </th>
+                    <th>
+                       Course Name
+                    </th>
+                    <th>
+                       Batch Name
+                    </th>
+                    <th>
+                       Student Name
+                    </th>
+                    <th>
+                       Contact Number
+                    </th>
+                    <th>
+                       Email Id
+                    </th>
+
+                    <th>
+                       Company Name
+                    </th>
+                    <th>
+                        Designation
+                    </th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.StudentList)
+                {
+                <tr>
+
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.StudentCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContactNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompanyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Designation)
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+

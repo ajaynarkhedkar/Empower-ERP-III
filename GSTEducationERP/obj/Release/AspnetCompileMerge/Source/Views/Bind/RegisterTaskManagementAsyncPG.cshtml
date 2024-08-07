@@ -1,0 +1,370 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+@{
+    ViewBag.Title = "RegisterTaskManagementAsyncPG";
+    // Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <html>
+    <body>
+        <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="form-group">
+                    <label for="TaskName" class="control-label">Task Name </label>
+                    <div class="col-md-10" style="width:370px">
+                        @Html.EditorFor(model => model.TaskName, new { htmlAttributes = new { @class = "form-control", required = "required", maxlength = 50 } })
+                        @Html.ValidationMessageFor(model => model.TaskName, "", new { @class = "text-danger" })
+                        <span id="taskNameError" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="AssignToStaffCode" class="control-label">Assign To </label>
+                    <div class="col-md-10" style="width:370px">
+                        @{
+                            var combinedReportingList = ViewBag.combinedReportingList as List<SelectListItem>;
+                        }
+                        @Html.DropDownListFor(model => model.AssignToStaffCode, new SelectList(combinedReportingList, "Value", "Text"), "--Select--", new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.AssignToStaffCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="TaskStartDate" class="control-label col-md-4">Start Date </label>
+                        <div class="col-md-8">
+                            <div class="input-group date" id="datepicker" data-target-input="nearest">
+                                <input type="text" name="TaskStartDate" class="form-control datetimepicker-input" data-target="#datepicker" required />
+                                <div class="input-group-append" data-target="#datepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <span class="text-danger" data-valmsg-for="TaskStartDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="TaskStartTime" class="control-label col-md-4">Start Time </label>
+                        <div class="col-md-8">
+                            <div class="input-group date" id="startTimepicker" data-target-input="nearest">
+                                <input type="text" name="TaskStartTime" class="form-control datetimepicker-input" data-target="#startTimepicker" required />
+                                <div class="input-group-append" data-target="#startTimepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                </div>
+                            </div>
+                            <span class="text-danger" data-valmsg-for="TaskStartTime"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="TaskEndDate" class="control-label col-md-4">End Date </label>
+                        <div class="col-md-8">
+                            <div class="input-group date" id="endDatepicker" data-target-input="nearest">
+                                <input type="text" name="TaskEndDate" class="form-control datetimepicker-input" data-target="#endDatepicker" required />
+                                <div class="input-group-append" data-target="#endDatepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                </div>
+                            </div>
+                            <span class="text-danger" id="endDateValidationMsg"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="TaskEndTime" class="control-label col-md-4">End Time </label>
+                        <div class="col-md-8">
+                            <div class="input-group date" id="endTimepicker" data-target-input="nearest">
+                                <input type="text" name="TaskEndTime" class="form-control datetimepicker-input" data-target="#endTimepicker" required />
+                                <div class="input-group-append" data-target="#endTimepicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="far fa-clock"></i></div>
+                                </div>
+                            </div>
+                            <span class="text-danger" id="endTimeValidationMsg"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="TaskDescription" class="control-label">Descriptions </label>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.TaskDescription, new { @class = "form-control", rows = 3, required = "required" })
+                    @Html.ValidationMessageFor(model => model.TaskDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Priority" class="control-label">Priority </label>
+                <div class="col-md-10" style="width:370px">
+                    @Html.DropDownListFor(model => model.Priority, new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "High", Value = "High" },
+                        new SelectListItem { Text = "Low", Value = "Low" }
+                    }, new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <a href="@Url.Action("ListTaskManagementAsyncPG","Bind")" class="back-link" title="Back to List">
+                                <video width="45" height="45" playsinline loop>
+                                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <input type="submit" value="SUBMIT" class="btn btn-success btn-sm" onclick="showConfirmation(event)" />
+                            <span class="spacer"></span>
+                            <input type="reset" value="CLEAR" class="btn btn-warning btn-sm" id="btnClear" onclick="clearForm()" />
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+        <!-- Bootstrap 4 -->
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Content/plugins/moment/moment.min.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+        <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('#startTimepicker').datetimepicker({
+                    format: 'LT'
+                });
+
+                $('#endTimepicker').datetimepicker({
+                    format: 'LT'
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#datepicker, #endDatepicker').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    icons: {
+                        time: 'far fa-clock',
+                        date: 'far fa-calendar',
+                        up: 'fas fa-chevron-up',
+                        down: 'fas fa-chevron-down',
+                        previous: 'fas fa-chevron-left',
+                        next: 'fas fa-chevron-right',
+                        today: 'fas fa-crosshairs',
+                        clear: 'far fa-trash-alt',
+                        close: 'far fa-times'
+                    }
+                });
+
+                $('.timepicker').datetimepicker({
+                    format: 'HH:mm',
+                    icons: {
+                        time: 'far fa-clock',
+                        date: 'far fa-calendar',
+                        up: 'fas fa-chevron-up',
+                        down: 'fas fa-chevron-down',
+                        previous: 'fas fa-chevron-left',
+                        next: 'fas fa-chevron-right',
+                        today: 'fas fa-crosshairs',
+                        clear: 'far fa-trash-alt',
+                        close: 'far fa-times'
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#AssignByStaffCode').change(function () {
+                    var assignByStaffCode = $(this).val();
+                    $.ajax({
+                        url: "/Bind/AssignTaskReportingStaffName",
+                        type: 'GET',
+                        data: { AssignByStaffCode: assignByStaffCode },
+                        success: function (data) {
+                            $('#AssignToStaffCode').empty(); // Clear existing options
+                            $.each(data, function (key, value) {
+                                $('#AssignToStaffCode').append($('<option>', {
+                                    value: value.Value,
+                                    text: value.Text
+                                }));
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            function clearForm() {
+                $('#TaskName').val('');
+                $('#AssignByStaffCode').val('');
+                $('#AssignToStaffCode').val('');
+                $('#TaskStartDate').val('');
+                $('#TaskStartTime').val('');
+                $('#TaskEndDate').val('');
+                $('#TaskEndTime').val('');
+                $('#TaskDescription').val('');
+                $('#Priority').val('');
+                return false;
+            }
+        </script>
+        <script>
+    $('form').submit(function (event) {
+        event.preventDefault();
+        if (validateForm()) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to submit the form.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: $(this).attr('method'),
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Data saved successfully!',
+                                    icon: 'success'
+                                }).then(() => {
+                                    // Redirect to another page
+                                    window.location.href = '@Url.Action("ListTaskManagementAsyncPG", "Bind")';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An error occurred: ' + response.errorMessage,
+                                    icon: 'error'
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred: ' + xhr.responseText,
+                                icon: 'error'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    function validateForm() {
+        var isValid = true;
+        var taskName = $('#TaskName').val();
+        var maxLength = 50; // Maximum length allowed for TaskName
+
+        if (taskName.length > maxLength) {
+            $('#taskNameError').text('Task Name must be at most ' + maxLength + ' characters long.');
+            isValid = false;
+        } else {
+            $('#taskNameError').text('');
+        }
+
+        // Check if any required fields are empty
+        $('.form-control[required]').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).addClass('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#datepicker').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    minDate: moment().startOf('day') // Set minimum date to today
+                });
+
+                // Start Timepicker
+                $('#startTimepicker').datetimepicker({
+                    format: 'LT',
+                    defaultDate: moment().startOf('hour') // Set default time to current hour and minute
+                });
+
+                // End Datepicker
+                $('#endDatepicker').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    minDate: moment().startOf('day') // Set minimum date to today
+                });
+
+                // End Timepicker
+                $('#endTimepicker').datetimepicker({
+                    format: 'LT',
+                    defaultDate: moment().startOf('hour') // Set default time to current hour and minute
+                });
+
+                // Set minimum end date based on start date
+                $('#datepicker').on('change.datetimepicker', function (e) {
+                    $('#endDatepicker').datetimepicker('minDate', e.date);
+                });
+
+                // Set minimum end time based on start time
+                $('#startTimepicker').on('change.datetimepicker', function (e) {
+                    $('#endTimepicker').datetimepicker('minDate', e.date);
+                });
+
+                // Prevent selecting past dates for start date
+                $('#datepicker').on('change.datetimepicker', function (e) {
+                    var currentDate = moment().startOf('day');
+                    var selectedDate = e.date;
+
+                    if (selectedDate.isBefore(currentDate)) {
+                        $('#datepicker').datetimepicker('date', currentDate);
+                    }
+
+                    // Update minimum end date
+                    $('#endDatepicker').datetimepicker('minDate', selectedDate);
+                });
+
+                // Prevent selecting past time for start time
+                $('#startTimepicker').on('change.datetimepicker', function (e) {
+                    var currentTime = moment().startOf('minute');
+                    var selectedTime = e.date;
+
+                    if (selectedTime.isBefore(currentTime)) {
+                        $('#startTimepicker').datetimepicker('date', currentTime);
+                    }
+                });
+
+                // Prevent selecting past time for end time
+                $('#endTimepicker').on('change.datetimepicker', function (e) {
+                    var currentTime = moment().startOf('minute');
+                    var selectedTime = e.date;
+
+                    if (selectedTime.isBefore(currentTime)) {
+                        $('#endTimepicker').datetimepicker('date', currentTime);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
+}

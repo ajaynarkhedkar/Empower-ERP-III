@@ -1,0 +1,114 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "ViewFeeFollowupDetailsAsyncRs";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+        <div class="card-body">
+            <h2>View Fee Details</h2>
+            <hr />
+        </div>
+<div class="card m-2">
+
+    <div class="card-body">
+        <div style="padding-left: 10px;">
+            <div class="form-group row" hidden>
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Student Enrollment No</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.StudentId)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Student Name</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.FullName)
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Contact Number</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.ContactNumber)
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">EmailId</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.Emailid)
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Batch Name</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.BatchName)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Course Fee</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.DiscountedCourseFee)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Discount</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.Discount)<label style="margin-left: 5px;">%</label>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Registration Fee</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.Amount)
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Paid Fee</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.PaidAmount)
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Remaining Fee</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.RemainingFee)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;"> Total Fee</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.CourseFee)
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Installment Amount</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.InstallmentAmount)
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Last Installment</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.LastInstallmentDate)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-4" style="margin-left: 40px; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">Next Installment</label>
+                <div class="col-md-6">
+                    @Html.DisplayFor(model => model.nextdate)
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>

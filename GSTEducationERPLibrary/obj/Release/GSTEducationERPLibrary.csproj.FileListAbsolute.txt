@@ -1,0 +1,9 @@
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Release\GSTEducationERPLibrary.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Release\GSTEducationERPLibrary.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Release\Helper.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Release\Helper.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Release\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Release\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Release\GSTEducationERPLibrary.csproj.CopyComplete
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Release\GSTEducationERPLibrary.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Release\GSTEducationERPLibrary.pdb

@@ -1,0 +1,508 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+@{
+    ViewBag.Title = "ListTaskManagementAsyncPG";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Management</title>
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        button.video-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #17A2B8;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .date-input {
+            margin-right: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .filter-btn {
+            background-color: #64bbc9;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            margin-left: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .image-style {
+            width: 35px;
+            height: auto;
+        }
+
+        .filter-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            background: none;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <br />
+    <div class="card " style="padding:5px;margin-right:20px;margin-left:10px; margin-top:-15px">
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <h2 class="col">Task Management </h2>
+                    <div class="col text-left">
+                        <label for="fromDate">From:</label>
+                        <input type="date" id="fromDate" name="fromDate" class="date-input" style="width: 120px; height:30px">
+                        <label for="toDate">To:</label>
+                        <input type="date" id="toDate" name="toDate" class="date-input" style="width: 120px; height: 30px">
+                        <img class="filter-btn" id="clearBtn" src="~/Content/Admin/icon/refreshicon.jpg" alt="Clear" title="Refresh">
+                    </div>
+                    <div class="col-2 text-right">
+                        <a href="#" title="Register Task" id="RegisterTask" data-url="@Url.Action("RegisterTaskManagementAsyncPG", "Bind")">
+                            <img src="~/Content/Admin/img/add-button.png" class="image-style" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card card-primary card-outline card-outline-tabs">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th hidden>SRNO</th>
+                            <th>Task Name</th>
+                            <th hidden>Task Code</th>
+                            <th hidden>Task Id</th>
+                            <th>Assign By Staff</th>
+                            <th>Assign To Staff</th>
+                            <th>Priority</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Task Description</th>
+                            <th>Status</th>
+                            <th hidden></th>
+                            <th hidden></th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int counter = 1;
+                        }
+                        @foreach (var item in Model.lstTaskManagement)
+                        {
+                            <tr>
+                                <td hidden>
+                                    @counter
+                                    @{
+                                        counter++;
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskName)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.TaskCode)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.TaskId)
+                                </td>
+                                <td>
+                                    @if (item.assignStaffcode == item.TaskAddedStaff)
+                                    {
+                                        <span class="badge bg-gradient-gray">@Html.DisplayFor(modelItem => item.AssignByStaffCode)</span>
+                                    }
+                                    @if (item.assignStaffcode != item.TaskAddedStaff)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.AssignByStaffCode)
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssignToStaffCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Priority)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskStartDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskEndDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskDescription)
+                                </td>
+                                <td>
+                                    @if (item.StatusName == "Completed")
+                                    {
+                                        <span class="badge bg-success">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                                    }
+                                    @if (item.StatusName == "Pending")
+                                    {
+                                        <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                                    }
+                                    @if (item.StatusName == "Assigned")
+                                    {
+                                        <span class="badge bg-blue">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                                    }
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.TaskAddedStaff)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.assignStaffcode)
+                                </td>
+                                <td class="actions">
+                                    @if (item.StatusName != "Completed")
+                                    {
+
+                                        <a href="#" class="icon" data-id="@item.TaskId" data-url="@Url.Action("UpdateTaskManagementAsyncPG", "Bind", new { id = item.TaskId })"
+                                           data-toggle="modal" data-target="#EditTaskModal" title="Edit">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                            </video>
+                                        </a>
+                                    }
+
+                                        <span class="delete-button video-link" onclick="showDeleteConfirmation('@item.TaskId', '@item.TaskAddedStaff', '@item.assignStaffcode')" title="Cancel">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/Delete%202.mp4" type="video/mp4" />
+                                            </video>
+                                        </span>
+                                    </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="taskManagementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center" id="exampleModalLabel" style="color: #33CCCC;">Register Assign Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="EditTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Update Assign Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <script>
+    $(document).ready(function () {
+        $('#RegisterTask').click(function (e) {
+            e.preventDefault();
+            var title = "RegisterTaskManagementAsyncPG";
+            $.ajax({
+                url: '@Url.Action("RegisterTaskManagementAsyncPG", "Bind")',
+                type: 'GET',
+                data: { title: title },
+                success: function (data) {
+                    $('#taskManagementModal .modal-body').html(data);
+                    $('#taskManagementModal').modal('show');
+                }
+            });
+        });
+    });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example1').on('click', '.icon', function () {
+                var TaskId = $(this).data('id');
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#EditTaskModal .modal-body').html(data);
+                        $('#EditTaskModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $.noConflict();
+        var table = $('#example1').DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": [
+                {
+                    extend: 'copy',
+                    text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'Copy'
+                },
+                {
+                    extend: 'csv',
+                    text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                    titleAttr: 'PDF'
+                },
+                {
+                    extend: 'print',
+                    text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                    titleAttr: 'Print'
+                },
+                {
+                    extend: 'colvis',
+                    text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                    titleAttr: 'Columns'
+                }
+            ]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+       $(document).ready(function () {
+    // Function to trigger filtering when date inputs change
+    $('#fromDate, #toDate').change(function () {
+        filterTable();
+    });
+
+    // Function to filter the table based on date range
+    function filterTable() {
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        $.ajax({
+            url: '@Url.Action("ListTaskManagementAsyncPG", "Bind")',
+            type: 'GET',
+            data: {
+                fromDate: fromDate,
+                toDate: toDate
+            },
+            success: function (result) {
+                $('#example1').html($(result).find('#example1').html());
+            },
+            error: function () {
+                alert('An error occurred while processing your request.');
+            }
+        });
+    }
+
+    // Clear button functionality (to clear date inputs)
+    $('#clearBtn').click(function () {
+        $('#fromDate').val('');
+        $('#toDate').val('');
+        filterTable(); // Trigger filtering after clearing the dates
+    });
+});
+    });
+    </script>
+    <script>
+    function showDeleteConfirmation(taskId, taskAddedStaff, assignStaffcode) {
+        if (taskAddedStaff === assignStaffcode) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to delete this task.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteTask(taskId);
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Permission Denied',
+                text: 'You do not have permission to delete this task.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        }
+        }
+
+        function deleteTask(taskId) {
+        $.ajax({
+            url: '@Url.Action("DeleteTask", "Bind")',
+            type: 'POST',
+            data: { taskId: taskId },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Task deleted successfully!',
+                        icon: 'success'
+                    }).then(() => {
+                        // Redirect to another page
+                        window.location.href = '@Url.Action("ListTaskManagementAsyncPG", "Bind")';
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete task. Error: ' + response.error,
+                        icon: 'error'
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+    </script>
+
+</body>
+</html>

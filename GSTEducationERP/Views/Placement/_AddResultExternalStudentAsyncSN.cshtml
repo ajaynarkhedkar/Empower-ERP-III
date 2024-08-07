@@ -1,0 +1,138 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+<html>
+<head>
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<!-- Bootstrap 4 -->
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- Bootstrap Switch -->
+	<script src="~/Content/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+	<link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+	<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+</head>
+<body>
+	@using (Html.BeginForm("AddResultExternalStudentAsyncSN", "Placement", FormMethod.Post))
+	{
+	<div class="card mx-auto pl-4">
+
+		@Html.HiddenFor(model => model.StudentCode)
+		@Html.HiddenFor(model => model.CourseCode)
+		@Html.HiddenFor(model => model.AssignExamId)
+		@Html.HiddenFor(model => model.PassingMarks)
+		@Html.HiddenFor(model => model.StaffCode)
+		@Html.HiddenFor(model => model.ResultStatus, new { id = "ResultStatus" })
+		<br />
+		@*<div class="input-group">
+			<label class="col-md-4">Course Name:</label>
+			@Model.CourseName
+		</div>*@
+		<div class="input-group">
+			<label class="col-md-4">Student Name:</label>
+			@Model.StudentName
+		</div>
+		<div class="input-group">
+			<label class="col-md-4">Exam Name:</label>
+			@Model.ExamName
+		</div>
+		<div class="input-group">
+			<label class="col-md-4">Exam Date:</label>
+			@Model.ExamDate.ToString("yyyy-MM-dd")
+		</div>
+		<div class="input-group">
+			<label class="col-md-4">Total Marks:</label>
+			@Model.TotalMarks
+		</div>
+		<div class="input-group">
+			<label class="col-md-4">Passing Marks:</label>
+			@Model.PassingMarks
+		</div>
+		<div class="input-group mb-2">
+			<label class="col-md-4">Attendance:</label>
+			<input type="checkbox" id="attendance" name="my-checkbox" class="col-md-8" checked data-bootstrap-switch data-off-color="danger" data-on-color="success" data-on-text="Present" data-off-text="Absent">
+			@Html.HiddenFor(model => model.AttendanceStatusId, new { id = "AttendanceStatusId" })
+		</div>
+
+		<div class="input-group">
+			<label class="col-md-4">Obtained Marks: </label>
+			<div class="col-md-8">
+				@Html.EditorFor(model => model.ObtainedMarks, new { htmlAttributes = new { @class = "form-control col-md-6", @id = "ObtainedMarks", @type = "text", @pattern = "^[0-9]+$" } })
+			</div>
+		</div>
+		<br />
+		<div class="d-flex justify-content-center align-items-center">
+			<input type="submit" class="btn btn-success mr-2" value="Save" />
+			<button type="button" class="btn btn-danger" id="cancel-button">Cancel</button>
+		</div>
+
+	</div>
+
+	}
+
+	<script>
+    $(document).ready(function () {
+        $('input[name="my-checkbox"]').bootstrapSwitch();
+
+        $("#ObtainedMarks").on("input", function () {
+            $(this).val($(this).val().replace(/\D/g, ''));
+
+            if ($(this).val().length > 3) {
+                $(this).val($(this).val().substr(0, 3));
+            }
+        });
+
+        $("form").submit(function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+			var switchStatus = $("#attendance").is(":checked");
+			debugger;
+            if (switchStatus) {
+                $("#AttendanceStatusId").val("30");
+
+                var obtainedMarks = parseFloat($("#ObtainedMarks").val());
+                var totalMarks = parseFloat("@Model.TotalMarks");
+                var passingMarks = parseFloat("@Model.PassingMarks");
+
+                if (obtainedMarks > totalMarks) {
+                    toastr.error("Obtained Marks cannot be greater than Total Marks.");
+                    return false; // Prevent form submission
+                }
+
+                var resultStatus = obtainedMarks >= passingMarks ? "Pass" : "Fail";
+                $("#ResultStatus").val(resultStatus);
+            } else {
+                $("#AttendanceStatusId").val("31");
+                $("#ResultStatus").val("Not Attended");
+            }
+			var form = $(this);
+			$.ajax({
+				type: form.attr('method'),
+				url: form.attr('action'),
+				data: form.serialize(),
+				success: function (response) {
+					// Display success message using toastr
+					toastr.success("Result saved successfully!");
+					$("#resultModal").modal("hide"); // Replace "myModal" with the actual ID of your modal
+					$('.modal-backdrop').remove();
+				},
+				error: function (xhr, status, error) {
+					// Display error message using toastr
+					toastr.error("Error occurred while saving the result.");
+				}
+			});
+
+			// Prevent default form submission
+			return false;
+		});
+
+		$("#attendance").bootstrapSwitch({
+			// Your Bootstrap Switch options...
+		}).on('switchChange.bootstrapSwitch', function (event, state) {
+			// Enable or disable obtained marks input based on attendance switch state
+			$("#ObtainedMarks").prop("readonly", !state);
+		});
+    });
+	</script>
+</body>
+</html>
+
+

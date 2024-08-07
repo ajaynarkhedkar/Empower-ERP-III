@@ -1,0 +1,158 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@*<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/Admin/js/Icon.js"></script>
+
+<link href="~/Content/plugins/select2/css/select2.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/select2/js/select2.min.js"></script>
+<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
+<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+<script src="~/Content/Admin/js/Icon.js"></script>*@
+
+
+@*<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function ($) {
+        $('#example1').on('click', '.icon, .icon1, .icon2', function () {
+            var MockId = $(this).data('id');
+            var url = $(this).data('action');
+            jQuery.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    jQuery('#PerformanceModal .modal-content').html(data);
+                    jQuery('#PerformanceModal').modal('show');
+                }
+            });
+        });
+    });
+</script>*@
+
+<div class="card">
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.ExpID)
+                        </th>*@
+                    <th>
+                        Receipt No.
+                    </th>
+                    <th>
+                        Transaction Date
+                    </th>
+                    <th>
+                        Vendor Name
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.lstCashList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransactionCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendorName)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>*@
+
+                        <td>
+                            @(String.Format("{0:N2} ₹", item.Amount))
+                        </td>
+
+                        <td style="text-align: center;">
+                            @*<a href="#" class="icon" data-toggle="tooltip" id="ShowDetails" title="View Transaction Details" data-target="#CashStatus" data-id="@item.BankId" onclick="ShowBankDetails()">
+                <video width="25" height="25" playsinline loop>
+                    <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                </video>
+            </a>*@
+
+                            <a href="#" class="icon cash-Expense" data-bank-id="@item.TransactionCode" data-toggle="modal" data-target="#CashHistory" title="View Cash Reciept">
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                </video>
+                            </a>
+                        </td>
+
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--<div class="modal fade custom-modal-width" id="PerformanceModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">-->
+                <!-- Content for Schedule Modal -->
+            <!--</div>
+        </div>
+    </div>
+</div>-->
+<div class="modal fade" id="CashHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Cash Deduction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $(document).on('click', '.cash-Expense', function (e) {
+            e.preventDefault();
+            var transactionid = $(this).data('bank-id');
+            console.log("Transaction ID: " + transactionid);
+            debugger;
+            $.ajax({
+                url: '/Accountant/CashExpenseViewAN',
+                type: 'GET',
+                data: { TransactionCode: transactionid },
+                success: function (data) {
+                    console.log("Data received:", data);
+                    $('#CashHistory .modal-body').html(data);
+                    $('#CashHistory .modal-header h5').text('Cash Deduction');
+                    $('#CashHistory').modal('show');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error: " + textStatus, errorThrown);
+                    alert("An error occurred while fetching bank details.");
+                }
+            });
+        });
+    });
+</script>
+
+
+
+

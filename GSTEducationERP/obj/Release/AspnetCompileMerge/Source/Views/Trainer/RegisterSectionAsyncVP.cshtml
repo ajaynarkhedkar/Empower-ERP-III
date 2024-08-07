@@ -1,0 +1,102 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group" style="display: none;">
+        @Html.LabelFor(model => model.CourseCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="input-group mb-2">
+        <label class="control-label">Course Name : </label>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })
+            @*@Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="control-label">Section Name : </label>
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SectionName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" id="SaveSection" class="btn btn-success btn-sm">SAVE</button>
+        </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+            $('#SaveSection').click(function (e) {
+                e.preventDefault();
+                // Validate Section Name
+                var sectionName = $('#SectionName').val();
+                if (sectionName == null || sectionName === "") {
+                    showErrorAlert('Please select a Section.');
+                    return;
+                }
+
+                // Serialize form data
+                var formData = $('form').serialize();
+
+                // Submit the form using AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("RegisterSectionAsyncVP")',
+                    data: formData,
+                    success: function (result) {
+                        if (result.success) {
+                            // Show success SweetAlert
+                            Swal.fire({
+                                title: 'Success',
+                                text: result.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                // Redirect or perform any other action after success
+                                window.location.href = '@Url.Action("DetailsSectionAsyncVP")';
+                            });
+                        } else {
+                            // Show error SweetAlert
+                            Swal.fire({
+                                title: 'Error',
+                                text: result.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function () {
+                        // Show error SweetAlert for unexpected errors
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An unexpected error occurred',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+            function showErrorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+                });
+            }
+        });
+</script>
+}
+
+

@@ -1,0 +1,142 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<html>
+<head>
+    <!-- Theme style -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>*@
+
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <style>
+        .star-rating {
+            font-size: 1.20em;
+            color: #FFD700; /* Set the color of the stars */
+        }
+
+        .empty-star {
+            color: #ccc; /* Set the color of the empty stars */
+        }
+
+        .custom-tooltip {
+            /*background-color: #e74c3c;*/ /*Specify your desired background color */
+            color: #fff; /* Specify your desired text color */
+            font-size: 14px;
+        }
+
+            .custom-tooltip:hover {
+                background-color: #00d5c1;
+                color: #fff; /* Specify your desired text color on hover */
+            }
+    </style>
+    <!-- Bootstrap 4 -->
+    <!--<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>-->
+</head>
+<body>
+    <table id="trainerfeedback" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseName)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.TypeName)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.FeedbackFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BatchName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FeedbackFor)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.FeedbackSendDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FeedbackTillDate)
+                </th>
+                <th>
+                    Feedback Sendby
+                </th>
+                <th style="width:10%;">
+                    @Html.DisplayNameFor(model => model.Rating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.lststudentfeed)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseName)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(model => item.TypeName)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FeedbackFrom)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BatchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FeedbackFor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.feedbcksendDate)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.feedbcktillDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FollowUpTakenBy)
+                    </td>
+                    <td>
+                        <div class="star-rating">
+                            @{
+                                int rating = (int)item.Rating;
+                                for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= rating)
+                                    {
+                                        <span>&#9733;</span> @*Full star*@
+                                    }
+                                    else
+                                    {
+                                        <span class="empty-star">&#9733;</span> @*Empty star*@
+                                    }
+                                }
+                            }
+                        </div>
+                    </td>
+                    <td data-toggle="tooltip" data-placement="top" title="@item.Comment" class="custom-tooltip">
+                        @Html.DisplayFor(modelItem => item.Comment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+</body>
+</html>
+
+

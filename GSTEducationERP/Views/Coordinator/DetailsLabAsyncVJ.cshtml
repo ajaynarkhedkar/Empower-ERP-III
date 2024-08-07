@@ -1,0 +1,110 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@*@{
+        ViewBag.Title = "DetailsLabAsyncVJ";
+        //Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+<html>
+<head>
+</head>
+<body>
+    @*<h2> Coordinator</h2>*@
+    <h2 align="center"> Lab Details </h2>
+    <br />
+    <div class="form-horizontal">
+        <div class="card"
+
+    <div>
+        @*<h4>Lab Details</h4>*@
+
+        <dl class="dl-horizontal">
+            <dt hidden>
+                @Html.DisplayNameFor(model => model.LabId)
+            </dt>
+
+            <dd hidden>
+                @Html.DisplayNameFor(model => model.LabId)
+            </dd>
+
+            <dt align="center" >
+                @*@Html.DisplayNameFor(model => model.LabCode)*@
+                <label> Lab Code</label>
+            </dt>
+
+            <dd align="center">
+                @Html.DisplayFor(model => model.LabCode)
+            </dd>
+
+            <dt align="center">
+                @*@Html.DisplayNameFor(model => model.LabName)*@
+                <label> Lab Name</label>
+            </dt>
+
+            <dd align="center">
+                @Html.DisplayFor(model => model.LabName)
+            </dd>
+
+            <dt align="center">
+                @*@Html.DisplayNameFor(model => model.CenterCode)*@
+                <label> Branch Code</label>
+            </dt>
+
+            <dd align="center">
+                @Html.DisplayFor(model => model.BranchCode)
+            </dd>
+
+            <dt align="center">
+                @*@Html.DisplayNameFor(model => model.LabCapacity)*@
+                <label> Lab Capacity</label>
+            </dt>
+
+            <dd align="center">
+                @Html.DisplayFor(model => model.LabCapacity)
+
+            </dd>
+
+            <dt align="center">
+                @*@Html.DisplayNameFor(model => model.AvailableSystem)*@
+                <label> Available System</label>
+            </dt>
+
+            <dd align="center">
+                @Html.DisplayFor(model => model.AvailableSystem)
+            </dd>
+
+            <dt align="center">
+                @*@Html.DisplayNameFor(model => model.LabCreatedDate)*@
+                <label> Lab Created Date</label>
+            </dt>
+
+            <dd align="center">
+                @Html.DisplayFor(model => model.LabCreatedDate)
+            </dd>
+
+            <dt hidden>
+                @*@Html.DisplayNameFor(model => model.FillLabCode)*@
+                <label> Fill Lab Code</label>
+            </dt>
+
+            <dd hidden>
+                @Html.DisplayFor(model => model.FillLabCode)
+            </dd>
+
+            <dt hidden>
+                @*@Html.DisplayNameFor(model => model.CenterName)*@
+                <label> Center Name</label>
+            </dt>
+
+            <dd hidden>
+                @Html.DisplayFor(model => model.CenterName)
+            </dd>
+        </dl>
+    </div>
+   </div>
+    </div>
+    <p>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.LabId }) |*@
+        @Html.ActionLink("Back to List", "DetailsLabManagementAsyncVJ")
+    </p>
+</body>
+</html>

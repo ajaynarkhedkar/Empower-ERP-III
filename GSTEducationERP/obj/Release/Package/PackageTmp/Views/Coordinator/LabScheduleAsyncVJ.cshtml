@@ -1,0 +1,196 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "LabScheduleAsyncVJ";
+    //Layout = "~/Views/Shared/_LayoutCoordinator.cshtml";
+}
+
+<head>
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #01a6a6;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #01a6a6;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #01a6a6;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #64bbc9;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+        .dataTables_filter {
+            margin-top: -50px;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="card">
+        <div class="card-body">
+            @*<h2>Lab Schedule</h2>*@
+            <table border="1" cellspacing="0" align="center" id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th height="50" width="70"> Time<br>---------Lab Name</th>
+                        <th height="70" width="120">8 AM to 9 AM</th>
+                        <th height="70" width="120">9 AM to 10 AM</th>
+                        <th height="70" width="120">10 AM to 11 AM</th>
+                        <th height="70" width="120">11 AM to 12 PM</th>
+                        <th height="70" width="120">12 PM to 1 PM</th>
+                        <th height="70" width="120">1 PM to 2 PM</th>
+                        <th height="70" width="120">2 PM to 3 PM</th>
+                        <th height="70" width="120">3 PM to 4 PM</th>
+                        <th height="70" width="120">4 PM to 5 PM</th>
+                        <th height="70" width="120">5 PM to 6 PM</th>
+                        <th height="70" width="120">6 PM to 7 PM</th>
+                        <th height="70" width="120">7 PM to 8 PM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        // Define a dictionary to store unique background colors for each schedule data
+                        var scheduleColors = new Dictionary<string, string>();
+                    }
+                    @foreach (var lab in Model.lstlabseduleGridvp)
+                    {
+                        <tr>
+                            <td style="font-weight:bold">@lab.LabName</td>
+                            @{
+                                var timeSlots = new string[12];
+                                for (int i = 0; i < timeSlots.Length; i++)
+                                {
+                                    timeSlots[i] = "";
+                                }
+                                int scheduleIndex = 1;
+                                var scheduleItems = lab.LabScheduledeatils.Split(',');
+                                foreach (var schedule in scheduleItems)
+                                {
+                                    var parts = schedule.Trim().Split('-');
+                                    if (parts.Length == 2)
+                                    {
+                                        var startTime = parts[0].Trim();
+                                        var endTime = parts[1].Trim();
+
+                                        var startIndex = GetTimeSlotIndex(startTime);
+                                        var endIndex = GetTimeSlotIndex(endTime);
+
+                                        if (startIndex >= 0 && endIndex >= 0 && endIndex <= timeSlots.Length) // Check array bounds
+                                        {
+                                            for (int i = startIndex; i < endIndex; i++)
+                                            {
+                                                if (!string.IsNullOrEmpty(timeSlots[i]))
+                                                {
+                                                    timeSlots[i] += "<br/>";
+                                                }
+                                                if (scheduleIndex < scheduleItems.Length) // Check array bounds
+                                                {
+                                                    timeSlots[i] += scheduleItems[scheduleIndex];
+                                                }
+                                            }
+
+                                            // Assign a unique background color for each schedule data
+                                            if (!scheduleColors.ContainsKey(scheduleItems[scheduleIndex]) && scheduleIndex < scheduleItems.Length) // Check array bounds
+                                            {
+                                                scheduleColors[scheduleItems[scheduleIndex]] = $"#{Guid.NewGuid().ToString().Substring(0, 6)}";
+                                            }
+
+
+                                        }
+                                        scheduleIndex += 1;
+                                    }
+                                }
+                            }
+                            @foreach (var slot in Enumerable.Range(0, 12))
+                            {
+                                <td style="background-color: @(string.IsNullOrEmpty(timeSlots[slot]) ? "white" : scheduleColors[timeSlots[slot]])">
+                                    @if (string.IsNullOrEmpty(timeSlots[slot]))
+                                    {
+                                        <a href="#">No schedule</a>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw(timeSlots[slot])
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+            @functions { private int GetTimeSlotIndex(string time)
+                {
+                    switch (time)
+                    {
+                        case "08:00": return 0;
+                        case "09:00": return 1;
+                        case "10:00": return 2;
+                        case "11:00": return 3;
+                        case "12:00": return 4;
+                        case "13:00": return 5;
+                        case "14:00": return 6;
+                        case "15:00": return 7;
+                        case "16:00": return 8;
+                        case "17:00": return 9;
+                        case "18:00": return 10;
+                        case "19:00": return 11;
+                        case "20:00": return 12;
+                        case "21:00": return 13;
+                        default: return -1;
+                    }
+                } }
+
+
+
+        </div>
+    </div>
+</body>

@@ -1,0 +1,6 @@
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\Helper\bin\Release\Helper.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\Helper\bin\Release\Helper.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\Helper\obj\Release\Helper.csproj.AssemblyReference.cache
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\Helper\obj\Release\Helper.csproj.CoreCompileInputs.cache
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\Helper\obj\Release\Helper.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\Helper\obj\Release\Helper.pdb

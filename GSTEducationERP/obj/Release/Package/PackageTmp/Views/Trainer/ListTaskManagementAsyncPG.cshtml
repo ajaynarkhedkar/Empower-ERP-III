@@ -1,0 +1,260 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "ListTaskManagementAsyncPG";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Management</title>
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        th {
+            text-transform: uppercase;
+            background-color: #64bbc9;
+            color: #000;
+            text-align: center !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        button.video-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #17A2B8;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <br />
+    <div class="card " style="padding:5px;margin-right:20px;margin-left:10px; margin-top:-15px">
+        <h2>Task Management :</h2>
+        <div class="card-body">
+            <div class="container" style="margin-left:-10px">
+                <div class="row">
+                    <div class="col-2">
+                        <a class="video-link" title="Add_Assign_Project" onclick="window.location.href='@Url.Action("RegisterTaskManagementAsyncPG", "Trainer")'">
+                            <video width="30" height="30" playsinline loop>
+                                <source src="~/Content/Admin/icon/add.mp4" type="video/mp4" />
+                            </video>
+                            <span>Assign Task</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>SRNO</th>
+                            <th>
+                                Task Name
+                            </th>
+                            <th hidden>
+                                Task Code
+                            </th>
+                            <th hidden>
+                                Task Id
+                            </th>
+                            <th>
+                                Assign By Staff
+                            </th>
+                            <th>
+                                Assign To Staff
+                            </th>
+                            <th hidden>
+                                Priority
+                            </th>
+                            <th>
+                                Startn Date
+                            </th>
+                            <th>
+                                End Date
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                TaskDescription
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int counter = 1; // Initialize the counter
+                        }
+                        @foreach (var item in Model.lstTaskManagement)
+                        {
+                            <tr>
+                                <td>
+                                    @counter
+                                    @{
+                                        counter++; // Increment the counter for the next row
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskName)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.TaskCode)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.TaskId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssignByStaffCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssignToStaffCode)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Priority)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskStartDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskEndDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StatusName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TaskDescription)
+                                </td>
+                                <td class="actions">
+                                    <a href="@Url.Action("UpdateTaskManagementAsyncPG", new { id = item.TaskId })" class="video-link" title="Edit">
+                                        <video width="35" height="35" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                        </video>
+                                    </a>
+
+                                    <a href="@Url.Action("RemoveDataTaskManagement", "Trainer", new { id = item.TaskId })" class="video-link" title="Cancel">
+                                        <video width="35" height="35" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Delete%202.mp4" type="video/mp4" />
+                                        </video>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.noConflict();
+            var table = $('#example1').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                        titleAttr: 'PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                        titleAttr: 'Print'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                        titleAttr: 'Columns'
+                    }
+                ]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+</body>
+</html>

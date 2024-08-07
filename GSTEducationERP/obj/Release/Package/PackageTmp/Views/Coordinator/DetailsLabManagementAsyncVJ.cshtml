@@ -1,0 +1,216 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "DetailsLabManagementAsyncVJ";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<html>
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- DataTables CSS -->
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">-->
+    <!-- jQuery -->
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
+    <!-- DataTables JS -->
+    <!--<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>-->
+
+</head>
+<body>
+    <div class="card">
+        <br />
+        <h2>Lab Management</h2>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="As" data-toggle="pill" href="@Url.Action("ListLabAsyncVJ","Coordinator")" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Lab List</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" id="createlab" data-toggle="pill" href="@Url.Action("RegisterNewLabAsyncVJ","Coordinator")" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Add New Lab</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pendingList" data-toggle="pill" href="@Url.Action("ListAcitveLabAsyncVJ","Coordinator")" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Active Lab </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="ConductList" data-toggle="pill" href="@Url.Action("LabScheduleAsyncVJ","Coordinator")" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Lab Schedule</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="custom-tabs-one-tabContent">
+                <!--<div class="tab-pane fade show active" id="AsTab" role="tabpanel" aria-labelledby="Lab List">
+                <!-- Content of AssignListTab will be loaded here -->
+                <!--</div>-->
+                <!--<div class="tab-pane fade" id="ConductedListTab" role="tabpanel" aria-labelledby="Create New Lab">-->
+                <!-- Content of ConductedListTab will be loaded here -->
+                <!--@*</div>*@
+                <div class="tab-pane fade" id="pendigListTab" role="tabpanel" aria-labelledby="Active Lab">
+                     Content of ConductedListTab will be loaded here
+                </div>
+                <div class="tab-pane fade" id="ConductListTab" role="tabpanel" aria-labelledby="Lab Schedule">
+                         Content of ConductedListTab will be loaded here
+                </div>-->
+                <div id="ExamList"></div>
+            </div>
+
+        </div>
+    </div>
+    @*<script>
+            $(document).ready(function () {
+                // Load AssignList view initially
+                $('#AsTab').load('/Coordinator/ViewLabList');
+                // Handle tab click events
+                $('#ConductedList').click(function () {
+                    $('#ConductedListTab').load('/Coordinator/AddNewLab');
+                });
+                $('#pendingList').click(function () {
+                    $('#pendigListTab').load('/Coordinator/ViewAcitveLabList');
+                });
+                $('#ConductList').click(function () {
+                    $('#ConductListTab').load('/Coordinator/LabSchedule');
+                });
+            });
+        </script>*@
+
+    <!-- jQuery -->
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+   
+
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                $.noConflict();
+                var table = $('#example1').DataTable({
+                    "responsive": true, "lengthChange": false, "autoWidth": false,
+                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            });
+        </script>*@
+
+    @*<script>
+
+    jQuery(document).ready(function ($) {
+
+        function loadTabContent(tabContentUrl) {
+            $.ajax({
+                url: tabContentUrl,
+                type: 'GET',
+                success: function (data) {
+                    $('#ExamList').html(data);
+                        var table = $('#ExamList table').DataTable({
+                        "responsive": true,
+                        "lengthChange": false,
+                        "autoWidth": true,
+                        "stateSave": true,
+                        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                    });
+                    table.buttons().container().appendTo('#ExamList .col-md-6:eq(0)');
+                },
+                error: function () {
+                    alert('Error loading content.');
+                }
+            });
+        }
+
+
+        $('.nav-link').on('click', function (e) {
+            e.preventDefault();
+            var tabContentUrl = $(this).attr('href');
+            loadTabContent(tabContentUrl);
+        });
+
+
+        var defaultTabUrl = '@Url.Action("ViewLabList", "Coordinator")';
+        loadTabContent(defaultTabUrl);
+    });
+    </script>*@
+
+    <script>
+    jQuery(document).ready(function ($) {
+        function loadTabContent(tabContentUrl) {
+            $.ajax({
+                url: tabContentUrl,
+                type: 'GET',
+                success: function (data) {
+                    $('#ExamList').html(data);
+                    var table = $('#ExamList table').DataTable({
+                        "responsive": true,
+                        "lengthChange": false,
+                        "autoWidth": false,
+						"stateSave": true,
+						"dom": 'Bfrtip', // Only buttons without other elements
+						"buttons": [
+							{
+								extend: 'copy',
+								text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+								titleAttr: 'Copy'
+							},
+							{
+								extend: 'csv',
+								text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+								titleAttr: 'CSV'
+							},
+							{
+								extend: 'excel',
+								text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+								titleAttr: 'Excel'
+							},
+							{
+								extend: 'pdf',
+								text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+								titleAttr: 'PDF'
+							},
+							{
+								extend: 'print',
+								text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+								titleAttr: 'Print'
+							},
+							{
+								extend: 'colvis',
+								text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+								titleAttr: 'Columns'
+							}
+						]
+					});
+                    table.buttons().container().appendTo('#ExamList .col-md-6:eq(0)');
+                },
+                error: function () {
+                    alert('Error loading content.');
+                }
+            });
+        }
+
+        $('#custom-tabs-one-tab').on('click', '.nav-link', function (e) {
+            e.preventDefault();
+            var tabContentUrl = $(this).attr('href');
+            loadTabContent(tabContentUrl);
+        });
+
+
+        var defaultTabUrl = '@Url.Action("ListLabAsyncVJ", "Coordinator")';
+        loadTabContent(defaultTabUrl);
+    });
+    </script>
+
+</body>
+</html>

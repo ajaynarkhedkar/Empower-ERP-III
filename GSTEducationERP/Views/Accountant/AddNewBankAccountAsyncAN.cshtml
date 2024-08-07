@@ -1,0 +1,502 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+
+<head>
+    <script src="/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 8px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .btn-green:hover {
+            color: white;
+            background: #2b83cb;
+        }
+
+        .btn-black {
+            color: white;
+            background: rgb(169,169,169);
+        }
+
+        a {
+            color: #13c6e6;
+        }
+
+        .btn-black:hover {
+            background: black;
+        }
+
+        .addlogo {
+            width: 65%;
+            aspect-ratio: 3/2;
+            object-fit: contain;
+            /*mix-blend-mode: color-burn;*/
+        }
+
+        .sectionEditLink:hover {
+            background-color: darkturquoise;
+        }
+
+        .card {
+            padding: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            /*margin-right: 10px;*/
+            font: xx-small !important;
+        }
+
+        input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    @*<form id="AddNewBank" action="/Accountant/AddNewBankAccountAsyncAN" method="post" enctype="multipart/form-data">*@
+    @using (Html.BeginForm("AddNewBankAccountAsyncAN", "Accountant", FormMethod.Post, new { @id = "AddNewBank", @enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <br />
+        <div class="card">
+
+
+            <div class="form-group row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankName, "Bank Name:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text"><i class="far fa-ambulance"></i></span>*@
+                        @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control", id = "BankName" } })
+                        @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankBrach, "Branch:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text"><i class="far fa-ambulance"></i></span>*@
+                        @Html.EditorFor(model => model.BankBrach, new { htmlAttributes = new { @class = "form-control", id = "BankBranch" } })
+                        @Html.ValidationMessageFor(model => model.BankBrach, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.AccountHolderName, "Account Holder Name:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text"><i class="far fa-ambulance"></i></span>*@
+                        @Html.EditorFor(model => model.AccountHolderName, new { htmlAttributes = new { @class = "form-control", id = "AccountHoldarName" } })
+                        @Html.ValidationMessageFor(model => model.AccountHolderName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankAccountNumber, "Account Number:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text"><i class="far fa-ambulance"></i></span>*@
+                        @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control", id = "AccountNumber" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.IFSCCode, "IFSC Code:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text"><i class="far fa-code-branch"></i></span>*@
+                        @Html.EditorFor(model => model.IFSCCode, new { htmlAttributes = new { @class = "form-control", id = "IFSC" } })
+                        @Html.ValidationMessageFor(model => model.IFSCCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MICRCode, "MICR Code:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text"></span>*@
+                        @Html.EditorFor(model => model.MICRCode, new { htmlAttributes = new { @class = "form-control", id = "MICR" } })
+                        @Html.ValidationMessageFor(model => model.MICRCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.AccountType, "Account Type", htmlAttributes: new { @class = "control-label" })
+                </div>
+                @*<div class="col-md-4">
+                        @Html.EditorFor(model => model.AccountType, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "text-danger" })
+                    </div>*@
+                <div class="col-md-4">
+                    @Html.DropDownListFor(
+                        model => model.AccountType,
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem { Value = "", Text = "-- Select Type --" },
+                            new SelectListItem { Value = "Saving", Text = "Saving" },
+                            new SelectListItem { Value = "Current", Text = "Current" }
+                        },
+                        new { @class = "form-control", id = "BankType" }
+                    )
+                    @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankAccountOpeningDate, "Account Opening Date:", htmlAttributes: new { @class = "control-label" })
+                </div>
+
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text">📅</span>*@
+                        @Html.EditorFor(model => model.BankAccountOpeningDate, new { htmlAttributes = new { @class = "form-control", type = "date", id = "OpeningDate" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountOpeningDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankAccountMinimumBalance, "Minimum Balance:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text">💰</span>*@
+                        @Html.EditorFor(model => model.BankAccountMinimumBalance, new { htmlAttributes = new { @class = "form-control", id = "MinimumBalace" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountMinimumBalance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankAccountOpeningBalance, "Opening Balance:", htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group mb-3">
+                        @*<span class="input-group-text">💸</span>*@
+                        @Html.EditorFor(model => model.BankAccountOpeningBalance, new { htmlAttributes = new { @class = "form-control", id = "OpeningBalace" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountOpeningBalance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <span id="balanceValidationMessage" class="text-danger"></span> <!-- Validation message here -->
+                </div>
+            </div>
+
+
+            @*<div class="text-center pt-2 mb-2">
+                    <button type="submit" id="submit" name="submit" onclick="" class="btn btn-sm btn-success">Save</button>
+                    <button type="button" name="clear" id="clear" class="btn btn-sm btn-warning" onclick="clearForm()">Clear</button>
+                </div>*@
+
+            <div class="d-flex justify-content-center pt-2 mb-2">
+                <input type="submit" value="Save" class="btn btn-success" id="SaveButton">
+            </div>
+        </div>
+    }
+
+    @* </form>*@
+
+    @*<script type="text/javascript">
+            $('input[type=text]').each(function () {
+                var req = $(this).attr('data-val-required');
+                if (undefined != req) {
+                    var label = $('label[for="' + $(this).attr('id') + '"]');
+                    var text = label.text();
+                    if (text.length > 0) {
+                        label.append('<span style="color:red"> *</span>');
+                    }
+                }
+            });
+        </script>*@
+
+    @*<script>
+
+            function clearForm() {
+                // Get the form element by its id
+                var form = document.getElementById('myForm');
+                debugger;
+                // Reset the form
+                form.reset();
+            }
+        </script>*@
+
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var today = new Date();
+            today.setDate(today.getDate()); // Set to Today
+            var formattedDate = today.toISOString().split('T')[0]; // Format as yyyy-mm-dd
+
+            // Set max attribute for the date input
+            $('#OpeningDate').attr('max', formattedDate);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize date picker
+            $("#OpeningDate").datepicker({
+                minDate: 0, // Disable past dates
+                dateFormat: "yy-mm-dd", // Set the format to yyyy-mm-dd
+                showOtherMonths: true, // Show dates from other months
+                selectOtherMonths: true, // Allow selection of dates from other months
+                changeMonth: true, // Allow changing month
+                changeYear: true, // Allow changing year
+                beforeShowDay: function (date) {
+                    // Disable all past dates
+                    if (date < new Date()) {
+                        return [false, "", "Unavailable"];
+                    }
+                    return [true, "", ""];
+                }
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            debugger;
+            // Function to validate the balance
+            function validateBalances() {
+                var minBalance = parseFloat($('#MinimumBalace').val()) || 0;
+                var openingBalance = parseFloat($('#OpeningBalace').val()) || 0;
+                var errorMessage = '';
+                debugger;
+                if (minBalance == 0) {
+                    errorMessage = 'First enter Minimum Positive Balace then Opening Balace';
+                }
+                else if (openingBalance <= minBalance) {
+                    errorMessage = 'Opening Balance must be greater than Minimum Balance.';
+                }
+
+                $('#balanceValidationMessage').text(errorMessage); // Show error message
+                return !errorMessage; // Return true if no error
+            }
+
+            // Attach the validation function to the input fields
+            $('#MinimumBalace, #OpeningBalace').on('input', function () {
+                validateBalances();
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#BankName').on('input', function () {
+                var maxLength = 250;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+
+            $('#AccountNumber').on('input', function () {
+                var maxLength = 18;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+
+            $('#BankBranch').on('input', function () {
+                var maxLength = 250;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+
+            $('#AccountHoldarName').on('input', function () {
+                var maxLength = 250;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+
+            $('#OpeningBalace').on('input', function () {
+                var maxLength = 10;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+
+            $('#MinimumBalace').on('input', function () {
+                var maxLength = 6;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+            $('#MICR').on('input', function () {
+                var maxLength = 9;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+
+            $('#IFSC').on('input', function () {
+                var maxLength = 11;
+                var value = $(this).val();
+                if (value.length > maxLength) {
+                    $(this).val(value.substring(0, maxLength));
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#AddNewBank").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+                // Show confirmation dialog
+                var bankName = $('#BankName').val();
+                var bankBranch = $('#BankBranch').val();
+                var holderName = $('#AccountHoldarName').val();
+                var acountNumber = $('#AccountNumber').val();
+                var minimumBalance = $('#MinimumBalace').val();
+                var openingBaalace = $('#OpeningBalace').val();
+                var openingDate = $('#OpeningDate').val();
+                var bankType = $('#BankType').val();
+                var ifsc = $('#IFSC').val();
+                var micr = $('#MICR').val();
+
+
+                // Validate form data
+                if (bankName.trim() === '' || bankBranch.trim() === '' || holderName.trim() === '' || acountNumber.trim() === '' || minimumBalance.trim() === '' || openingBaalace.trim() === '' || openingDate.trim() === '' || bankType.trim() === '' || ifsc.trim() === '' || micr.trim() === '') {
+                    Swal.fire('Error', 'Please fill in all fields.', 'error');
+                    return;
+                }
+                else {
+
+
+                    Swal.fire({
+                        title: 'Confirmation',
+                        text: 'Are you sure you want to add a new bank account?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Perform form submission via AJAX
+                            $.ajax({
+                                url: $(this).attr("action"),
+                                type: $(this).attr("method"),
+                                data: new FormData(this),
+                                processData: false,
+                                contentType: false,
+                                success: function (response) {
+                                    // Clear form fields
+                                    $("#AddNewBank")[0].reset();
+
+                                    // Show success message using Toastr
+                                    toastr.success('Bank account added successfully!', 'Success');
+                                    setTimeout(function () {
+                                        window.location.href = 'BankAccountListAsyncAN'; // Replace 'list-view-url' with your actual URL
+                                    }, 1000);
+                                },
+                                error: function () {
+                                    // Show error message if the AJAX request fails
+                                    toastr.error('An error occurred. Please try again later.', 'Error');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    @*<script>
+        $(document).ready(function () {
+
+            $("#AddNewBank").submit(function (e) {
+                debugger;
+                    e.preventDefault(); // Prevent the default form submission
+
+                    // Check if the form is valid
+                if ($(this).valid()) {
+                    debugger;
+                        // Show confirmation dialog
+                        Swal.fire({
+                            title: 'Confirmation',
+                            text: 'Are you sure you want to add a new bank account?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes',
+                            cancelButtonText: 'No',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Perform form submission via AJAX
+                                $.ajax({
+                                    url: $(this).attr("action"),
+                                    type: $(this).attr("method"),
+                                    data: new FormData(this),
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (response) {
+                                        // Clear form fields
+                                        $("#AddNewBank")[0].reset();
+
+                                        // Show success message using Toastr
+                                        toastr.success('Bank account added successfully!', 'Success');
+                                        setTimeout(function () {
+                                            window.location.href = 'BankAccountListAsyncAN'; // Replace with your actual URL
+                                        }, 1000);
+                                    },
+                                    error: function () {
+                                        // Show error message if the AJAX request fails
+                                        toastr.error('An error occurred. Please try again later.', 'Error');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        </script>*@
+
+
+</body>

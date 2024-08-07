@@ -1,0 +1,150 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.ScheduleId)
+<html>
+<head>
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 20px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+            text-align: center;
+        }
+    </style>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+
+</head>
+<body>
+    <div class="container-fluid">
+        <br>
+        <div class="card ">
+            @*<div class="form-horizontal">*@
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+                <h2 class="text-center">New Demo</h2>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4" style="padding-left:10px;">
+                        <label>Demo Name:</label>
+                        <span>@Model.DemoName</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>No. of Students:</label>
+                        <span>@Model.NoOfStudent</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Lab Name:</label>
+                        <span>@Model.LabName</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" style="padding-left:10px;">
+                        <label>Date:</label>
+                        <span>@Model.strtDate</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Start Time:</label>
+                        <span>@Model.StartTime.ToString("HH:mm:ss")</span>
+                    </div>
+                    <div class="col-md-4">
+                        <label>End Time:</label>
+                        <span>@Model.EndTime.ToString("HH:mm:ss")</span>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" class="btn btn-success mr-2" value="YES" id="editButton">
+                    <button type="reset" class="btn btn-danger" onclick="" id="cancelButton">NO</button>
+                </div>
+            @*</div>*@
+        </div>
+    </div>
+
+    @*/*This is for accept the demo request*/*@
+
+    <script>
+    document.getElementById('editButton').addEventListener('click', function (event) {
+        event.preventDefault();
+        var ScheduleId = document.getElementById('ScheduleId').value;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to accept the demo......',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Accepted!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('@Url.Action("DemoAcceptedKKAsync", "Trainer")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        ScheduleId: ScheduleId
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire('Success!', 'Demo Accepted Successfully.', 'success').then(() => {
+                            // Redirect to the list page after Swal confirmation
+                            window.location.href = '/Trainer/ListDemoArrangedKKAsync';
+                        });
+                    } 
+                })
+               
+            }
+        });
+    });
+    </script>
+
+
+
+    <script>
+        document.getElementById('cancelButton').addEventListener('click', function () {
+        event.preventDefault();
+        var ScheduleId = document.getElementById('ScheduleId').value;
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to reject the demo Request......',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Rejected!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('@Url.Action("DemoRejectedKKAsync", "Trainer")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        ScheduleId: ScheduleId
+                    })
+                })
+                .then(response => {
+                        if (response.ok) {
+                            Swal.fire('Success!', 'Demo Rejected.', 'success').then(() => {
+                                // Redirect to the list page after Swal confirmation
+                                window.location.href = '/Trainer/ListDemoArrangedKKAsync';
+                            });
+                        } 
+                    })
+                   
+            }
+        });
+    });
+    </script>
+</body>
+</html>
+}

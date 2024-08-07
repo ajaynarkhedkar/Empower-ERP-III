@@ -1,0 +1,252 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "ListAllProjectsAsyncPG";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>All Projects</title>
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        button.video-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #17A2B8;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .image-style {
+            width: 35px;
+            height: auto;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <br />
+    <div class="card " style="padding:5px;margin-right:20px;margin-left:10px; margin-top:-15px">
+        <div class="card-body">
+            <div class="row">
+                <h2 class="col-10">All Projects </h2>
+                <div class="col-2 text-right">
+                    <a href="@Url.Action("RegisterAssignProjectAsyncPG")" class="video-link" title="Assign Project">
+                        <img src="~/Content/Admin/icon/save.jpeg" class="image-style" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th hidden>SRNO</th>
+                        <th hidden>Project Id</th>
+                        <th>Project Name</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Technology</th>
+                        <th>Methodology</th>
+                        <th>Project Owner</th>
+                        <th>Staff Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 1;
+                    }
+                    @foreach (var item in Model.lstAllProjects)
+                    {
+                        <tr>
+                            <td hidden>
+                                @counter
+                                @{
+                                    counter++;
+                                }
+                            </td>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.Projectid)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProjectName)
+                            </td>
+                            <td>
+                                @item.Date.ToString("yyyy-MM-dd")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Duration)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Technology)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Methodology)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProjectOwner)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StaffName)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a href="@Url.Action("ListAllAssignedProjectAsyncPG")" class="back-link">
+            <video width="45" height="45" playsinline loop>
+                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+            </video>
+        </a>
+    </div>
+        <!-- jQuery -->
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- DataTables  & Plugins -->
+        <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+        <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+        <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.noConflict();
+                var table = $('#example1').DataTable({
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "buttons": [
+                        {
+                            extend: 'copy',
+                            text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                            titleAttr: 'Copy'
+                        },
+                        {
+                            extend: 'csv',
+                            text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                            titleAttr: 'CSV'
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend: 'pdf',
+                            text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                            titleAttr: 'PDF'
+                        },
+                        {
+                            extend: 'print',
+                            text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                            titleAttr: 'Print'
+                        },
+                        {
+                            extend: 'colvis',
+                            text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                            titleAttr: 'Columns'
+                        }
+                    ]
+                }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            });
+        </script>
+</body>
+</html>

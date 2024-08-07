@@ -1,0 +1,758 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "RegisterTestAsycTS";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+
+
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!--<script src="path/to/jquery.min.js"></script>-->
+    <!-- Include Bootstrap CSS -->
+    @*<link rel="stylesheet" href="path/to/bootstrap.min.css">*@
+    <!-- Include Bootstrap JavaScript (make sure it comes after jQuery) -->s
+    @*<script src="path/to/bootstrap.min.js"></script>*@
+    <!-- Include locally hosted jQuery Timepicker -->
+    <link rel="stylesheet" href="path/to/jquery.timepicker.min.css" />
+    <script src="path/to/jquery.timepicker.min.js"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+
+    <!-- Bootstrap 4 -->
+
+    <script src="~/Content/plugins/moment/moment.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Attach a click event handler to the Close button
+            $('#closeButton').click(function () {
+                // Redirect to the previous page
+                window.history.back();
+            });
+
+            // Add a click event listener to the save button
+            $('#saveButton').click(function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                debugger;
+                var testName = $('#TestName').val();
+                var courseName = $('#CourseName').val();
+                var topicName = $('#TopicName').val();
+                var dateTime = $('#DateTime').val();
+                var sduration = $('#SDuration').val();
+                var totalMarks = $('#TotalMarks').val();
+                var passigMars = $('#PassingMarks').val();
+                var testPaperFile = $('#TestPaperFile').val();
+                var staffcode = $('#staffCode').val();
+                var totaloofQuestion = $('#TotalNoOfQuestion').val();
+
+
+                // Validate form data
+                debugger;
+                if (testName === '' || courseName === '' || topicName === '' || dateTime === '' || sduration === '' || totalMarks === '' || passigMars === '' || testPaperFile === '' || staffcode === '' || totaloofQuestion === '') {
+                    // Display SweetAlert error message
+                    Swal.fire('Error', 'Please fill in all fields.', 'error');
+                    return;
+                }
+
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to schedule your mock.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then(async (result) => {
+                    // If the user clicks "Yes, save it!" execute your save logic here
+                    if (result.isConfirmed) {
+                        debugger;
+                        // Prepare form data to send to the server
+                        var formData = new FormData();
+                        formData.append('MockId', mockName);
+                        formData.append('BatchCode', batchCode);
+                        formData.append('SelectedStudentCodes', studentCode); // Adjusted to SelectedStudentCodes
+                        formData.append('MockDate', mockDate);
+                        formData.append('SelectedDuration', duration);
+                        formData.append('StaffCode', interviewerName);
+                        formData.append('StartTime', startTime);
+                        formData.append('endTime', endTime)
+                        formData.append('LabCode', labName)
+
+                        try {
+                            // Send form data to the server using Fetch API
+                            var response = await fetch('/Placement/ScheduleInternalMockSHAsync', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                              if (response.ok) {
+                            // Success message
+                            Swal.fire({
+                                title: 'Schedule Successful',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '@Url.Action("ListAllMock", "Placement")';
+                            });
+                        } else {
+                            // Handle error
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while assigning the exam.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        // Handle unexpected error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An unexpected error occurred. Please try again later.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Attach a click event handler to the Close button
+            $('#closeButton').click(function () {
+                // Redirect to the previous page
+                window.history.back();
+            });
+
+            // Add a click event listener to the save button
+            $('#saveButton').click(function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                debugger;
+                var testName = $('#TestName').val();
+                var courseName = $('#CourseName').val();
+                var topicName = $('#TopicName').val();
+                var dateTime = $('#DateTime').val();
+                var sduration = $('#SDuration').val();
+                var totalMarks = $('#TotalMarks').val();
+                var passigMars = $('#PassingMarks').val();
+                var testPaperFile = $('#TestPaperFile').val();
+                var staffcode = $('#staffCode').val();
+                var totaloofQuestion = $('#TotalNoOfQuestion').val();
+
+
+                // Validate form data
+                debugger;
+                if (testName === '' || courseName === '' || topicName === '' || dateTime === '' || sduration === '' || totalMarks === '' || passigMars === '' || testPaperFile === '' || staffcode === '' || totaloofQuestion === '') {
+                    // Display SweetAlert error message
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Please fill all fields.',
+                        icon: 'error'
+                    });
+                    return;
+                }
+                //// Validate Lab Name
+                //if (!validateLabName(labName)) {
+                //    // Display error message if validation fails
+                //    Swal.fire({
+                //        title: 'Error',
+                //        text: 'Please enter a valid Lab Name with the first letter capitalized.',
+                //        icon: 'error'
+                //    });
+                //    return;
+                //}
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to create a New Lab.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then(async (result) => {
+                    // If the user clicks "Yes, save it!" execute your save logic here
+                    if (result.isConfirmed) {
+                        // Prepare form data to send to the server
+                        debugger;
+                        var formData = {
+                            TestName: testName,
+                            CourseName: courseName,
+                            TopicName: topicName,
+                            DateTime: dateTime,
+                            SDuration: sduration
+                                TotalMarks: totalMarks,
+                            PassingMarks: passigMars,
+                            TestPaperFile: testPaperFile,
+                            staffCode: staffcode,
+                            TotalNoOfQuestion: totaloofQuestion
+                        };
+
+                        try {
+                            // Send form data to the server using AJAX
+                            var response = await $.ajax({
+                                url: '/Trainer/RegisterTestAsycTS',
+                                type: 'POST',
+                                data: formData,
+                                success: function (data) {
+                                    // Display success toast
+                                    displayToast('Data Saved Successfully.', 'success');
+
+                                    // Redirect to the list page after a slight delay
+                                    setTimeout(function () {
+                                        window.location.href = '/Trainer/ListTestManagementAsynchTS';
+                                    }, 1000); // Redirect after 1 second
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error:', error);
+                                    // Display error toast
+                                    displayToast('Error saving followup data. Please try again.', 'error');
+                                }
+                            });
+                        } catch (error) {
+                            console.error('Error:', error);
+                            // Display error toast
+                            displayToast('An unexpected error occurred. Please try again later.', 'error');
+                        }
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Handle if the user clicked the cancel button
+                        Swal.fire('Cancelled', 'Your action has been cancelled.', 'info');
+                    }
+                });
+            });
+
+            function displayToast(message, type) {
+                // Display Toastr notification
+                toastr[type](message);
+            }
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: 'toast-top-right',
+                showMethod: 'slideDown',
+                timeOut: 40000 // How long the toast will be displayed (in milliseconds)
+            };
+        });
+    </script>
+
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 38px;
+        }
+
+        .col-md-10 {
+            margin-top: 5px;
+        }
+
+        .row .form-group {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .bootstrap-duallistbox-container {
+            margin-top: 20px;
+        }
+
+        .box1, .box2 {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .btn-sm {
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .filter {
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            font-size: 16px;
+            height: 40px;
+            width: 100px;
+        }
+
+        .spacer {
+            margin-left: 10px;
+        }
+
+        .form-group.text-center {
+            text-align: center;
+        }
+
+            .form-group.text-center .col-md-6 {
+                display: inline-block;
+            }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .date-input {
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        .date-picker {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    @using (Html.BeginForm("RegisterTestAsycTS", "Trainer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-container" id="">
+            <div class="form-horizontal">
+                <div class="form-horizontal" style="text-align: center;">
+                    <h2>Register New Test </h2>
+                </div>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="CourseName" class="control-label">Course Name</label>
+
+                        @Html.DropDownListFor(model => model.CourseName, new SelectList(ViewBag.Course6, "Value", "Text"), "Select Course", new { @class = "form-control required", style = "width: 300px;" })
+                        @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="SectionName" class="control-label">Section Name</label>
+
+                        <select id="SectionName" name="SectionName" class="form-control required" style="width: 300px;"></select><br />
+                        @*@Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.SectionName, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <div class="col-md-10 col-md-offset-1">
+                        <label for="TopicName" class="control-label">Topic Name</label>
+                    </div>
+                    <div class="col-md-10 col-md-offset-1" style="margin-left: 70px;">
+                        <select id="TopicName" name="TopicName" class="form-control required" style="width: 500px;"></select><br />
+                        @Html.ValidationMessageFor(model => model.TopicName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="TestName" class="control-label">Test Name:</label>
+                        @Html.EditorFor(model => model.TestName, new { htmlAttributes = new { @class = "form-control required", style = "width: 300px;" } })
+
+
+                        @Html.ValidationMessageFor(model => model.TestName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="SDuration" class="control-label">Duration:</label>
+
+                        <div class="input-group">
+                            <input type="time" id="SDuration" name="SDuration" value="@Model.SDuration.ToString("hh\\:mm")" class="form-control" style="width: 300px;" />
+
+                            <div class="col-md-10">
+                                @Html.ValidationMessageFor(model => model.SDuration, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group row">
+                    <!--<div class="form-group">
+                    <label for="RegisterDate" class="control-label">RegisterDate:</label>
+                    <div class="col-md-10">-->
+                    @*@Html.EditorFor(model => model.RegisterDate, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <!--@Html.ValidationMessageFor(model => model.RegisterDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>-->
+                    <div class="col-md-6">
+                        <label for="TotalMarks" class="control-label">Total Marks:</label>
+
+
+                        @Html.EditorFor(model => model.TotalMarks, new { htmlAttributes = new { @class = "form-control numeric-input", style = "width: 300px;" } })
+
+
+                        @Html.ValidationMessageFor(model => model.TotalMarks, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-6">
+                        <label for="PassingMarks" class="control-label">Passing Marks:</label>
+
+                        @Html.EditorFor(model => model.PassingMarks, new { htmlAttributes = new { @class = "form-control numeric-input", style = "width: 300px;" } })
+
+                        @Html.ValidationMessageFor(model => model.PassingMarks, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label for="TotalNoOfQuestion" class="control-label">Total No Question:</label>
+
+
+
+                    @Html.EditorFor(model => model.TotalNoOfQuestion, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+
+                    @Html.ValidationMessageFor(model => model.TotalNoOfQuestion, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputFile" class="control-label">File Upload:</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" name="Files" class="custom-file-input fileInput" multiple onchange="validateFileType(this)" id="exampleInputFile">
+                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text">Upload</span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.TestPaperFile, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <br />
+            <div class="form-group text-center">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" id="saveButton" formaction="/Trainer/RegisterTestAsycTS" class="btn btn-primary btn-success btn-custom" />
+
+                    <span class="spacer"></span>
+                    <input type="reset" value="CLEAR" class="btn btn-warning btn-custom" id="btnClear" onclick="clearForm()" />
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    }
+
+    @*<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+        <script src="~/Content/plugins/jquery-ui/jquery-ui.js"></script>
+            <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></scri*@pt>
+    <script>
+        $(document).ready(function () {
+            $("#CourseName").change(function () {
+                var id = $(this).val();
+                $("#SectionName").empty();
+                // alert("Course is selected!");
+				$.get("Section_BindTS", { CourseCode: id }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#SectionName").html(v);
+                });
+            });
+            $("#SectionName").change(function () {
+                var id = $(this).val();
+                $("#TopicName").empty();
+                // alert("Section is selected!");
+                $.get("Topic_Bind", { SectionId: id }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#TopicName").html(v);
+                });
+            });
+        });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#PassingMarks").change(function () {
+                var passingMarks = parseFloat($(this).val());
+                var totalMarks = parseFloat($("#TotalMarks").val());
+
+                if (passingMarks > totalMarks) {
+                    alert("Passing marks cannot be greater than total marks.");
+                    $(this).val(""); // Clear the passing marks input
+                }
+            });
+        });
+        $(document).ready(function () {
+            // Add event listener for input events on elements with class 'numeric-input'
+            $('#TotalNoOfQuestion').on('input', function () {
+                // Get the current value of the input
+                var inputValue = $(this).val();
+
+                // Remove any non-digit characters using a regular expression
+                var sanitizedValue = inputValue.replace(/\D/g, '');
+
+                // Update the input value with the sanitized value
+                $(this).val(sanitizedValue);
+
+                // Check if the input value exceeds 99
+                if (parseInt(sanitizedValue) > 99) {
+                    // If it exceeds 99, truncate the input value to 99
+                    $(this).val(99);
+                }
+            });
+        });
+
+    </script>
+    <script>
+        function addFileInput() {
+            var fileContainer = $('<div class="input-group"></div>'); // Adjusted to match the inner structure of the form group
+            var customFile = $('<div class="custom-file"></div>');
+            var fileInput = $('<input type="file" name="Files" class="custom-file-input fileInput" multiple onchange="validateFileType(this)">');
+            var label = $('<label class="custom-file-label">Choose file</label>');
+            var inputGroupAppend = $('<div class="input-group-append"></div>');
+            var uploadButton = $('<span class="input-group-text">Upload</span>');
+            var deleteIcon = $('<span class="delete-icon input-group-append" onclick="removeFileInput(this)">Delete</span>');
+
+            customFile.append(fileInput);
+            customFile.append(label);
+            fileContainer.append(customFile);
+            inputGroupAppend.append(uploadButton);
+            inputGroupAppend.append(deleteIcon); // Added delete icon
+            fileContainer.append(inputGroupAppend); // Appended input group append to the file container
+
+            $('.form-group').append(fileContainer); // Appended file container to the form group with the class 'form-group'
+        }
+
+        function removeFileInput(deleteIcon) {
+            $(deleteIcon).parent('.input-group-append').parent('.input-group').remove(); // Adjusted parent selectors to match the updated structure
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Add event listener for input events on elements with class 'numeric-input'
+            $('.numeric-input').on('input', function () {
+                // Get the current value of the input
+                var inputValue = $(this).val();
+
+                // Remove any non-digit characters using a regular expression
+                var sanitizedValue = inputValue.replace(/\D/g, '');
+
+                // Update the input value with the sanitized value
+                $(this).val(sanitizedValue);
+            });
+        });
+    </script>
+
+    <script>
+        function validateFileType(input) {
+            const allowedExtensions = /(\.pdf)$/i;
+            if (!allowedExtensions.exec(input.value)) {
+                alert('Please select a PDF file.');
+                input.value = '';
+                return false;
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Add event listener for form submission
+            $("form").submit(function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+
+                // Perform form validation
+                if (validateForm()) {
+                    // If form is valid, submit the form
+                    $(this).unbind('submit').submit();
+                } else {
+                    // If form is not valid, show an alert or error message
+                    alert("Please fill in all required fields.");
+                }
+            });
+
+            // Function to validate the form
+            function validateForm() {
+                var isValid = true;
+
+                // Check if each required field has a value
+                $('.required').each(function () {
+                    if ($(this).val() == '') {
+                        isValid = false;
+                        return false; // Exit the loop if any required field is empty
+                    }
+                });
+
+                return isValid;
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Add event listener for form submission
+            $("form").submit(function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+
+                // Perform form validation
+                if (validateForm()) {
+                    // If form is valid, submit the form
+                    $(this).unbind('submit').submit();
+                } else {
+                    // If form is not valid, show an alert or error message
+                    alert("Please fill in all required fields.");
+                }
+            });
+
+            // Function to validate the form
+            function validateForm() {
+                var isValid = true;
+
+                // Check if each required field has a value
+                $('.required').each(function () {
+                    if ($(this).val() == '') {
+                        isValid = false;
+                        return false; // Exit the loop if any required field is empty
+                    }
+                });
+
+                return isValid;
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Add event listener for input events on elements with class 'numeric-input'
+            $('.numeric-input').on('input', function () {
+                // Get the current value of the input
+                var inputValue = $(this).val();
+
+                // Remove any non-digit characters using a regular expression
+                var sanitizedValue = inputValue.replace(/\D/g, '');
+
+                // Update the input value with the sanitized value
+                $(this).val(sanitizedValue);
+
+                // Check if the input value exceeds 999
+                if (parseInt(sanitizedValue) > 999) {
+                    // If it exceeds 999, truncate the input value to 999
+                    $(this).val(999);
+                }
+            });
+        });
+    </script>
+    <script>
+        function validateFileType(input) {
+            const allowedExtensions = /(\.pdf)$/i;
+            if (!allowedExtensions.exec(input.value)) {
+                alert('Please select a PDF file.');
+                input.value = '';
+                return false;
+            } else {
+                // Display the selected file name in the custom file input label
+                var fileName = input.files[0].name;
+                $(input).siblings('.custom-file-label').html(fileName);
+            }
+        }
+    </script>
+    <script>
+        function clearForm() {
+            // Reset the values of all input fields to their default state
+            $('input[type=text], input[type=number], input[type=email], input[type=password], select').val('');
+
+            // Reset the file input
+            $('.custom-file-label').html('Choose file');
+
+            // Reset any validation messages
+            $('.text-danger').text('');
+        }
+    </script>
+
+
+</body>
+</html >

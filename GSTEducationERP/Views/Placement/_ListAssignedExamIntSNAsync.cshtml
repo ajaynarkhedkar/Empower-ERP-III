@@ -1,0 +1,751 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- Bootstrap 4 -->
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="~/Content/plugins/moment/moment.min.js"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+	<link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+	<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+	<style>
+		.card-header {
+			cursor: pointer;
+		}
+
+		.error-field {
+			border: 2px solid red; /* Add your preferred styling for highlighting */
+		}
+
+		label:not(.form-check-label):not(.custom-file-label) {
+			font-size: 16px;
+		}
+
+		.form-control {
+			font-size: 16px !important;
+		}
+
+		.input-group > .custom-file {
+			font-size: 16px !important;
+		}
+
+		.btn:not(:disabled):not(.disabled) {
+			font-size: 14px !important;
+		}
+
+		.text-danger {
+			font-size: 12px !important;
+		}
+	</style>
+	<style>
+		.modal-dialog-right {
+			right: 0;
+			margin-right: 0px; /* Adjust this value as needed */
+			transform: translateX(100%);
+			transition: transform 0.3s ease-out;
+		}
+
+		.modal.fade.show .modal-dialog-right {
+			transform: translateX(0);
+		}
+
+		#TechnologyName {
+			height: 40px; /* Set your desired height */
+			overflow-y: auto; /* Enable vertical scrolling */
+		}
+	</style>
+
+</head>
+<body>
+	<div class="card card-default">
+		<div class="card-header" style="background-color: #33CCCC">
+			<h4 class="card-title">Assign Exam</h4>
+
+			@*<div class="card-tools">
+					<button type="button" class="btn btn-tool" data-card-widget="collapse">
+						<i class="fas fa-minus"></i>
+					</button>
+				</div>*@
+		</div>
+		<div class="card-body collapse" id="AssignExam">
+			@using (Html.BeginForm())
+			{
+				@Html.AntiForgeryToken()
+
+				<div class="row">
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="input-group">
+									@Html.LabelFor(model => model.CourseCode, "Course Name", htmlAttributes: new { @class = "control-label col-md-4" })
+									<div class="col-md-8">
+										@Html.DropDownListFor(model => model.CourseCode, new SelectList(ViewBag.Course, "Value", "Text"), "---Select Course---", new { @class = "form-control col-md-12", required = "required" })
+										@Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="input-group">
+									@Html.LabelFor(model => model.BatchName, "Batch Name", htmlAttributes: new { @class = "control-label col-md-4" })
+									<div class="col-md-8">
+										@Html.DropDownListFor(model => model.BatchName, new SelectList(Enumerable.Empty<SelectListItem>()), "---Select Batch---", new { @class = "form-control col-md-12", id = "BatchName", required = "required" })
+										@Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="input-group">
+									@Html.LabelFor(model => model.ExamName, "Exam", htmlAttributes: new { @class = "control-label col-md-4" })
+									<div class="col-md-8">
+										@Html.DropDownListFor(model => model.ExamName, new SelectList(Enumerable.Empty<SelectListItem>()), "-----Select Exam----", new { @class = "form-control col-md-12", id = "ExamName", required = "required" })
+										@Html.ValidationMessageFor(model => model.ExamName, "", new { @class = "text-danger" })
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-4">
+								<div class="input-group">
+									@Html.LabelFor(model => model.ExamDate, htmlAttributes: new { @class = "control-label col-md-4" })
+									<div class="col-md-8">
+
+										@Html.EditorFor(model => model.ExamDate, new { htmlAttributes = new { @class = "form-control datepicker col-md-12", min = DateTime.Now.ToString("yyyy-MM-dd"), required = "required" } })
+
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="bootstrap-timepicker">
+									<div class="input-group">
+										@Html.LabelFor(model => model.ExamTime, htmlAttributes: new { @class = "control-label col-md-4" })
+										<div class="col-md-8">
+											<div class="input-group date col-md-12" data-target-input="nearest">
+												<input type="text" name="ExamTime" id="timepicker" class="form-control col-md-12 datetimepicker-input" data-target="#timepicker" readonly />
+												<div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+													<div class="input-group-text"><i class="far fa-clock"></i></div>
+												</div>
+											</div>
+											<!-- /.input group -->
+										</div>
+									</div>
+								</div>
+								@Html.HiddenFor(model => model.EndTime, new { id = "endTime" })
+								@*<input type="text" name="EndTime" id="endTime" class="form-control" readonly />*@
+							</div>
+							<div class="col-md-4">
+								<div class="input-group">
+									@Html.LabelFor(model => model.TechnologyName, "Technology", htmlAttributes: new { @class = "control-label col-md-4" })
+									<div class="col-md-8">
+										@*@Model.TechnologyName*@
+										<label class="form-control col-md-12" id="TechnologyName">@Model.TechnologyName</label>
+
+										@*@Html.EditorFor(model => model.TechnologyName, new { @class = "form-control col-md-12", required = "required" })*@
+										@Html.ValidationMessageFor(model => model.TechnologyName, "", new { @class = "text-danger" })
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-md-4">
+								<div class="input-group">
+									<label class="control-label col-md-4">Lab Name </label>
+									<select id="LabCode" name="LabCode" class="form-control col-md-8" required> </select>
+									@Html.ValidationMessageFor(model => model.LabCode, "", new { @class = "text-danger" })
+
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="input-group">
+									@Html.LabelFor(model => model.SupervisorName, htmlAttributes: new { @class = "control-label col-md-4" })
+									<div class="col-md-8">
+										@Html.DropDownListFor(model => model.SupervisorName, new SelectList(ViewBag.Trainer, "Value", "Text"), "-----Select Supervisor----", new { @class = "form-control col-md-12", required = "required" })
+										@Html.ValidationMessageFor(model => model.SupervisorName, "", new { @class = "text-danger" })
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="input-group">
+									<label class="control-label col-md-4">Duration </label>
+									@Html.DisplayFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control col-md-4", id = "DisplayedDuration" } })
+									@Html.HiddenFor(model => model.Duration, new { id = "DurationValue" })
+									<label class="form-control col-md-8" id="Duration">@Model.Duration</label>
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="input-group justify-content-end " style="margin-top:10px; padding-right:40px;">
+									<div class="col-md-offset-2 col-md-2">
+										<button type="button" class="btn btn-block bg-gradient-success btn-block" onclick="confirmAssign()">Save</button>
+									</div>
+									<div class="col-md-2">
+										<button type="button" class="btn btn-block bg-gradient-danger btn-block" onclick="resetForm()">Clear</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+					</div>
+					<div class="col-md-3">
+						<div class="card justify-content-center" style="display: flex; overflow: auto; height: 200px; padding: 10px;">
+							<!-- Add a container for the student list -->
+							<div class="form-group " name="SelectedStudents" id="studentListContainer" style=" display: none; overflow-y: auto;">
+								<label class="control-label col-md-2">Students</label>
+								<div class="col-md-6">
+									<!-- Student list will be displayed here -->
+								</div>
+							</div>
+						</div>
+						@Html.Hidden("SelectedStudents", "", new { @class = "form-control", id = "SelectedStudents", required = "required" })
+
+					</div>
+				</div>
+
+			}
+		</div>
+	</div>
+	<div class="card">
+		<div class="card-body">
+			<table id="internalAssignedExams" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th hidden>
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.CourseName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.BatchName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.ExamName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.SupervisorName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.LabName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TimeString)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.DateString)
+						</th>
+						<th>
+							Duration(hh:mm)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TotalMarks)
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					@if (Model != null && Model.lstExams != null)
+					{
+						for (int i = 0; i < Model.lstExams.Count; i++)
+						{
+							var item = Model.lstExams[i];
+							<tr>
+								<td hidden>
+									@Html.HiddenFor(modelItem => item.AssignExamId)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.CourseName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.BatchName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ExamName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.SupervisorName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.LabName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.TimeString)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DateString)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.FormattedDuration)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.TotalMarks)
+								</td>
+								<td style="text-align: center;">
+									<a href="#" class="icon" data-toggle="modal" data-target="#resultModal" data-id="@item.AssignExamId" data-action="Edit Assigned Exam" title="Edit">
+										<!-- Embed the video element -->
+										<video width="25" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4">
+										</video>
+									</a>
+								</td>
+							</tr>
+						}
+					}
+
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+	@*Modal*@
+	<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content" style="width:700px!important;">
+				<div class="modal-header">
+					<h3 class="modal-title " id="resultModalLabel">Edit Assigned Exam</h3>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="background-color:transparent">
+					@* Result form content will be loaded here*@
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<link href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+	<script src="~/Content/Admin/js/Icon.js"></script>
+	<!-- Include SweetAlert CSS and JS files -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="~/Content/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script>
+		$(document).ready(function () {
+
+
+
+			$("#studentListContainer").hide();
+			$("#BatchName, #ExamName").prop("disabled", true);
+			$("#CourseCode").change(function () {
+				var id = $(this).val();
+				$("#BatchName, #ExamName").prop("disabled", true); // Disable BatchName and ExamName
+				$("#studentListContainer").hide();
+				// Check if CourseCode is selected
+				if (id) {
+					$("#BatchName").empty();
+					$.get("ListALLBatchSNAsync", { CourseCode: id }, function (data) {
+						var v = "<option>---Select Batch---</option>";
+						$.each(data, function (i, v1) {
+							v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+						});
+						$("#BatchName").html(v);
+						$("#BatchName").prop("disabled", false); // Enable BatchName once loaded
+					});
+
+					$("#ExamName").empty();
+					$.get("ListExamSNAsync", { CourseCode: id }, function (data) {
+						var v = "<option>---Select Exam---</option>";
+						$.each(data, function (i, v1) {
+							v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+						});
+						$("#ExamName").html(v);
+						$("#ExamName").prop("disabled", false); // Enable ExamName once loaded
+					});
+				}
+			});
+
+			$("#BatchName").change(function () {
+				var batchCode = $(this).val();
+
+				// Check if a batch is selected
+				if (batchCode) {
+					var studentListContainer = $("#studentListContainer");
+
+					// Clear previous content before making a new AJAX request
+					studentListContainer.empty();
+					$("#ExamName").val('');
+					$("#TechnologyName").text('');
+					$("#Duration").text('');
+
+					// Add an option to select all students
+					var selectAllCheckbox = $('<input type="checkbox" class="student-checkbox" value="selectAll">');
+					var selectAllLabel = $('<label>Select All</label>');
+
+					// Append checkbox and label to the container
+					studentListContainer.append(selectAllCheckbox);
+					studentListContainer.append(selectAllLabel);
+					studentListContainer.append("<br>");
+
+					// Handle checkbox change to update selected students
+					selectAllCheckbox.change(function () {
+						// Check or uncheck all student checkboxes based on the select all checkbox
+						$(".student-checkbox").prop("checked", $(this).prop("checked"));
+						updateSelectedStudents();
+					});
+
+					// Make an AJAX request to get the list of students for the selected batch
+					$.get("ListStudentSNAsync", { BatchCode: batchCode }, function (data) {
+						// Create checkboxes for each student
+						$.each(data, function (i, student) {
+							var checkbox = $('<input type="checkbox" class="student-checkbox" value="' + student.Value + '">');
+							var label = $('<label>' + student.Text + '</label>');
+
+							// Append checkbox and label to the container
+							studentListContainer.append(checkbox);
+							studentListContainer.append(label);
+							studentListContainer.append("<br>");
+
+							// Handle checkbox change to update selected students
+							checkbox.change(function () {
+								updateSelectedStudents();
+							});
+						});
+
+						// Show the student list container
+						studentListContainer.show();
+					});
+				} else {
+					// If no batch is selected, hide the student list container
+					$("#studentListContainer").hide();
+				}
+			});
+
+
+			// Function to update the hidden field with selected students
+			function updateSelectedStudents() {
+				var selectedStudents = $(".student-checkbox:checked").not('[value="selectAll"]').map(function () {
+					return $(this).val();
+				}).get().join(","); // Join selected students with a comma
+
+				// Update the value of the hidden field
+				$("#SelectedStudents").val(selectedStudents);
+			}
+
+	  $("#ExamName").change(function () {
+
+        // Get the selected exam and batch values
+        var selectedExamId = $(this).val();
+        var selectedBatchId = $("#BatchName").val();
+
+        // Perform asynchronous check
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("IsExamAssignedToBatchSN", "Placement")', // Replace "YourControllerName" with the actual controller name
+            data: { ExamId: selectedExamId, BatchCode: selectedBatchId },
+            success: function (result) {
+                if (result.isAssigned) {
+                    // Exam is already assigned to the batch, show SweetAlert
+                    Swal.fire({
+                        title: 'Warning',
+                        text: 'The selected exam is already assigned to the same batch.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        // Optionally, reset the selected exam
+						$("#ExamName").val('');
+						$("#TechnologyName").text('');
+						$("#Duration").text('');
+                    });
+                }
+            },
+            error: function (error) {
+                // Handle error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An error occurred while checking if the exam is assigned to the batch.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+		});
+
+	$.ajax({
+    type: 'GET',
+    url: '@Url.Action("GetTechnologyNameAsyncSN", "Placement")',
+    data: { ExamId: selectedExamId },
+    success: function (data) {
+        // Access the JSON data in the 'data' variable
+        var technology = data;
+		$("#TechnologyName").text(data);
+        // Now you can use the 'technology' variable as needed
+        console.log(technology);
+    },
+    error: function (error) {
+        // Handle error
+        Swal.fire({
+            title: 'Error',
+            text: 'An error occurred while fetching the technology name.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+	});
+		  $.ajax({
+    type: 'GET',
+    url: '@Url.Action("GetExamDurationAsyncSN", "Placement")',
+    data: { ExamId: selectedExamId },
+    success: function (data) {
+        // Access the JSON data in the 'data' variable
+		var duration = data;
+		$("#DurationValue").val(data);
+		$("#Duration").text(data);
+        // Now you can use the 'technology' variable as needed
+        console.log(duration);
+    },
+    error: function (error) {
+        // Handle error
+        Swal.fire({
+            title: 'Error',
+            text: 'An error occurred while fetching the duration.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+});
+
+    });
+
+		});
+	</script>
+	<!-- Add this script at the end of your HTML body -->
+	<script>
+		$(document).ready(function () {
+			$('.card-header').click(function () {
+				var cardBody = $(this).closest('.card').find('.card-body:first');
+				cardBody.slideToggle();
+			});
+		});
+	</script>
+
+
+
+	<script>
+
+		$(document).ready(function () {
+			//$.noConflict();
+			//Timepicker
+			$('#timepicker').datetimepicker({
+				format: 'LT',
+
+			})
+
+			$('#ExamDate').datetimepicker({
+				format: 'YYYY-MM-DD',
+				minDate: moment().startOf('day')
+			});
+			$('#timepicker').on('change.datetimepicker', function (e) {
+                calculateEndTime();
+
+            });
+			$('#ExamDate').on('change.datetimepicker', function (e) {
+                getLabDetails();
+            });
+
+
+
+			// Usage in your existing function
+			       function calculateEndTime() {
+
+                var startTime = $('#timepicker').datetimepicker('date');
+                var durationString = $('#DurationValue').val();
+
+                // Extract numeric value from the duration string
+                var durationValue = parseInt(durationString.split(' ')[0]);
+
+                // Check if duration is in minutes or hours
+                var isHours = durationString.includes('Hour');
+
+                var duration = isHours ? 'Hour' : 'minute';
+
+                if (startTime && durationValue) {
+                    var startTimeMoment = moment(startTime, 'LT');
+                    var endTimeMoment = startTimeMoment.clone().add(durationValue, duration);
+
+                    $('#endTime').text(endTimeMoment.format('LT'));
+                    $('#endTime').val(endTimeMoment.format('LT'));
+                    getLabDetails();
+                } else {
+                    $('#endTime').text('');
+                }
+            }
+
+
+        function getLabDetails() {
+
+    var Batchcode = $('#BatchName').val(); // Corrected to use BatchName
+	var startDate = $('#ExamDate').val();
+    var StartTime = $('#timepicker').val();
+    var EndTime = $('#endTime').text();
+
+    $.ajax({
+        url: '@Url.Action("ReadAvailableLabBatch_Bind", "Placement")',
+        type: 'POST',
+        data: {
+            Batchcode: Batchcode,
+            startDate: startDate,
+            StartTime: StartTime,
+            EndTime: EndTime
+        },
+        success: function (data) {
+            try {
+                var result = JSON.parse(data);
+                var v = "<option>---Select---</option>";
+                $.each(result, function (i, item) {
+                    v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+                });
+                $("#LabCode").html(v);
+            } catch (e) {
+                console.error('Error parsing JSON data:', e);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX request failed:', status, error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while fetching lab details.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+		});
+
+	</script>
+	<script>
+		function confirmAssign() {
+			console.log('confirmAssign function is being executed.');
+			// Check if all required fields are filled in
+			// Check if all fields are filled
+			if (!areAllFieldsFilled()) {
+				// If not, display a SweetAlert warning
+				Swal.fire({
+					title: 'Validation Error',
+					text: 'Please fill in all required fields.',
+					icon: 'warning',
+					confirmButtonText: 'OK'
+				});
+				return;
+			}
+
+
+
+        Swal.fire({
+            title: 'Are you sure you want to assign the exam!',
+			icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, assign it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User confirmed, submit the form
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AssignExamInternalStudentSNAsync", "Placement")', // Update the URL as needed
+                    data: $('form').serialize(),
+                    success: function (data) {
+                        // Display a success message
+						displayToast('Exam Assigned successfully!', 'success');
+						
+							// Wait for the toast to be shown before redirecting
+						setTimeout(function () {
+							resetForm();
+							$('#AssignExam').slideUp();
+							}, 2000); // Adjust the timeout value as needed
+						},
+                    error: function (error) {
+                        // Handle error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while assigning the exam.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
+		}
+		function areAllFieldsFilled() {
+			var allFieldsFilled = true;
+
+			// Iterate over form elements
+			$('form :input').each(function () {
+				// Check if the element is required and its value is empty
+				if ($(this).prop('required') && $.trim($(this).val()) === '') {
+					allFieldsFilled = false;
+					return false; // Exit the loop early if any field is empty
+				}
+			});
+
+			return allFieldsFilled;
+
+
+		}
+		function resetForm() {
+			$('form')[0].reset(); // Reset the form
+			$("#studentListContainer").hide(); // Hide the student list container
+			$("#BatchName, #ExamName").prop("disabled", true); // Disable BatchName and ExamName
+			// You can add additional reset logic if needed
+			$("#CourseCode").val('');
+			$("#BatchName").val('');
+			$("#ExamName").val('');
+			$("#ExamDate").val('');
+			$('#timepicker').datetimepicker('clear');
+			$("#LabCode").html('');
+			$("#SupervisorName").val('');
+			$("#Duration").text('');
+			$("#TechnologyName").text('');
+		}
+	</script>
+	<script>
+		function displayToast(message, type) {
+			// Display Toastr notification
+			toastr[type](message);
+		}
+
+		toastr.options = {
+			closeButton: true,
+			progressBar: true,
+			positionClass: 'toast-top-right',
+			showMethod: 'slideDown',
+			timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+		};
+
+
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.icon, .icon1').click(function () {
+
+				var id = $(this).data('id');
+
+				// Load partial view into modal body
+				var url = '/Placement/UpdateAssignedExamIntStuAsyncSN?id=' + id;
+
+				// Clear previous content before loading new content
+				$('#resultModal .modal-body').empty();
+
+				// Load the new content into modal body
+				$('#resultModal .modal-body').load(url, function (response, status, xhr) {
+					console.log('Load Status:', status);
+					if (status === "error") {
+						console.log('Error:', xhr.status, xhr.statusText);
+					}
+				});
+			});
+		});
+
+	</script>
+</body>
+</html>

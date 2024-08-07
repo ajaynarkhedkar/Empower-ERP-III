@@ -1,0 +1,456 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "RegisterAssignTestTS";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="path/to/jquery.min.js"></script>
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    <!-- jQuery UI library -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 38px;
+        }
+
+        .col-md-10 {
+            margin-top: 5px;
+        }
+
+        .row .form-group {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .bootstrap-duallistbox-container {
+            margin-top: 20px;
+        }
+
+        .box1, .box2 {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .btn-sm {
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .filter {
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            font-size: 16px;
+            height: 40px;
+            width: 100px;
+        }
+
+        .spacer {
+            margin-left: 10px;
+        }
+
+        .form-group.text-center {
+            text-align: center;
+        }
+
+            .form-group.text-center .col-md-6 {
+                display: inline-block;
+            }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .date-input {
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        .date-picker {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    @using (Html.BeginForm("RegisterAssignTestTS", "Trainer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-container" id="">
+            <div class="form-horizontal">
+                <div class="form-horizontal" style="text-align: center;">
+                    <h2>Assign New Test </h2>
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        @Html.DropDownListFor(model => model.CourseName, new SelectList(ViewBag.Course6, "Value", "Text"), "Select Course", new { @class = "form-control", style = "width: 300px;" })
+                        @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.BatchName, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        <select id="BatchName" name="BatchName" class="form-control" style="width: 300px;"></select><br />
+                        @*@Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.SectionName, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                        <select id="SectionName" name="SectionName" class="form-control" style="width: 300px;"></select><br />
+                        @*@Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.SectionName, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.TopicName, htmlAttributes: new { @class = "control-label col-md-2"})
+
+                        <select id="TopicName" idname="TopicName" class="form-control" style="width: 300px;"></select><br />
+                        @*@Html.EditorFor(model => model.TopicName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.TopicName, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TestName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <select id="TestName" name="TestName" class="form-control" style="width: 300px;"></select>
+
+                            @*@ @Html.EditorFor(model => model.TestName, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.TestName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CompleteTillDate, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="input-group" style="width: 700px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" id="CompleteTillDate" name="CompleteTillDate" class="form-control float-right" />
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CompleteTillDate, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <div class="form-group text-center">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Assign" formaction="/Trainer/RegisterAssignTestTS" class="btn btn-primary btn-success btn-custom" />
+                    <span class="spacer"></span>
+                    <input type="reset" value="CLEAR" class="btn btn-warning btn-custom" id="btnClear" onclick="clearForm()" />
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    } <!-- Closing the using block here -->
+
+    <script>
+        $(document).ready(function () {
+            $("#CourseName").change(function () {
+                var courseId = $(this).val();
+                $("#SectionName").empty(); // Clear existing sections
+                $("#BatchName").empty(); // Clear existing batches
+                // Fetch sections for the selected course
+                $.get("Section_BindTS", { CourseCode: courseId }, function (data) {
+                    var sectionOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, section) {
+                        sectionOptions += "<option value='" + section.Value + "'>" + section.Text + "</option>";
+                    });
+                    $("#SectionName").html(sectionOptions);
+                });
+                // Fetch batches for the selected course
+                $.get("Batch_Bind", { CourseCode: courseId }, function (data) {
+                    var batchOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, batch) {
+                        batchOptions += "<option value='" + batch.Value + "'>" + batch.Text + "</option>";
+                    });
+                    $("#BatchName").html(batchOptions);
+                });
+            });
+
+            $("#SectionName").change(function () {
+                var sectionId = $(this).val();
+                // Fetch topics for the selected section
+                $.get("Topic_Bind", { SectionId: sectionId }, function (data) {
+                    var topicOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, topic) {
+                        topicOptions += "<option value='" + topic.Value + "'>" + topic.Text + "</option>";
+                    });
+                    $("#TopicName").html(topicOptions);
+                });
+            });
+
+            $("#TopicName").change(function () {
+                var topicId = $(this).val();
+                // Fetch tests for the selected topic
+                $.get("Test_Bind", { TopicId: topicId }, function (data) {
+                    var testOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, test) {
+                        testOptions += "<option value='" + test.Value + "'>" + test.Text + "</option>";
+                    });
+                    $("#TestName").html(testOptions);
+                });
+            });
+        });
+    </script>
+
+
+
+
+    <script>
+    $(document).ready(function () {
+        // Assuming you have RegisterDate available in your model
+        var registerDate = new Date('@Model.RegisterDate.ToString("yyyy-MM-dd")');
+
+        // Get the current date
+        var currentDate = new Date();
+
+        // Initialize jQuery UI Datepicker
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',  // Set the desired date format
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: currentDate,  // Set the minimum selectable date to the current date
+            beforeShow: function(input, inst) {
+                // Hide the past dates in the calendar
+                setTimeout(function () {
+                    $('.ui-datepicker-calendar').find('a.ui-state-disabled').hide();
+                }, 0);
+            },
+            onSelect: function (selectedDate) {
+                // Ensure the selected date is not earlier than RegisterDate
+                var selected = new Date(selectedDate);
+                if (selected < registerDate) {
+                    alert('CompleteTillDate must be after RegisterDate');
+                    $(this).datepicker('setDate', currentDate);  // Set the date to the current date
+                }
+            }
+        });
+
+        // Disable the icon and make the input readonly
+        $('.datepicker').datepicker('widget').find('.ui-datepicker-trigger').hide();
+        $('.datepicker').prop('readonly', true);
+    });
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            // Initialize jQuery UI Datepicker
+            $('#CompleteTillDate').datepicker({
+                dateFormat: 'yy-mm-dd',  // Set the desired date format
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                minDate: 0, // Disable selection of past dates
+            });
+
+            // Disable the icon and make the input readonly
+            $('#CompleteTillDate').datepicker('widget').find('.ui-datepicker-trigger').hide();
+            $('#CompleteTillDate').prop('readonly', true);
+        });
+    </script>
+
+
+    <script>
+        function clearForm() {
+            // Clear input fields
+            $('input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="tel"], input[type="date"], select').val('');
+
+            // Clear dropdowns
+            $('select').prop('selectedIndex', 0);
+
+            // Clear validation messages
+            $('.text-danger').text('');
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Add event listener for form submission
+            $("form").submit(async function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
+
+                // Perform form validation
+                if (validateForm()) {
+                    // Show confirmation dialog using SweetAlert
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to create a new test.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, save it!'
+                    }).then(async (result) => {
+                        // If the user clicks "Yes, save it!" execute your save logic here
+                        if (result.isConfirmed) {
+                            try {
+                                // Prepare form data to send to the server
+                                var formData = new FormData(this); // Use FormData to handle file uploads and other form data
+
+                                // Add anti-forgery token to the FormData
+                                formData.append('_RequestVerificationToken', $('input[name="_RequestVerificationToken"]').val());
+
+                                // Send form data to the server using AJAX
+                                var response = await $.ajax({
+                                    url: '/Trainer/RegisterAssignTestTS',
+                                    type: 'POST',
+                                    data: formData,
+                                    processData: false, // Prevent jQuery from processing the data
+                                    contentType: false, // Prevent jQuery from setting contentType
+                                    success: function (data) {
+                                        // Display success SweetAlert
+                                        Swal.fire({
+                                            title: 'Success',
+                                            text: 'Test registered successfully.',
+                                            icon: 'success'
+                                        }).then(function () {
+                                            // Redirect to the list page after the SweetAlert is closed
+                                            window.location.href = '/Trainer/ListTestManagementAsynchTS';
+                                        });
+                                    },
+                                    error: function (xhr, status, error) {
+                                        // Display error SweetAlert
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'An error occurred while registering the test. Please try again.',
+                                            icon: 'error'
+                                        });
+                                    }
+                                });
+                            } catch (error) {
+                                // Handle unexpected errors
+                                console.error('Error:', error);
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'An unexpected error occurred. Please try again later.',
+                                    icon: 'error'
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    // If form is not valid, show an alert or error message
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Please fill in all required fields.',
+                        icon: 'error'
+                    });
+                }
+            });
+
+            // Function to validate the form
+            function validateForm() {
+                var isValid = true;
+
+                // Check if each required field has a value
+                $('.required').each(function () {
+                    if ($(this).val() == '') {
+                        isValid = false;
+                        return false; // Exit the loop if any required field is empty
+                    }
+                });
+
+                return isValid;
+            }
+        });
+
+    </script>
+
+
+
+</body>
+</html>

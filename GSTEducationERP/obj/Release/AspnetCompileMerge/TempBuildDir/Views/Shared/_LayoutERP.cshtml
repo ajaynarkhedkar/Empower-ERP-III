@@ -1,0 +1,757 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gaya Empower ERP</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    @*<link rel="stylesheet" href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">*@
+    <!-- iCheck -->
+    @*<link rel="stylesheet" href="~/Content/plugins/icheck-bootstrap/icheck-bootstrap.min.css">*@
+    <!-- JQVMap -->
+    @*<link rel="stylesheet" href="~/Content/plugins/jqvmap/jqvmap.min.css">*@
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Content/Admin/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    @*<link rel="stylesheet" href="~/Content/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">*@
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/Content/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    @*<link rel="stylesheet" href="~/Content/plugins/summernote/summernote-bs4.min.css">*@
+
+    <link href="~/Content/Admin/css/PreLoading.css" rel="stylesheet" />
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+
+        <div class="preloader flex-column justify-content-center align-items-center" id="preloader">
+            <div class="wavy">
+                <span style="--i:1;">L</span>
+                <span style="--i:2;">o</span>
+                <span style="--i:3;">a</span>
+                <span style="--i:4;">d</span>
+                <span style="--i:5;">i</span>
+                <span style="--i:6;">n</span>
+                <span style="--i:7;">g</span>
+                <span style="--i:8;">.</span>
+                <span style="--i:9;">.</span>
+                <span style="--i:10;">.</span>
+            </div>
+        </div>
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                @if (Session["StaffPositionId"] != null)
+                {
+                    var staffPositionId = (int)Session["StaffPositionId"];
+                    if (staffPositionId == 3) // Assuming 1 is for Counsellor
+                    {
+                        <!-- Left navbar links -->
+                        <li class="nav-item">
+                            <!-- Left navbar links -->
+                            @if (ViewBag.Breadcrumbs != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumbs as List<GSTEducationERP.Controllers.TrainerController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            }
+                                            else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                            else if (ViewBag.Breadcrumb != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumb as List<GSTEducationERP.Controllers.BindController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            }
+                                            else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                        </li>
+
+                    }
+                    else if (staffPositionId == 2)
+                    {
+
+                        <li class="nav-item">
+                            <!-- Left navbar links -->
+                            @if (ViewBag.Breadcrumbs != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumbs as List<GSTEducationERP.Controllers.CoordinatorController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            }
+                                            else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                            else if (ViewBag.Breadcrumb != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumb as List<GSTEducationERP.Controllers.BindController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            }
+                                            else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                        </li>
+
+                    }
+                    else if (staffPositionId == 5)
+                    {
+                        <li class="nav-item">
+                            <!-- Left navbar links -->
+                            @if (ViewBag.Breadcrumbs != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumbs as List<GSTEducationERP.Controllers.PlacementController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            }
+                                            else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                            else if (ViewBag.Breadcrumb != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumb as List<GSTEducationERP.Controllers.BindController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            }
+                                            else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                        </li>
+
+                    }
+
+                }
+            </ul>
+            @{
+
+                var Batchcount = Session["BatchCount"] as string;
+            }
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge">@Batchcount</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="@Url.Action("ListScheduledBatchRequestAsyncST", "Trainer")" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i>New Schedule
+                            <span class="float-right text-muted text-sm"> @Batchcount</span>
+                        </a>
+                        <a href="@Url.Action("ListDemoArrangedKKAsync", "Trainer")" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i>Demo Request
+                            <span class="float-right text-muted text-sm"> @ViewBag.DemoNotification</span>
+                        </a>
+                    </div>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                        <i class="fas fa-th-large"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="index3.html" class="brand-link">
+                <img src="~/Content/Admin/img/GyaSoftLogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">Gaya Empower ERP</span>
+            </a>
+            @{                var photograph = Session["Photograph"] as string;
+                var staffName = Session["StaffName"] as string;
+            }
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/Content/HR/docs/@photograph" class="img-circle elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="@Url.Action("DetailStaffProfile","Bind")" class="d-block">@staffName</a>
+                    </div>
+                </div>
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        @if (Session["StaffPositionId"] != null)
+                        {
+                            var staffPositionId = (int)Session["StaffPositionId"];
+                            if (staffPositionId == 3) //-- trainer
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("TrainerDashboardAsyncTS", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/TrainerDashboardAsyncTS") ? "active" : "")">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Dashboard
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListStudent", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListStudent") ? "active" : "")">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Student List
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllBatchAsyncST", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListAllBatchAsyncST") ? "active" : "")">
+                                        <i class="nav-icon fas fa-graduation-cap"></i>
+                                        <p>
+                                            Batch Management
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-calendar-alt nav-icon"></i>
+                                        <p>
+                                            Batch Schedule
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("DetailsSectionAsyncVP", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/DetailsSectionAsyncVP") ? "active" : "")">
+                                                <i class="nav-icon fas fa-plus-square"></i>
+                                                <p>Create Schedule</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("DetailsAssignScheduleAsyncVP", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/DetailsAssignScheduleAsyncVP") ? "active" : "")">
+                                                <i class="nav-icon far fa-calendar-check"></i>
+                                                <p>Assign Schedule</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListDemoArrangedKKAsync", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/ListDemoArrangedKKAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                        <p>
+                                            Demo
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAttendanceAsyncYT", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/ListAttendanceAsyncYT") ? "active" : "")">
+                                        <i class="nav-icon fas fa-user-check"></i>
+                                        <p>
+                                            Attendance
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListCourseContentAsyncYT", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/ListCourseContentAsyncYT") ? "active" : "")">
+                                        <i class="nav-icon fas fa-book"></i>
+                                        <p>
+                                            Course Content
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListTestManagementAsynchTS", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/ListTestManagementAsynchTS") ? "active" : "")">
+                                        <i class="nav-icon fas fa-clipboard-list"></i>
+                                        <p>
+                                            Test Mangement
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllAssignedProjectAsyncPG", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Trainer/ListAllAssignedProjectAsyncPG") ? "active" : "")">
+                                        <i class="nav-icon far fa-comment-alt"></i>
+                                        <p>
+                                            Project Management
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListNewFeedbackToStudentKKAsync", "Trainer")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListAllFeedbackForTrainerKKAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-comments"></i>
+                                        <p>Feedback </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListTaskManagementAsyncPG", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListTaskManagementAsyncPG") ? "active" : "")">
+                                        <i class="nav-icon fas fa-tasks"></i>
+                                        <p>
+                                            Task Management
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SendEmailAsyncPB", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/SendEmailAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-envelope"></i>
+                                        <p>
+                                            Mail
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListContactAsyncPB", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListContactAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-address-book"></i>
+                                        <p>
+                                            Contact
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Logout", "Account")" class="nav-link">
+                                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                                        <p>
+                                            Log Out
+                                        </p>
+                                    </a>
+                                </li>
+
+                            }
+                            else if (staffPositionId == 2) //--coordinator
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("CoordinatorDashboardPRAsync","Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/CoordinatorDashboardPRAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Dashboard
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListStudent", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListStudent") ? "active" : "")">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Student List
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DetailsLabManagementAsyncVJ", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/DetailsLabManagementAsyncVJ") ? "active" : "")">
+                                        <i class="nav-icon fas fa-chalkboard"></i>
+
+                                        <p>
+                                            Lab Management
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-graduation-cap"></i>
+                                        <p>
+                                            Batch Management
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("ListAllBatchAsyncST", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListAllBatchAsyncST") ? "active" : "")">
+                                                <i class="nav-icon fas fa-plus-square"></i>
+                                                <p>New Batch</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("BatchScheduleMainViewAsyncST", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/BatchScheduleMainViewAsyncST") ? "active" : "")">
+                                                <i class="far fa-calendar-alt nav-icon"></i>
+                                                <p>Batch Schedule</p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListShowAttendanceFollowUpKKAsync", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListShowAttendanceFollowUpKKAsync") ? "active" : "")">
+                                        <i class="nav-icon far fa-calendar-check"></i>
+                                        <p>
+                                            Attendance Follow-Up
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListDemoKKAsync", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListDemoKKAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                        <p>
+                                            Demo
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllEventPCAsync", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListAllEventPCAsync") ? "active" : "")">
+                                        <i class="nav-icon far fa-calendar-alt"></i>
+
+                                        <p>
+                                            Event
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DetailsTestManagementAsyncVP", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/DetailsTestManagementAsyncVP") ? "active" : "")">
+                                        <i class="nav-icon fas fa-clipboard-list"></i>
+
+                                        <p>
+                                            Test Management
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListFeeFollowupAsyncRs", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListFeeFollowupAsyncRs") ? "active" : "")">
+
+                                        <i class="nav-icon fas fa-money-check-alt"></i>
+                                        <p>
+                                            Fees Follow-Up
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListTaskManagementAsyncPG", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListTaskManagementAsyncPG") ? "active" : "")">
+                                        <i class="nav-icon fas fa-tasks"></i>
+                                        <p>
+                                            Task Management
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SendEmailAsyncPB", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/SendEmailAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-envelope"></i>
+                                        <p>
+                                            Mail
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListContactAsyncPB", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListContactAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-address-book"></i>
+                                        <p>
+                                            Contact
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon far fa-comment-alt"></i>
+                                        <p>
+                                            Feedback
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("ListAllFeedbackForTrainerKKAsync", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListAllFeedbackForStudentKKAsync") ? "active" : "")">
+                                                <i class="fas fa-comments nav-icon"></i>
+                                                <p>Student To Trainer</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="@Url.Action("ListAllFeedbackForStudentKKAsync", "Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/ListAllFeedbackForTrainerKKAsync") ? "active" : "")">
+                                                <i class="nav-icon fas fa-comments"></i>
+                                                <p>Trainer To Student </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Logout", "Account")" class="nav-link">
+                                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                                        <p>
+                                            Log Out
+                                        </p>
+                                    </a>
+                                </li>
+
+                            }
+                            else if (staffPositionId == 5)  //---------placement
+                            {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("PlcementDashboardPCAsync", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/PlcementDashboardPCAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Dashboard
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListInternalRelesedStudentsPRAsync", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListInternalRelesedStudentsPRAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-list-alt"></i>
+                                        <p>
+                                            Student
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllCompanyAsyncPB", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListAllCompanyAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-building"></i>
+                                        <p>
+                                            Company
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllAssignedExamSNAsync", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListAllAssignedExamSNAsync") ? "active" : "")">
+                                        <i class="nav-icon fas fa-book-open"></i>
+                                        <p>
+                                            Exam
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllMock", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListAllMock") ? "active" : "")">
+                                        <i class="nav-icon fas fa-check-double"></i>
+                                        <p>
+                                            Mock
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListAllInterviewAsyncSN", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListAllInterviewAsyncSN") ? "active" : "")">
+                                        <i class="nav-icon fa fa-user"></i>
+                                        <p>
+                                            Interview
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListFeesCompletionPD", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListFeesCompletionPD") ? "active" : "")">
+                                        <i class="nav-icon fas fa-money-check-alt"></i>
+                                        <p>
+                                            Fees Completion
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListTestimonialPD", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListTestimonialPD") ? "active" : "")">
+                                        <i class="nav-icon fas fa-user-check"></i>
+                                        <p>
+                                            Testimonial
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListTaskManagementAsyncPG", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListTaskManagementAsyncPG") ? "active" : "")">
+                                        <i class="nav-icon fas fa-tasks"></i>
+                                        <p>
+                                            Task Management
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("SendEmailAsyncPB", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/SendEmailAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-envelope"></i>
+                                        <p>
+                                            Mail
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListContactAsyncPB", "Bind")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Bind/ListContactAsyncPB") ? "active" : "")">
+                                        <i class="nav-icon fas fa-address-book"></i>
+                                        <p>
+                                            Contact
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Logout", "Account")" class="nav-link">
+                                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                                        <p>
+                                            Log Out
+                                        </p>
+                                    </a>
+                                </li>
+
+                            }
+
+                        }
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+
+                    <!-- /.row (main row) -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2014-2023 <a href="http://rahitech.com/">GayaSoft Solutions</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.2.0
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    @*<script src="~/Content/plugins/jquery-ui/jquery-ui.min.js"></script>*@
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        //$.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/Content/plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    @*<script src="~/Content/plugins/sparklines/sparkline.js"></script>*@
+    <!-- JQVMap -->
+    @*<script src="~/Content/plugins/jqvmap/jquery.vmap.min.js"></script>*@
+    @*<script src="~/Content/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>*@
+    <!-- jQuery Knob Chart -->
+    @*<script src="~/Content/plugins/jquery-knob/jquery.knob.min.js"></script>*@
+    <!-- daterangepicker -->
+    <script src="~/Content/plugins/moment/moment.min.js"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    @*<script src="~/Content/plugins/summernote/summernote-bs4.min.js"></script>*@
+    <!-- overlayScrollbars -->
+    @*<script src="~/Content/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>*@
+    <!-- AdminLTE App -->
+    <script src="~/Content/Admin/js/adminlte.js"></script>
+
+
+    <script>
+        // Disable the back button
+        //function preventBack() { window.history.forward(); }
+        //setTimeout("preventBack()", 0);
+        //window.onunload = function () { null };
+        $(document).ready(function () {
+
+            // Fakes the loading setting a timeout
+            setTimeout(function () {
+                $('body').addClass('loaded');
+            }, 3500);
+
+        });
+    </script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/Content/Admin/js/demo.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <!--<script src="~/Content/Admin/js/dashboard.js"></script>-->
+</body>
+</html>

@@ -1,0 +1,136 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@{
+    ViewBag.Title = "BankAccountStatementAsyncAN";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<head>
+    <style>
+        .custom-table {
+            border-collapse: separate; /* Allows for separate borders and rounded corners */
+            border-spacing: 0 5px; /* Add space between rows */
+            width: 100%; /* Optional: Ensure full width */
+            border: none; /* Remove default table border */
+        }
+
+            .custom-table th, .custom-table td {
+                border: none; /* Remove cell borders */
+                padding: 10px; /* Add padding for cell content */
+                background: transparent; /* Ensure no default background */
+                text-align: center; /* Center text horizontally */
+            }
+
+            .custom-table tbody tr {
+                background: transparent; /* Make row background transparent */
+                border-radius: 10px; /* Round corners for entire row */
+                overflow: hidden; /* Clip content to rounded corners */
+            }
+
+                .custom-table tbody tr.credit {
+                    background-color: #d4f8d4; /* Faint green for Credit rows */
+                }
+
+                .custom-table tbody tr.debit {
+                    background-color: #f8d4d4; /* Faint red for Debit rows */
+                }
+
+                    .custom-table tbody tr.credit td:first-child,
+                    .custom-table tbody tr.debit td:first-child {
+                        border-top-left-radius: 10px; /* Round top-left corner */
+                        border-bottom-left-radius: 10px; /* Round bottom-left corner */
+                    }
+
+                    .custom-table tbody tr.credit td:last-child,
+                    .custom-table tbody tr.debit td:last-child {
+                        border-top-right-radius: 10px; /* Round top-right corner */
+                        border-bottom-right-radius: 10px; /* Round bottom-right corner */
+                    }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+    </style>
+    <style>
+        .card {
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 8px;
+        }
+
+            td p {
+                margin: 0;
+            }
+
+        strong {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="margin:20px"></div>
+    <div class="card">
+        <div class="col-md-6 text-left mt-1" style="padding-left:20px; padding-bottom:10px;">
+            <h2>Bank Account Statement</h2>
+        </div>
+
+
+
+        <div class="card" style="width:50%; margin: 0 auto;">
+            <table>
+                <tr>
+                    <td><p><strong>Bank Name:</strong> @Model.BankName</p></td>
+                    <td><p><strong>Account Number:</strong> @Model.BankAccountNumber</p></td>
+                </tr>
+                <tr>
+                    <td><p><strong>Account Holder:</strong> @Model.AccountHolderName</p></td>
+                    <td><p><strong>Closing Balance:</strong> @String.Format("{0:N2} ₹", Model.BankAmount)</p></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped custom-table">
+                <thead>
+                    <tr>
+                        <th>Transaction Date</th>
+                        <th hidden>Transaction Date</th>           
+                        <th>Name</th>
+                        <th>Transaction Id</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstBankTransactions)
+                    {
+                        <tr class="@(item.TransactionType == "Credit" ? "credit" : "debit")">
+
+                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                            <td hidden>@Html.DisplayFor(modelItem => item.Date)</td>                       
+                            <td>@Html.DisplayFor(modelItem => item.ReceiverBankAccountHolderName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                            <td>@String.Format("{0:N2} ₹", item.Balance)</td>
+                 
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>

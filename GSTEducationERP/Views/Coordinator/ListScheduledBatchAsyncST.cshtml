@@ -1,0 +1,262 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "ListScheduledBatchAsyncST";
+}
+
+<style>
+    .btn-custom {
+        background-color: #ffcc00;
+        color: #ffffff;
+        border: 2px solid #ffcc00;
+        border-radius: 8px;
+        padding: 10px 20px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+        .btn-custom:hover {
+            background-color: #ff9900;
+            color: #ffffff;
+            border-color: #ff9900;
+        }
+    h3 {
+        color: #64bbc9;
+        font-weight: bold;
+        font-size: 30px;
+        margin-left: 17px;
+        margin-bottom: -10px;
+        font-family: sans-serif;
+    }
+        
+</style>
+
+
+<html lang="en" style="height: auto;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.js"></script>
+    <link href="~/Content/Coordinator/css/ToolTips.css" rel="stylesheet" />
+</head>
+
+<body>
+    @*//POPUP*@
+
+    <div id="partialModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="BatchModalLabel" style="position:center">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:600px;">
+                <div class="modal-header">
+                    <h3 class="modal-title " id="BatchModalLabel">Batch Schedule Details</h3>
+                    <button class="close text-danger" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="partialModal1" class="modal" tabindex="-1" role="dialog" aria-labelledby="BatchModalLabel" style="position: center; padding: 15px; margin-right: 800px; margin-left: -180px; margin-top: -15px">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="margin-right: 350px; margin-left: 150px; width: 640px;">
+                <!-- Adjust width as needed -->
+                <div class="modal-header">
+                    <h3 class="modal-title " id="BatchModalLabel">New Batch Schedule</h3>
+                    <button class="close text-danger" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body1" style="margin-right: 400px; margin-left: 200px;">
+                    <!-- Your modal body content goes here -->
+                </div>
+                <div class="modal-footer">
+                    <!-- Your modal footer content goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="StudentModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Student List</h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4" style=" margin-top: 0px !important">
+        <div class="card-body">
+            <div class="add-buttons" id="NewSchedule" style="margin-top: -5px">
+                <img src="~/Content/Coordinator/img/add-button.png" data-toggle="tooltip" data-placement="top" title="New Schedule" alt="New Schedule" style="width: 35px; height: 35px; border: 0; float: right">
+            </div>
+
+            <br>
+            <br>
+
+            <table id="BatchData" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th hidden>
+                            Schedule Id
+                        </th>
+                        <th hidden>
+                            Batch Code
+                        </th>
+                        <th>
+                            Batch
+                        </th>
+                        <th>
+                            Course
+                        </th>
+                        <th>
+                            Trainer
+                        </th>
+                        <th>
+                            Lab
+                        </th>
+                        <th>
+                            Student
+                        </th>
+                        <th>
+                            Schedule Date
+                        </th>
+                        <th>
+                            Start Date
+                        </th>
+                        <th>
+                            Start Time
+                        </th>
+                        <th>
+                            End Time
+                        </th>
+                        <th>
+                            Status
+                        </th>
+
+                        <th> Action </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstBatchData)
+                    {
+                        <tr>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.ScheduleId)
+                            </td>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.BatchCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BatchName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StaffName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LabName)
+                            </td>
+                            <td style="text-align: center;">
+                                <u>
+                                    <a href="#" class="icon" data-id="@item.BatchCode" data-url="@Url.Action("BatchAllStudentDetailsAsyncST", "Bind", new { batchcode = item.BatchCode  })"
+                                       data-toggle="modal" data-target="#StudentModal" title="Student List">
+                                        @item.NoOfStudent
+                                    </a>
+                                </u>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BatchScheduleDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDate)
+                            </td>
+                            <td>
+                                @Html.Raw(item.StartTime.ToString("h:mm:ss tt"))
+                            </td>
+                            <td>
+                                @{
+                                    DateTime endTimeWithAdditional15Minutes = item.EndTime.AddMinutes(15);
+                                }
+                                @Html.Raw(endTimeWithAdditional15Minutes.ToString("h:mm:ss tt"))
+                            </td>
+                            <td>
+                                @if (item.Status == "Scheduled")
+                                {
+                                    <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.Status)</span>
+                                }
+                            </td>
+                            <td>
+                                <a class="ScheduleDetailes" href="javascript:;" data-id="@item.ScheduleId" tooltip="View DetailsBatchScheduleAsyncST " flow="down">
+                                    <video width="35" height="35" playsinline loop>
+                                        <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                    </video>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            $('#BatchData').on('click', '.ScheduleDetailes', function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.data('id');
+                $.ajax({
+                    type: "GET",
+                    url: "/Coordinator/DetailsBatchScheduleAsyncST",
+                    data: { ScheduleId: id },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#partialModal .modal-body").html(response);
+                        $("#partialModal").modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error: " + error);
+                    }
+                });
+            });
+            $('#BatchData').on('click', '.icon', function () {
+                var BatchCode = $(this).data('id');
+                var url = $(this).data('url');
+                // Make an AJAX call to load the content of DemoDetailssection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the modal body with the content of DemoDetailssection view
+                        $("#StudentModal").find(".modal-content").html(data);
+                        // Show the modal
+                        $('#StudentModal').modal('show');
+                    }
+                });
+            });
+            $("#NewSchedule").click(function () {
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr('data-id')
+                $.ajax({
+                    type: "GET",
+                    url: "/Coordinator/BatchScheduleAsyncST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        $("#partialModal1").find(".modal-body1").html(response);
+                        $("#partialModal1").modal('show');
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+@{
+    ViewBag.Title = "UpdateTestimonialPD";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<style>
+    h2 {
+        padding-top: 10px;
+        margin-bottom: 10px;
+        font-family: Verdana;
+        font-weight: bold;
+        font-size: medium;
+        color: #33CCCC;
+    }
+
+    .card-primary.card-outline-tabs > .card-header a.active {
+        border-top: 3px solid #33CCCC;
+    }
+
+    a {
+        color: #33CCCC;
+    }
+
+    .card.card-outline-tabs .card-header a:hover {
+        color: #33CCCC;
+    }
+
+    .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+        border-top: 3px solid #33CCCC;
+    }
+
+    .card-body {
+        font-family: Calibri !important;
+        padding-bottom: 0px !important;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+</style>
+
+@using (Html.BeginForm("UpdateTestimonialPD", "Placement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="card p-3">
+        <div class="form-horizontal">
+            <h2>Edit Testimonial</h2>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row col-md-12">
+                <div class="form-group col-md-6" style="display:none">
+                    @Html.LabelFor(model => model.TestimonialId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.TestimonialId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TestimonialId, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label> Student Name :</label>
+
+                    @Html.EditorFor(model => model.StudentName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+
+                </div>
+             
+            </div>
+            <div class="row col-md-12">
+                <div class="form-group col-md-12">
+                    <label> Comment :</label>
+                    @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="col-md-4">
+                    <label>Video :</label>
+                    <video controls id="videoPlayer" style="width:350px; height:180px;">
+                        <source src="@Url.Content(Model.Video)" type="video/mp4" width="50%" height="40px">
+                    </video>
+                    <br>
+                    <label>Upload New Video :</label>
+                    <input type="file" id="newVideo" name="VideoFILe" accept=".mp4">
+                    @Html.TextBoxFor(model => model.Video, new { @class = "form-control hidden", id = "VideoPath", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Video, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2"></div>
+				<div class="col-md-4">
+					<div class="row">
+						<label>Audio :</label>
+						<audio controls id="audioPlayer">
+							<source src="@Url.Content(Model.Audio)" type="audio/mpeg">
+							Your browser does not support the audio tag.
+						</audio>
+					</div>
+					<br />
+					<div class="row">
+						<label>Upload New Audio :</label>
+						<input type="file" class="form-control" name="AudioFIle" id="AudioInput" accept=".mp3" onchange="showAudioPath(this)">
+						@Html.TextBoxFor(model => model.Audio, new { @class = "form-control hidden", id = "AudioPath", @readonly = "readonly" })
+						@Html.ValidationMessageFor(model => model.Audio, "", new { @class = "text-danger" })
+					</div>
+                </div>
+				</div>
+            <div class="form-group">
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>PDF :</label>
+                    @if (!string.IsNullOrEmpty(Model.Pdf))
+                    {
+                        <embed src="@Url.Content(Model.Pdf)" type="application/pdf" width="100%" height="200%" id="pdfViewer" />
+                    }
+                    <br />
+                    <div class="col-md-4">
+                        <label>Upload New PDF :</label>
+                        <input type="file" class="form-control" name="PDFFILe" id="PDFInput" onchange="showPdfPath(this)" accept=".pdf">
+                        @Html.TextBoxFor(model => model.Pdf, new { @class = "form-control hidden", id = "PdfPath", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Pdf, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12" style="text-align: center;">
+                <input type="submit" value="Save" class="btn btn-success">
+            </div>
+            <br />
+        </div>
+            <div>
+                <a href="@Url.Action("ListTestimonialPD")" class="back-link">
+                    <video width="30" height="30" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                    </video>
+                </a>
+            </div>
+        </div>
+}
+
+
+<script src="~/Content/Admin/js/Icon.js"></script>
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        // Function to update video source and textbox value
+        function updateVideoSourceAndPath(videoSource, videoPath) {
+            $("#videoPlayer source").attr("src", videoSource);
+            $("#videoPlayer")[0].load();
+            $("#VideoPath").val(videoPath);
+        }
+
+        // Event listener for when a new video is selected
+        $("#newVideo").change(function () {
+            var selectedFile = this.files[0];
+            var objectUrl = URL.createObjectURL(selectedFile);
+            updateVideoSourceAndPath(objectUrl, selectedFile.name);
+        });
+    });
+</script>
+<script>
+    function showAudioPath(input) {
+        var file = input.files[0];
+        var url = URL.createObjectURL(file);
+        $('#audioPlayer').attr('src', url);
+        $('#AudioPath').val(input.value);
+    }
+</script>
+<script>
+    function showPdfPath(input) {
+        $('#pdfViewer').attr('src', URL.createObjectURL(input.files[0]));
+        $('#PdfPath').val(input.value);
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        // Function to show SweetAlert confirmation before form submission
+        $('form').submit(function (event) {
+            event.preventDefault(); // Prevent default form submission
+            var form = this;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to save the changes!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                timer: 4000,
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form
+                    form.submit();
+                    showSuccessToast();
+                }
+            });
+        });
+
+        // Function to show Toastr message upon successful submission
+        function showSuccessToast() {
+            toastr.success('Testimonial saved successfully!', 'Success');
+        }
+
+        
+    });
+</script>

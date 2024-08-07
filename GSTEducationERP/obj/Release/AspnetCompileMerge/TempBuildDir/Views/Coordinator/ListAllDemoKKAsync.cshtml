@@ -1,0 +1,287 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<html>
+<head>
+    <!-- Theme style -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>*@
+
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <!-- Bootstrap 4 -->
+    <!--<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>-->
+</head>
+
+<body>
+
+    <table id="DemoList" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.BatchCode)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.ScheduleId)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.LabScheduleId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DemoName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TrainerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DemoArrangedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LabName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NoOfStudent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Time)
+                    </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusName)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.StatusId)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.lstDemo)
+            {
+                <tr>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.BatchCode)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.ScheduleId)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.LabScheduleId)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DemoName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TrainerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DemoArrangedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LabName)
+                    </td>
+                    <td>
+                        @*<a href="@Url.Action("NoOfStudentListsKKAsync", "Coordinator", new { batchcode = item.BatchCode })">@item.NoOfStudent</a>*@
+                        <u>
+                            <a href="#" class="icon" data-id="@item.BatchCode" data-url="@Url.Action("ListNoOfStudentKKAsync", "Coordinator", new { batchcode = item.BatchCode  })"
+                               data-toggle="modal" data-target="#StudentModal" title="Student List">
+                                @item.NoOfStudent
+                            </a>
+                        </u>
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.strtDate)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Time)
+                        </td>*@
+                    <td>
+                        @if (item.StatusName == "Conducted")
+                        {
+                            <span class="badge bg-success">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                        }
+                        @if (item.StatusName == "Arranged")
+                        {
+                            <span class="badge bg-orange">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                        }
+                        @if (item.StatusName == "Pending")
+                        {
+                            <span class="badge bg-yellow">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                        }
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.StatusId)
+                    </td>
+                    <td>
+                        @if (item.StatusId == 13)
+                        {
+                            <a href="#" class="sectionEditLink" data-id="@item.ScheduleId" data-url="@Url.Action("DetailsDemoKKAsync", "Coordinator", new { ScheduleId = item.ScheduleId })"
+                               data-toggle="modal" data-target="#FollowupModal" title="Demo Details">
+                                <video width="35" height="35" playsinline loop>
+                                    <source src="~/Content/Admin/icon/view.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+
+                        }
+                        else if (item.StatusId == 25)
+                        {
+                            <a href="#" class="DemoEdit" data-id="@item.ScheduleId" data-url="@Url.Action("UpdateDemoKKAsync", "Coordinator", new { ScheduleId = item.ScheduleId })"
+                               data-toggle="modal" data-target="#DemoModal" title="Demo Edit">
+                                <video width="35" height="35" playsinline loop>
+                                    <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+                            <a href="#" class="sectionEditLink" data-id="@item.ScheduleId" data-url="@Url.Action("DetailsDemoKKAsync", "Coordinator", new { ScheduleId = item.ScheduleId })"
+                               data-toggle="modal" data-target="#FollowupModal" title="Demo Details">
+                                <video width="35" height="35" playsinline loop>
+                                    <source src="~/Content/Admin/icon/view.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+
+                        }
+                        else if (item.StatusId == 6)
+                        {
+                            <a href="#" class="demoEditLink" data-id="@item.ScheduleId" data-url="@Url.Action("UpdateResheduleDemoKKAsync", "Coordinator", new { ScheduleId = item.ScheduleId })"
+                               data-toggle="modal" data-target="#RescheduleModal" title="Demo Reschedule">
+                                <video width="35" height="35" playsinline loop>
+                                    <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+                        }
+
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="partialViewContainer"></div>
+
+    <div class="modal fade" id="FollowupModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Demo Details</h1>
+
+            </div>
+            @*<div class="modal-body">
+
+                </div>*@
+        </div>
+    </div>
+    <div class="modal fade" id="StudentModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Student List</h1>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="RescheduleModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white; width:800px;">
+                <h1 class="text-info modal-title">Reschedule Data</h1>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DemoModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white; width: 800px;">
+                <h1 class="text-info modal-title">Edit Demo</h1>
+            </div>
+        </div>
+    </div>
+
+    @*This script for the demo details method model popup*@
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            // Use event delegation on a parent element that remains constant
+            $('#DemoList').on('click', '.sectionEditLink', function () {
+                var ScheduleId = $(this).data('id');
+                var url = $(this).data('url');
+                // Make an AJAX call to load the content of DemoDetailssection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the modal body with the content of DemoDetailssection view
+                        $("#FollowupModal").find(".modal-content").html(data);
+                        // Show the modal
+                        $('#FollowupModal').modal('show');
+                    }
+                });
+            });
+            // Use event delegation on a parent element that remains constant
+            $('#DemoList').on('click', '.icon', function () {
+                var BatchCode = $(this).data('id');
+                var url = $(this).data('url');
+                // Make an AJAX call to load the content of DemoDetailssection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the modal body with the content of DemoDetailssection view
+                        $("#StudentModal").find(".modal-content").html(data);
+                        // Show the modal
+                        $('#StudentModal').modal('show');
+                    }
+                });
+            });
+            $('#DemoList').on('click', '.demoEditLink', function () {
+                var scheduleid = $(this).data('id');
+                var url = $(this).data('url');
+                // Make an AJAX call to load the content of DemoDetailssection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the modal body with the content of DemoDetailssection view
+                        $("#RescheduleModal").find(".modal-content").html(data);
+                        // Show the modal
+                        $('#RescheduleModal').modal('show');
+                    }
+                });
+            });
+            $('#DemoList').on('click', '.DemoEdit', function () {
+                var scheduleid = $(this).data('id');
+                var url = $(this).data('url');
+                // Make an AJAX call to load the content of DemoDetailssection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the modal body with the content of DemoDetailssection view
+                        $("#DemoModal").find(".modal-content").html(data);
+                        // Show the modal
+                        $('#DemoModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</body>
+        </html>

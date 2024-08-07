@@ -1,0 +1,497 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@{
+    ViewBag.Title = "DetailsPurchaseAsyncVP";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+    var currency = Html.Raw(ViewBag.Currency);
+}
+
+
+
+<html lang="en" style="height: auto;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--datatable css-->
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!-- Include jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!--toaster css-->
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <style>
+        #addpurchaseButton, #addvoucherButton {
+            margin-top: 15px !important;
+            font-size: 16px !important;
+        }
+
+        .card-header {
+            cursor: pointer;
+        }
+
+        .btnicon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .error-field {
+            border: 2px solid red; /* Add your preferred styling for highlighting */
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        h3 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            text-align: center;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .select2-container {
+            font-size: x-small;
+            width: 100%;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #33CCCC;
+        }
+
+        .select2 select2-container select2-container--default select2-container--focus {
+            width: 100% !important;
+        }
+    </style>
+
+</head>
+<body style="margin: 0; padding: 0;">
+    @using (Html.BeginForm("DetailsPurchaseAsyncVP", "Accountant"))
+    {
+        <br />
+        <div class="card">
+            <div class="card-body" style="padding-top:0px; ">
+                <div class="row">
+                    <div class="col-md-4 text-left mt-1" style="padding-left:20px;">
+                        <h2>Purchase Details</h2>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row g-6 justify-content-end">
+                            <div class="col-3">
+                                <button id="addvoucherButton" type="button" class="btn btn-block bg-gradient-info btn-block" onclick="location.href = '/Placement/ListInternalRelesedStudentsPRAsync', '/Placement/ListInternalOnHoldStudentsPRAsync'">
+                                    @*<img src="~/Content/Admin/icon/Add.jpeg"  class="btnicon"/>*@Add Voucher
+                                </button>
+                            </div>
+                            <div class="col-3">
+                                <button id="addpurchaseButton" type="button" class="btn btn-block bg-gradient-info btn-block" onclick="location.href = '/Accountant/AddPurchaseAsyncVP'">
+                                    @*<img src="~/Content/Admin/icon/Add.jpeg" class="btnicon" />*@ Add Purchase
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <label style="padding-right: 10px; padding-left: 10px ">Status</label>
+                    <select id="ddlStatus" class="form-control">
+                        <option value="Pending">Pending</option>
+                        <option value="Settled">Settled</option>
+                    </select>
+                </div>
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <label>Start Date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+
+                </div>
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <label>End Date</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+
+
+            </div>
+            <div class="modal" id="StudentModal">
+                <div class="modal-dialog" style="background-color: white;">
+
+                    <div class="modal-content">
+                        <h1 class="text-info modal-title">Item List</h1>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal fade custom-modal-width" id="MatchVoucherModal" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="width:30vw;">
+                        <div class="modal-body">
+                            <!-- Content for Schedule Modal -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="margin:1vw">
+                <div class="card-body">
+                    <table id="PurchaseList" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Purchase Code
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VendorName)
+                                </th>
+
+                                <th>
+                                    Items
+                                </th>
+                                <th hidden>
+                                    Items Count
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TransactionAmount) (@currency)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.BalanceAmount) (@currency)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TransactionDate)
+                                </th>
+                                <th hidden>
+                                    @Html.DisplayNameFor(model => model.PaymentMode)
+                                </th>
+                                <th hidden>
+                                    @Html.DisplayNameFor(model => model.TranId_CheqNo)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.lstPurchaseVP != null)
+                            {
+                                for (int i = 0; i < Model.lstPurchaseVP.Count; i++)
+                                {
+                                    var item = Model.lstPurchaseVP[i];
+                                    <tr>
+                                        <td x>
+                                            @Html.DisplayFor(modelItem => item.TransactionCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VendorName)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ItemName)
+                                        </td>
+                                        <td hidden>
+                                            <a href="#" class="icon" id="PopUpitem" data-id="@item.TransactionCode" data-url="@Url.Action("ListPurchasedItemsAsyncVP", "Accountant", new { PurchaseCode = item.TransactionCode  })"
+                                               data-toggle="modal" data-target="#StudentModal" title="Items List">
+                                                <video width="25" height="25" playsinline loop>
+                                                    <source src="~/Content/Admin/icon/notebook_3.mp4" type="video/mp4" />
+                                                </video>
+                                            </a>
+
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TransactionAmount)
+                                        </td>
+                                        <td >
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span style="color:red;"> @Html.DisplayFor(modelItem => item.BalanceAmount)</span>
+                                            }
+                                            else
+                                            {
+                                                @Html.DisplayFor(modelItem => item.BalanceAmount)
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TransactionDate)
+                                        </td>
+                                        <td hidden>
+                                            @Html.HiddenFor(modelItem => item.PaymentMode)
+                                        </td>
+                                        <td hidden>
+                                            @Html.HiddenFor(modelItem => item.TranId_CheqNo)
+                                        </td>
+                                        <td>
+                                            @if (item.Status == "Completed")
+                                            {
+                                                <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>
+                                            }
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                            }
+                                        </td>
+
+                                        <td style="text-align: center;">
+                                            @if (item.Status == "Completed")
+                                            {
+                                                <a href="javascript:void(0);" class="icon" id="ViewPurchase" data-toggle="tooltip" title="View Purchase Invoice" data-PurchaseCode="@item.TransactionCode">
+                                                    <video width="25" height="25" playsinline loop>
+                                                        <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                                    </video>
+                                                </a>
+                                            }
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span>
+                                                    <!--pay button-->
+                                                    <a href="#" class="icon" id="Matchicon" data-id="@item.TransactionCode" data-action="@Url.Action("MatchVoucherAsyncVM", "Accountant", new { TCode = item.TransactionCode +"-" +item.VendorName ,Amount = item.BalanceAmount})"
+                                                       data-toggle="modal" data-target="#MatchVoucherModal" title="Pay">
+                                                        <video width="25" height="25" playsinline loop>
+                                                            <source src="~/Content/Admin/icon/payment.mp4" type="video/mp4">
+                                                        </video>
+                                                    </a>
+                                                </span>
+                                                if (item.TransactionAmount == 0)
+                                                {
+                                                    <span>
+                                                        <!--edit  button-->
+                                                        <a href="@Url.Action("UpdatePurchaseAsyncVP", "Accountant", new { PurchaseCode = item.TransactionCode })" class="icon" data-toggle="tooltip" title="Edit Purchase">
+                                                            <video width="25" height="25" playsinline loop>
+                                                                <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                                            </video>
+
+                                                        </a>
+                                                    </span>
+                                                }
+
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+    }
+
+
+    @*scripts here for the datatable*@
+    <!-- Scripts -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!--datatable scripts here-->
+    <!-- Other necessary scripts -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/moment/moment.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
+    <!--select dropdown script here-->
+    <!--sweet alert and toastr script-->
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+
+            $('#PurchaseList').on('click', '#PopUpitem', function () {
+                var PurchaseCode = $(this).data('id');
+                var url = $(this).data('url');
+                jQuery.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        jQuery('#StudentModal .modal-content').html(data);
+                        jQuery('#StudentModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        jQuery(function ($) {
+            $('body').removeClass('sidebar-open');
+            // Add 'sidebar-collapse' class to ensure sidebar is collapsed
+            $('body').addClass('sidebar-collapse');
+            var today = new Date();
+
+            // Calculate one year before the current date
+            var oneYearBefore = new Date();
+            oneYearBefore.setFullYear(today.getFullYear() - 1);
+
+            // Calculate the end date as the next month date
+            var endDate = new Date();
+            endDate.setMonth(today.getMonth() + 1);
+            endDate.setDate(1); // Set the date to the first day of the next month
+
+            // Format dates as YYYY-MM-DD strings
+            var startDate = formatDate(oneYearBefore);
+            var formattedEndDate = formatDate(endDate);
+
+            // Set the values of start date and end date inputs
+            $('#startDate').val(startDate);
+            $('#endDate').val(formattedEndDate);
+
+            // Other JavaScript code goes here...
+
+            // Function to format date as YYYY-MM-DD
+            function formatDate(date) {
+                var month = String(date.getMonth() + 1).padStart(2, '0');
+                var day = String(date.getDate()).padStart(2, '0');
+                var year = date.getFullYear();
+
+                return year + '-' + month + '-' + day;
+            }
+            function preventBack() { window.history.forward(); }
+            setTimeout("preventBack()", 0);
+            window.onunload = function () { null };
+        });
+    </script>
+    <script>
+        jQuery(function ($) {
+            var table = $('#PurchaseList').DataTable({
+
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "stateSave": true,
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                        titleAttr: 'PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                        titleAttr: 'Print'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                        titleAttr: 'Columns'
+                    }
+                ]
+            }).buttons().container().appendTo('#PurchaseList_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+
+    <script>
+       document.querySelectorAll('#ViewPurchase').forEach(function(element) {
+            element.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent the default anchor behavior
+            var purchaseCode = this.getAttribute('data-purchasecode'); // Get the purchase
+            // Redirect to the controller method with the purchase code as a query parameter
+            window.location.href = '@Url.Action("ViewPurchaseAsyncVP", "Accountant")?purchaseCode=' + purchaseCode;
+            });
+       });
+        @*$('#EditPurchase').on('click', function () {
+            debugger;
+            var purchaseCode = this.getAttribute('data-purchasecode'); // Get the purchase
+            window.location.href = '@Url.Action("UpdatePurchaseAsyncVP", "Accountant")?PurchaseCode=' + purchaseCode;
+        });*@
+        document.querySelectorAll('#EditPurchase').forEach(function(element) {
+            element.addEventListener('click', function (e) {
+                debugger;
+                e.preventDefault(); // Prevent the default anchor behavior
+                var purchaseCode = this.getAttribute('data-purchasecode'); // Get the purchase
+                // Redirect to the controller method with the purchase code as a query parameter
+                window.location.href = '@Url.Action("UpdatePurchaseAsyncVP", "Accountant")?PurchaseCode=' + purchaseCode;
+            });
+        });
+        $('#PurchaseList').on('click', '#Matchicon', function () {
+            debugger;
+            var PurchaseCode = $(this).data('id');
+            var url = $(this).data('action');
+            jQuery.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                     jQuery('#MatchVoucherModal .modal-content').html(data);
+                     jQuery('#MatchVoucherModal').modal('show');
+                }
+            });
+       });
+
+    </script>
+
+
+    <!--display the toastr methode here-->
+    <script>
+        function displayToast(message, type) {
+            // Display Toastr notification
+            toastr[type](message);
+        }
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            showMethod: 'slideDown',
+            timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+        };
+    </script>
+
+</body>
+</html>
+
+

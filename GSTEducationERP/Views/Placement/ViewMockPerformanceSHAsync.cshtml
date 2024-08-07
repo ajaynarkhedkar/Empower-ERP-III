@@ -1,0 +1,54 @@
+﻿<div class="card-body">
+    <h2>Mock Performance</h2>
+    <hr>
+    <div class="card pl-8 mx-auto col-md-11">
+        <div class="card-body">
+            <div style="padding-left:20px">
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Student Name:</label>
+                    <div class="col-md-6">
+                        @Model.StudentName
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Skill:</label>
+                    <div class="col-md-6">
+                        @Model.CourseName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Mock Name:</label>
+                    <div class="col-md-6">
+                        @Model.MockName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Mock Date:</label>
+                    <div class="col-md-6">
+                        @Model.MDate
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Attendance:</label>
+                    <div class="col-md-6">
+                        @Model.Attendance
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Performance:</label>
+                    <div class="col-md-6">
+                        @Model.PerformanceStatus
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+<button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+<a href="@Url.Action("ListAllMock")" class="back-link">
+    <video width="45" height="45" playsinline loop>
+        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+    </video>
+</a>

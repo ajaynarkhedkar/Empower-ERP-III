@@ -1,0 +1,314 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "AddTrainerFeedbackKKAsync";
+    
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            h2 {
+                padding-top: 10px;
+                margin-bottom: 10px;
+                font-family: Verdana;
+                font-weight: bold;
+                font-size: medium;
+                color: #33CCCC;
+            }
+
+            #studentCardContainer.scrollable-container {
+                max-height: 80px; /* Adjust the height as needed */
+                overflow-y: auto;
+            }
+        </style>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#CourseName").change(function (event) {
+                    event.preventDefault(); // Prevent the default form submission behavior
+                    var id = $(this).val();
+                    $("#TrainerName").empty();
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("CourseTrainerNameKKAsync", "Coordinator")",
+                        data: { CourseCode: id },
+                        dataType: "json",
+                        success: function (data) {
+                            var v = "<option value=''>----Select Trainer----</option>";
+                            $.each(data, function (i, v1) {
+                                v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+
+                            });
+                            $("#TrainerName").html(v);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error:", error);
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+        $(document).ready(function () {
+            $("#TrainerName").change(function (event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+                var id = $(this).val();
+                $("#FeedbackFor").empty();
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("TrainerBatchesKKAsync", "Coordinator")",
+                    data: { TrainerCode: id },
+                    dataType: "json",
+                    success: function (data) {
+                        var v = "<option value=''>----Select Batch----</option>";
+                        $.each(data, function (i, v1) {
+                            v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+
+                        });
+                        $("#FeedbackFor").html(v);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#FeedbackFor').change(function () {
+                var batchCode = $(this).val();
+                  if (batchCode) {
+                  $.ajax({
+                    url: "@Url.Action("BatchStudentsListKKAsync", "Coordinator")",
+                    type: "GET",
+                     data: { BatchCode: batchCode },
+                     success: function (data) {
+                // Update the student list in the table
+                      var cardContainer = $("#studentCardContainer");
+                      cardContainer.empty();
+
+                var cardContent = "";
+                $.each(data, function (index, item) {
+                    // Add a data-student-code attribute to store the student code
+                    cardContent += "<div data-student-code='" + item.Value + "'>" + item.Text + "</div>";
+                });
+                cardContainer.append(cardContent);
+            },
+            error: function (error) {
+                console.error("Error fetching student list: " + error);
+            }
+        });
+                    } else {
+                        $('#studentListContainer').empty();
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $("#save-button").click(function (event) {
+                    event.preventDefault();
+                    var CourseCode = $("#CourseName").val();
+                    var trainername = $("#TrainerName").val();
+                    var feedbackFor = $("#FeedbackFor").val();
+                    var date = $("#Date").val();
+                    var description = $("#Description").val();
+
+                    if (!trainername || !feedbackFor || !date || !description) {
+                        Swal.fire('Error', 'Please fill in all fields.', 'error');
+                        return;
+                    }
+                    // Extract student codes directly from the div elements
+                    var studentCodes = [];
+                    $("#studentCardContainer div[data-student-code]").each(function () {
+                        var studentCode = $(this).data("student-code");
+                        if (studentCode) {
+                            studentCodes.push(studentCode.toString()); // Assuming the student code is a string
+                        }
+                    });
+
+                    // Create a list of records
+                    var records = [];
+                    $.each(studentCodes, function (index, studentCode) {
+                        var record = {
+                            StudentCode: studentCode,
+                            CourseCode: CourseCode,
+                            TrainerName: trainername,
+                            FeedbackFor: feedbackFor,
+                            Date: date,
+                            Description: description
+                        };
+                        records.push(record);
+                    });
+                    // Make an Ajax call to save the records
+                    $.ajax({
+                        type: "POST",
+                        url: "/Coordinator/AddTrainerFeedbackKKAsync",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(records), // Pass the list of records directly
+                        success: function (data) {
+                            console.log("Records saved successfully");
+                            // Display success message using SweetAlert
+                            Swal.fire({
+                                title: "Success",
+                                text: "Records saved successfully",
+                                icon: "success"
+                            }).then(function () {
+                                // Redirect or perform any other action
+                                window.location.href = '/Coordinator/ListAllFeedbackForStudentKKAsync'; // Adjust URL as needed
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            // Display error message using SweetAlert
+                            console.error("Error:", error);
+                            Swal.fire({
+                                title: "Error",
+                                text: "An error occurred while saving records",
+                                icon: "error"
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#TrainerName').prop('disabled', true); // Initially disable TrainerName dropdown
+                $('#FeedbackFor').prop('disabled', true); // Initially disable FeedbackFor dropdown
+
+                // Event listener for CourseName dropdown change
+                $('#CourseName').change(function () {
+                    if ($(this).val() === "") {
+                        // If no course is selected, disable TrainerName and FeedbackFor dropdowns
+                        $('#TrainerName').prop('disabled', true);
+                        $('#FeedbackFor').prop('disabled', true);
+                        // Show SweetAlert error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please select a course!',
+                        });
+                    } else {
+                        // Enable TrainerName dropdown if a course is selected
+                        $('#TrainerName').prop('disabled', false);
+                    }
+                });
+
+                // Event listener for TrainerName dropdown change
+                $('#TrainerName').change(function () {
+                    if ($(this).val() === "") {
+                        // If no trainer is selected, disable FeedbackFor dropdown
+                        $('#FeedbackFor').prop('disabled', true);
+                        // Show SweetAlert error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please select a trainer!',
+                        });
+                    } else {
+                        // Enable FeedbackFor dropdown if a trainer is selected
+                        $('#FeedbackFor').prop('disabled', false);
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#CancelDemo').click(function () {
+                    // Reset the form
+                    $('form')[0].reset();
+                    // Redirect to the BatchScheduleMainViewAsyncST page
+                    window.location.href = '/Coordinator/ListAllFeedbackForStudentKKAsync';
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="card " style="padding:5px;">
+                <div class="form-horizontal">
+                    @*<br />*@
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label", @id = "CourseNameLabel" })
+                                @Html.DropDownListFor(Model => Model.CourseName, new SelectList(ViewBag.Course, "Value", "Text"), "----Select Course----", new { @class = "form-control", id = "CourseName" })
+                                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*--------------This label is use as Feedback From---------*@
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TrainerName, htmlAttributes: new { @class = "control-label" })
+                                <select id="TrainerName" name="TrainerName" class="form-control" required="required"></select>
+                                @Html.ValidationMessageFor(model => model.TrainerName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FeedbackFor, "Batch Name", htmlAttributes: new { @class = "control-label" })
+                                <select id="FeedbackFor" name="FeedbackFor" class="form-control" required="required"></select>
+                                @Html.ValidationMessageFor(model => model.FeedbackFor, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StudentList, htmlAttributes: new { @class = "control-label" })
+                                <div id="studentListContainer">
+                                    <!-- Student cards will be displayed here -->
+                                    <div id="studentCardContainer" class="scrollable-container">
+                                        <!-- Student cards will be dynamically populated here -->
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", min = DateTime.Now.ToString("yyyy-MM-dd"), required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control",maxlength="200" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group col-md-12 text-center">
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-success btn-sm" value="Save" id="save-button" />
+                            <button type="button" class="btn btn-danger btn-sm" id="CancelDemo">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+       
+    </body>
+</html>
+}
+

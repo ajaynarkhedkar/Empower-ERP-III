@@ -1,0 +1,331 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+@*<h2>GetStudentContact</h2>*@
+<html>
+
+<head>
+    <script src="/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+
+    <style>
+        .btn-green:hover {
+            color: white;
+            background: #2b83cb;
+        }
+
+        .btn-black {
+            color: white;
+            background: rgb(169,169,169);
+        }
+
+            .btn-black:hover {
+                background: black;
+            }
+
+        .flex {
+            display: flex;
+            font: xx-small;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("UpdateContactAsyncPB", "Bind", FormMethod.Post, new { @id = "form", @enctype = "multipart/form-data" }))
+    {
+        <div class="card" style="width:600px;">
+            <div class="row mt-4">
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4">Type</label>
+                    <select class="form-control selectt2 col-md-6" name="TypeId" id="TypeId" required>
+                        <option value="" disabled selected>--Select Type--</option>
+                        @foreach (System.Data.DataRow data in ViewBag.Type.Tables[0].Rows)
+                        {
+                            var Selected = "";
+                            if (ViewBag.ContacEdit.Tables[0].Rows[0]["TypeId"].ToString() == data["TypeId"].ToString())
+                            {
+                                Selected = "selected";
+                            }
+                            //Option selected
+                            <option value="@data["TypeId"]" @Selected>@data["TypeName"]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4">Name</label>
+                    <input type="text" name="FullName" id="FullName" class="form-control onlycharactors col-md-6" value="@ViewBag.ContacEdit.Tables[0].Rows[0]["Name"]" required />
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4">Contact</label>
+                    <input class="form-control onlynumber col-md-6" type="text" name="ContactNumber" id="ContactNumber" value="@ViewBag.ContacEdit.Tables[0].Rows[0]["Contact"]" required maxlength="11" main="10" />
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4">Email</label>
+                    <input type="email" class="form-control col-md-6" name="EmailId" id="EmailId" onchange="checkEmail('EmailId')" required value="@ViewBag.ContacEdit.Tables[0].Rows[0]["EmailId"]" />
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4">Countary</label>
+                    <select class="form-control select2 col-md-6" name="CountryName" id="CountryName">
+                        <option value="" disabled selected>--Select Country</option>
+                        @foreach (System.Data.DataRow data in ViewBag.Country.Tables[0].Rows)
+                        {
+                            var Selected = "";
+                            if (ViewBag.ContacEdit.Tables[0].Rows[0]["CountryId"].ToString() == data["CountryId"].ToString())
+                            {
+                                Selected = "selected";
+                            }
+                        
+                            <option value="@data["CountryId"]" @Selected>@data["CountryName"]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4"> State</label>
+                    <select class="form-control select2 col-md-6" id="StateName" name="StateName">
+                        <option value="" disabled selected>--Select Country</option>
+                        @foreach (System.Data.DataRow data in ViewBag.State.Tables[0].Rows)
+                        {
+                            var Selected = "";
+                            if (ViewBag.ContacEdit.Tables[0].Rows[0]["StateId"].ToString() == data["StateId"].ToString())
+                            {
+                                Selected = "selected";
+                            }
+                         
+                            <option value="@data["StateId"]" @Selected>@data["StateName"]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4"> City</label>
+                    <select class="form-control select2 col-md-6" id="City" name="City">
+                        <option value="" disabled selected>--Select Country</option>
+                        @foreach (System.Data.DataRow data in ViewBag.City.Tables[0].Rows)
+                        {
+                            var Selected = "";
+                            if (ViewBag.ContacEdit.Tables[0].Rows[0]["City"].ToString() == data["CityId"].ToString())
+                            {
+                                Selected = "selected";
+                            }
+                            //Option selected
+                            <option value="@data["CityId"]" @Selected>@data["CityName"]</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6 form-group flex">
+                    <label class="col-md-4">Address</label>
+                    <textarea class="form-control col-md-6" id="Address" name="Address" required>@ViewBag.ContacEdit.Tables[0].Rows[0]["Address"]</textarea>
+                </div>
+
+                <input type="hidden" id="Id" name="Id" value="@ViewBag.ContacEdit.Tables[0].Rows[0]["Id"]" required />
+            </div>
+
+            <div class="text-center pt-4 mb-2">
+                <button type="button" id="submit" name="submit" class="btn btn-sm btn-success">Submit</button>
+
+                <div class="text-left">
+                    <a href="/Bind/ListContactAsyncPB" class="icon">
+                        <video width="30" height="30" playsinline loop>
+                            <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                        </video>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    }
+
+
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
+
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(".onlycharactors").keypress(function (e) {
+                var key = e.keyCode;
+                if (key >= 48 && key <= 57) {
+
+                    e.preventDefault();
+                    //or
+                    return false;
+                }
+            });
+            $(".onlynumber").keyup(function (e) {
+                if (/\D/g.test(this.value)) {
+                    // Filter non-digits from input value.
+                    this.value = this.value.replace(/\D/g, '');
+                }
+            });
+            $(".onlynumberchar").keypress(function (e) {
+                var regex = new RegExp("^[a-zA-Z0-9]+$");
+                var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                if (regex.test(str)) {
+                    return true;
+                }
+                e.preventDefault();
+                return false;
+            });
+
+            $('#submit').click(function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+
+                var FullName = $('#FullName').val();
+                if (FullName == null || FullName === "") {
+                    showErrorAlert('Please Enter Name.');
+                    return;
+                }
+                var TypeName = $('#TypeId').val();
+                if (TypeName == null || TypeName === "") {
+                    showErrorAlert('Please Enter Type.');
+                    return;
+                }
+                var EmailId = $('#EmailId').val();
+                if (EmailId == null || EmailId === "") {
+                    showErrorAlert('Please Enter Email.');
+                    return;
+                }
+                var Address = $('#Address').val();
+                if (Address == null || Address === "") {
+                    showErrorAlert('Please Enter Address.');
+                    return;
+                }
+                var Contact = $('#ContactNumber').val();
+                if (Contact == null || Contact === "") {
+                    showErrorAlert('Please Enter Contact Number.');
+                    return;
+                }
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        var formData = new FormData(form[0]);
+                        $.ajax({
+                            type: 'POST',
+                            url: form.attr('action'),
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                if (data.success) {
+                                      Swal.fire("Saved!", "Your changes have been saved.", "success").then(function () {
+                                    window.location.href = '@Url.Action("ListContactAsyncPB", "Bind")';
+
+                                       });
+                                } else {
+                                    Swal.fire('Error', 'Unable to save the company.', 'error');
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('Error', 'Unable to communicate with the server.', 'error');
+                            }
+
+                        });
+
+                    } else if (result.isDenied) {
+                        // Handle case where changes are not saved
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+
+
+            });
+
+            function showErrorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+                });
+            }
+
+            $('#CountryName').on('change', function (e) {
+                var Country = $('#CountryName').val();
+                $.ajax({
+                    url: "/Bind/GetStateAsyncPB",
+                    type: 'Post',
+                    data: {
+                        CountryId: Country
+                    },
+                    success: function (response) {
+
+                        var v = "<option>---Select State---</option>";
+                        var result = JSON.parse(response);
+                        for (var i = 0; i < result.length; i++) {
+
+                            v += "<option value=" + result[i]["StateId"] + ">" + result[i]["StateName"] + "<option>";
+
+                        }
+                        $("#StateName").html(v);
+                    },
+                });
+            });
+
+            $('#StateName').on('change', function (e) {
+                var state = $('#StateName').val();
+                $.ajax({
+                    url: "/Bind/GetCityAsyncPB",
+                    type: 'Post',
+                    data: {
+                        StateId: state
+                    },
+                    success: function (response) {
+
+                        var v = "<option>---Select City---</option>";
+                        var result = JSON.parse(response);
+                        for (var i = 0; i < result.length; i++) {
+
+                            v += "<option value=" + result[i]["CityId"] + ">" + result[i]["CityName"] + "<option>";
+                        }
+                        $("#City").html(v);
+                    },
+
+                });
+            });
+        });
+
+               function isValidEmail(email) {
+                var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return emailRegex.test(email);
+                /*return pattern.test(email);*/
+               }
+              function checkEmail(inputId) {
+                var emailInput = document.getElementById(inputId);
+                var email = emailInput.value;
+
+                if (isValidEmail(email)) {
+                    // Valid email, you can perform additional actions here if needed
+                } else {
+                    $("#" + inputId).val("");
+                    Swal.fire({
+                        title: "<span style='font-size: smaller;'>Please enter a valid email address.</span>",
+                        showConfirmButton: true,
+
+                    });
+                }
+            }
+
+
+    </script>
+
+</body>
+</html>
+

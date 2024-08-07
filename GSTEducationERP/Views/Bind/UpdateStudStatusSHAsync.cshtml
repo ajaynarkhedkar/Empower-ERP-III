@@ -1,0 +1,117 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+
+@*<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>*@
+<!-- Include SweetAlert2 CSS and JS files -->
+
+
+<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#saveButton').on('click', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Show SweetAlert when the button is clicked
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to save your changes.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+
+                // If the user clicks "Yes, save it!" execute your save logic here
+                if (result.isConfirmed) {
+                    // Submit the form manually
+                    $('form').submit();
+                    displayToast('Status change successfully', 'success');
+                    setTimeout(function () {
+                        $("#StatusModal").modal("hide"); // Replace "myModal" with the actual ID of your modal
+                        window.location.href = '/Trainer/ListStudent'; // Replace '/home' with the URL you want to redirect to
+                    }, 4000); // Adjust the timeout value as needed
+                }
+            }).catch((error) => {
+                // Handle the error response from the server
+                console.error("Save failed", error);
+                // You can show an error message or perform other actions as needed
+            });
+        });
+    });
+</script>
+
+<script>
+    function displayToast(message, type) {
+        // Display Toastr notification
+        toastr[type](message);
+    }
+
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        showMethod: 'slideDown',
+        timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+    };
+</script>
+
+
+@using (Html.BeginForm())
+{
+
+    <div class="card-body">
+        <h2 style="text-align:center">Change Status</h2>
+        <hr />
+        <div class="card">
+            @Html.HiddenFor(model => model.StudentCode)
+
+            <div style="padding-left:20px">
+                <br>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Student Name:</label>
+                    <div class="col-md-6">
+                        @Model.StudentName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Course Name:</label>
+                    <div class="col-md-6">
+                        @Model.CourseName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Batch Name:</label>
+                    <div class="col-md-6">
+                        @Model.BatchName
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="margin-left: 40px;">Status:</label>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.StatusList, "Value", "Text"), "---Select Status---", new { @class = "form-control" })
+                    </div>
+                </div>
+              
+            </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12 text-center">
+                        <input type="submit" class="btn btn-success" id="saveButton" value="Save" style="margin-bottom: 10px;" />
+                    </div>
+                </div>
+            </div>
+            <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+
+
+
+}
+

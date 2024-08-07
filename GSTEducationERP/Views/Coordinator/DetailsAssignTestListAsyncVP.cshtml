@@ -1,0 +1,142 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<style>
+
+    .modal-content {
+        border: 2px solid #33CCCC;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .modal-title {
+        color: #33CCCC;
+    }
+
+</style>
+
+
+<table id="Assign" class="table table-bordered">
+    <thead>
+        <tr>
+            <th hidden>
+                AssignTestId
+            </th>
+            <th>
+                Course Name
+            </th>
+
+            <th>
+                Batch Name
+            </th>
+            <th>
+                Test Name
+            </th>
+            <th>
+                Complete Till Date
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                Total Marks
+            </th>
+
+            <th> Action </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.lstAssignTestGrid)
+        {
+            <tr>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.AssignTestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TestName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompleteTillDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalMarks)
+                </td>
+                <td>
+                    <a href="#" class="ArrageTest" data-id="@item.AssignTestId" data-url="@Url.Action("RegisterArrangeTestAsyncVP", "Coordinator", new { AssignTestId = item.AssignTestId })" data-toggle="modal" data-target="#partialModal" title="Arrange Test">
+                        <video width="25" height="25" playsinline loop>
+                            <source src="~/Content/Admin/icon/Add Event.mp4" type="video/mp4">
+                        </video>
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<div id="partialModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Assign Test </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Assign').on('click', '.ArrageTest', function () {
+            var AssignTestId = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    $("#partialModal").find(".modal-body").html(response);
+                    $("#partialModal").modal('show');
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+
+        });
+        $('.ArrageTest').mouseenter(function () {
+            $(this).find('video')[0].play();
+            $(this).addClass('running');
+        });
+
+        $('.ArrageTest').mouseleave(function () {
+            var video = $(this).find('video')[0];
+            video.pause();
+            video.currentTime = 0;
+            $(this).removeClass('running');
+        });
+
+
+    });
+
+</script>

@@ -1,0 +1,155 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            $('#externalMockList').on('click', '.icon, .icon1, .icon2', function () {
+                var MockId = $(this).data('id');
+                var url = $(this).data('action');
+                jQuery.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        jQuery('#PerformanceModal .modal-content').html(data);
+                        jQuery('#PerformanceModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <table id="externalMockList" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.MockId)
+                        </th>
+                        <th>
+                            Skill
+                        </th>
+                        <th>
+                            Student Name
+                        </th>
+                        <th>
+                            Lab Name
+                        </th>
+                        <th>
+                            Mock Name
+                        </th>
+                        <th>
+                            Mock Date
+                        </th>
+                        <th>
+                            Start Time
+                        </th>
+                        <th>
+                            Interviewer Name
+                        </th>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.StatusId)
+                        </th>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.MockPerformanceId)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.lstExternalMock)
+                    {
+                        <tr>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.MockId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SkillName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StudentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LabName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MockName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.InterviewrName)
+                            </td>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.StatusId)
+                            </td>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.MockPerformanceId)
+                            </td>
+                            <td>
+                                @if (item.StatusId == 35 || item.StatusId == 6)
+                                {
+                                    @*@Html.ActionLink("Edit", "UpdateExtMockSHAsync", new { id = item.MockId })*@
+                                    <a href="#" class="icon" data-id="@item.MockId" data-action="@Url.Action("UpdateExtMockSHAsync", "Placement", new { MockId = item.MockId })"
+                                       data-toggle="modal" data-target="#PerformanceModal" title="Edit">
+                                        <video width="20" height="20" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                }
+                                @if (item.StatusId == 13)
+                                {
+                                    <!-- Check if MockPerformanceId is null -->
+                                    if (item.MockPerformanceId == null)
+                                    {
+                                        <!-- Icon for adding performance -->
+                                        <a href="#" class="icon1" data-id="@item.MockId" data-action="@Url.Action("AddMockExtPerformanceSHAsync", "Placement", new { MockId = item.MockId })"
+                                           data-toggle="modal" data-target="#PerformanceModal" title="Add performance">
+                                            <video width="20" height="20" playsinline loop>
+                                                <source src="~/Content/Admin/icon/score.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <!-- Icon for viewing performance -->
+                                        <a href="#" class="icon" data-id="@item.MockId" data-action="@Url.Action("ViewMockPerformanceSHAsync", "Placement", new { MockId = item.MockId })"
+                                           data-toggle="modal" data-target="#PerformanceModal" title="View performance">
+                                            <video width="20" height="20" playsinline loop>
+                                                <source src="~/Content/Admin/icon/viewEye.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+                                    }
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="PerformanceModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Add your modal content here -->
+
+                <div class="modal-body">
+                    @*Your modal body content goes here*@
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

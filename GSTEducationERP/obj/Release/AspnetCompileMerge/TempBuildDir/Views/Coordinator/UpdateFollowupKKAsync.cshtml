@@ -1,0 +1,231 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@using (Html.BeginForm())
+{
+
+
+    <html>
+    <head>
+
+        <style>
+            .container {
+                margin-top: 20px;
+            }
+
+            .card {
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+
+            .close {
+                font-size: 24px;
+                font-weight: bold;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                color: #ff0000;
+            }
+
+            h2 {
+                color: #64bbc9;
+                font-weight: bold;
+                font-size: 25px;
+                margin-bottom: 20px;
+                font-family: sans-serif;
+                text-align: center;
+            }
+
+            label {
+                font-weight: bold;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .btn-group {
+                text-align: center;
+            }
+        </style>
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    </head>
+
+    <body>
+        @Html.HiddenFor(model => model.FollowUpId)
+        <div class="container">
+            <div class="card " style="padding:10px; margin-right:0px; margin-left:0px; margin-top:10px">
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 0; right: 0;">&times;</button>
+                <h2>Edit Follow-Up</h2>
+                <hr />
+                <form>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StudentCode,"Student Code")
+                                @Html.EditorFor(model => model.StudentCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StudentName,"Student Name")
+                                @Html.EditorFor(model => model.StudentName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AlternateNumber,"Alternate Number")
+                                @Html.EditorFor(model => model.AlternateNumber, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.AlternateNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CourseName,"Course Name")
+                                @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.LabelFor(model => model.FollowUpNote, "Followup Note")
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @*@Html.TextAreaFor(model => model.FollowUpNote, new { htmlAttributes = new { @class = "form-control", @id = "followupNote", maxlength = "200" } })*@
+                                <textarea id="followupNote" name="FollowUpNote" class="form-control onlycharacters" minlength="10" maxlength="200">@Model.FollowUpNote</textarea>
+                                @Html.ValidationMessageFor(model => model.FollowUpNote, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DateofJoin)
+                                @Html.EditorFor(model => model.DateofJoin, new { htmlAttributes = new { @class = "form-control datepicker", min = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(model => model.DateofJoin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NextFollowUpDate)
+                                @Html.EditorFor(model => model.NextFollowUpDate, new { htmlAttributes = new { @class = "form-control datepicker", min = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(model => model.NextFollowUpDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                @Html.DropDownListFor(model => model.StatusName, (IEnumerable<SelectListItem>)ViewBag.Status, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="followUpTaken">FollowUp Taken:</label>
+                                @Html.DropDownListFor(model => model.FollowUpTaken, (IEnumerable<SelectListItem>)ViewBag.Staff, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="button" class="btn btn-success btn-sm" value="Save" id="editButton" style="margin-right:20px" />
+                        <button type="button" class="btn btn-danger btn-sm" id="cancel-button" onclick="history.go()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $('#editButton').on('click', async function (event) {
+                    debugger;
+                    event.preventDefault();
+                    var followUpId = $('#FollowUpId').val();
+                    var followUpNote = $('#followupNote').val();
+                    var nextFollowUpDate = $('#NextFollowUpDate').val();
+                    var statusName = $('#StatusName').val();
+                    var dateOfJoin = $('#DateofJoin').val();
+                    var followUpTaken = $('#FollowUpTaken').val();
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to save your changes.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, save it!'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            var formData = new FormData();
+                            formData.append('FollowUpId', followUpId);
+                            formData.append('FollowUpNote', followUpNote);
+                            formData.append('NextFollowUpDate', nextFollowUpDate);
+                            formData.append('StatusName', statusName);
+                            formData.append('DateofJoin', dateOfJoin);
+                            formData.append('FollowUpTaken', followUpTaken);
+                            try {
+                                var response = await fetch('/Coordinator/UpdateFollowupKKAsync', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+                                if (response.ok) {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'FollowUp Data Saved Successfully.',
+                                        icon: 'success'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            window.location.href = '/Coordinator/ListViewFollowupKKAsync';
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire('Error', 'Error saving followup data. Please try again.', 'error');
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                                Swal.fire('Error', 'An unexpected error occurred. Please try again later.', 'error');
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#editButton').click(function () {
+                    var dateOfJoin = $('#DateofJoin').val();
+                    var nextFollowUpDate = $('#NextFollowUpDate').val();
+
+                    if (new Date(nextFollowUpDate) <= new Date(dateOfJoin)) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Next Follow-Up Date should be greater than Date of Join.",
+                            icon: "error"
+                        });
+                    } else {
+                        // If validation passes, proceed with your save operation
+                        // For example:
+                        $('#formId').submit(); // Submit the form
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
+}
+

@@ -1,0 +1,304 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+   // ViewBag.Title = "ViewRResutltTSAsynch";
+  //  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <style>
+
+        th {
+            text-transform: uppercase;
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            margin-top: -40px !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        button.video-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #17A2B8;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <br />
+        <div class="card" style="padding: 5px; margin-right: 20px; margin-left: 10px; margin-top: -15px">
+
+            <dd  hidden>
+                @Html.DisplayFor(model => model.AssignTestId)
+            </dd>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        <label class="control-label">Course Name:</label>
+                    </dt>
+
+                    <dd class="col-md-6">
+                        @Html.DisplayFor(model => model.CourseName)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        TestName
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TestName)
+                    </dd>
+                </div>
+                <div class="col-md-4">
+                    <dt>
+                        TotalMarks
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TotalMarks)
+                    </dd>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <dt>
+                        BatchName
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BatchName)
+                    </dd>
+                </div>
+
+                <div class="col-md-4">
+                    <dt>
+                        TestTime
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TestTime)
+                    </dd>
+
+                </div>
+
+                <div class="col-md-4">
+                    <dt>
+                        TestDate
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.TestDate)
+                    </dd>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <dt hidden>
+                TopicName
+            </dt>
+            <dd hidden>
+                @Html.DisplayFor(model => model.TopicName)
+            </dd>
+
+            <dt hidden>
+                Batch Code
+            </dt>
+
+            <dd hidden>
+                @Html.DisplayFor(model => model.BatchCode)
+            </dd>
+
+        </div>
+        <div class="card">
+         <div class="card-header">
+             <h2 class="card-title">Result List</h2>
+         </div>
+         
+        <div class="card-body">
+            <div class="card card-primary card-outline card-outline-tabs">
+                <table id="example1" class="table table-bordered">
+
+                    <thead>
+                        <tr class="bg-primary text-light">
+                            <th>@Html.DisplayNameFor(model => model.StudentName)</th>
+                            <th>@Html.DisplayNameFor(model => model.Attendance)</th>
+                            <th>@Html.DisplayNameFor(model => model.ObtainedMarks)</th>
+                            <th>@Html.DisplayNameFor(model => model.Result)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="InfoTBody">
+                        @foreach (var item in Model.ResultList)
+                        {
+
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Attendance)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ObtainedMarks)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Result)</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+                @*@Html.ActionLink("ReTestAsyncTS", "ReTestAsyncTS", new { id = Model.AssignTestId, courseName = Model.CourseName, testName = Model.TestName, totalMarks = Model.TotalMarks, batchName = Model.BatchName, testDate = Model.TestDate, testTime = Model.TestTime, batchCode = Model.BatchCode, TopicName = Model.TopicName, TopicId = Model.TopicId })*@
+
+
+            </div>
+        </div>
+    </div>
+
+       </div>
+
+<script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.noConflict();
+            var table = $('#example1').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                        titleAttr: 'PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                        titleAttr: 'Print'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                        titleAttr: 'Columns'
+                    }
+
+                ]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+
+</body>
+</html>

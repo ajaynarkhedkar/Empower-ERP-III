@@ -1,0 +1,104 @@
+﻿
+@model GSTEducationERPLibrary.Placement.Placement
+
+
+<div class="card-body">
+	<div class="col-md-6">
+		@Html.LabelFor(model => model.StudentName, "Candidate Name", htmlAttributes: new { @class = "control-label col-md-3" })
+		@Model.StudentName
+	</div>
+	<table id="DetailsPlacedStudents" class="table table-bordered table-striped">
+		<thead>
+
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.CompanyName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.DesignationName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.CTC)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Status)
+				</th>
+				<th>
+					View Offer
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@if (Model != null && Model.lstAllRoundDetails != null)
+			{
+				for (int i = 0; i < Model.lstAllRoundDetails.Count; i++)
+				{
+					var item = Model.lstAllRoundDetails[i];
+			<tr>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.CompanyName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DesignationName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CTC)
+				</td>
+				<td>
+					@if (item.Status == "Placed")
+					{
+						<span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>
+								}
+								else
+								{
+						<span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+
+					}
+				</td>
+
+				<td style="text-align: center;">
+					<a href="#" class="icon" data-toggle="tooltip" title="View Offer Letter" data-studentCode="@item.StudentCode" onclick="viewOfferLetter('@item.FilePth')">
+						<video width="25" height="25" playsinline loop>
+							<source src="~/Content/Admin/icon/viewEye.mp4" type="video/mp4">
+						</video>
+					</a>
+				</td>
+			</tr>
+				}
+			}
+		</tbody>
+	</table>
+	<br />
+</div>
+
+
+<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="~/Content/Admin/js/Icon.js"></script>
+
+
+<script>
+	function viewOfferLetter(filePath) {
+        var fileUrl = '@Url.Content("~/Content/Placement/docs/OfferLetter/")' + filePath;
+
+        // Check if the file exists by making a HEAD request to the file URL
+        $.ajax({
+            type: 'HEAD',
+            url: fileUrl,
+            success: function() {
+                // File exists, open it in a new tab
+                window.open(fileUrl, '_blank');
+            },
+            error: function() {
+                // File does not exist, display error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File not found',
+                    text: 'The offer letter could not be found.'
+                });
+            }
+        });
+    }
+</script>

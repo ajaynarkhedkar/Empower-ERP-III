@@ -1,0 +1,408 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Content/plugins/moment/moment.min.js"></script>
+<script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+
+<head>
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet"   />
+</head>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+
+        <div class="card " style="padding:15px; margin-right:-400px; margin-left:-200px; margin-top:5px">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.BatchCode, "Batch Name")
+                    @Html.DropDownListFor(model => model.BatchCode, new SelectList(ViewBag.Batch, "Value", "Text"), "Select", new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.BatchCode, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.CourseName, "Course Name")
+                    @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control", @id = "CourseName", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4" hidden>
+                    @Html.LabelFor(model => model.CourseCode, "Course Code")
+                    @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control", @id = "CourseCode", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Duration, "Batch Duration")
+                    @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control", @id = "Duration", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.StaffName, "Staff Name")
+                    <select id="StaffName" name="StaffName" class="form-control"></select>
+                    @Html.ValidationMessageFor(model => model.StaffName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="bootstrap-timepicker col-md-4">
+                    <div class="form-group">
+                        <label>Start Time </label>
+                        <div class="input-group date" id="startTimepicker" data-target-input="nearest">
+                            <input type="text" name="StartTime" class="form-control datetimepicker-input" data-target="#startTimepicker" />
+                            <div class="input-group-append" data-target="#startTimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bootstrap-timepicker col-md-4">
+                    <div class="form-group">
+                        <label>End Time </label>
+                        <div class="input-group date" id="endTimepicker" data-target-input="nearest">
+                            <input type="text" name="EndTime" class="form-control datetimepicker-input" data-target="#endTimepicker" />
+                            <div class="input-group-append" data-target="#endTimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.StartDate, "Start Date")
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "StartDate"@*, min = DateTime.Now.ToString("yyyy-MM-dd")*@ } })
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.EndDate, "Tentative End Date")
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "EndDate" } })
+                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.LabName, "Lab Name")
+                    <select id="LabName" name="LabName" class="form-control" required="required"></select>
+                    @Html.ValidationMessageFor(model => model.LabName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6" hidden>
+                <label class="col-md-4">Duration InSecounds </label>
+                @Html.EditorFor(model => model.CourseDuration, new { htmlAttributes = new { @class = "form-control", @id = "CourseDuration", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.CourseDuration, "", new { @class = "text-danger" })
+            </div>
+            <br>
+
+            <div class="form-group col-md-12 text-center">
+                <div class="col-md-offset-2 col-md-12" style="position:center">
+                    <input type="submit" value="Save" class="btn btn-success btn-sm" id="AddSchedule" />
+                    <input type="button" value="Cancel" id="cancelButton" class="btn btn-danger btn-sm" onclick="showCancelConfirmation()" />
+                </div>
+            </div>
+            <div class="col-md-12">
+                <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; margin-left: -20px;"  onclick="location.href = '@Url.Action("BatchScheduleMainViewAsyncST", "Coordinator")'">
+                    <video width="35" height="35" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                    </video>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+@*<script>
+    $(document).ready(function () {
+        $('#startTimepicker, #endTimepicker').datetimepicker({
+            format: 'LT', // Format for displaying time
+        });
+
+        // Set minimum end date based on start date
+        $('#datepicker').on('change.datetimepicker', function (e) {
+            $('#endDatepicker').datetimepicker('minDate', e.date);
+        });
+
+       
+
+        //// Prevent selecting past time for start time
+        $('#startTimepicker').on('change.datetimepicker', function (e) {
+            var currentTime = moment().startOf('minute');
+            var selectedTime = e.date;
+
+            //if (selectedTime.isBefore(currentTime)) {
+            //    $('#startTimepicker').datetimepicker('date', currentTime);
+            //}
+        });
+        // Set minimum end time based on start time
+        $('#startTimepicker').on('change.datetimepicker', function (e) {
+            var minEndTime = e.date.clone().add(1, 'hours');
+            $('#endTimepicker').datetimepicker('minDate', minEndTime);
+        });
+        // Prevent selecting past time for end time
+        $('#endTimepicker').on('change.datetimepicker', function (e) {
+            var currentTime = moment().startOf('minute');
+            var selectedTime = e.date;
+
+            if (selectedTime.isBefore(currentTime)) {
+                $('#endTimepicker').datetimepicker('date', currentTime);
+            }
+        });
+    });
+</script>*@
+<script>
+    $(document).ready(function () {
+        // Initialize date and time pickers
+        $('#datepicker').datetimepicker({
+            format: 'L',
+        });
+
+        $('#startTimepicker, #endTimepicker').datetimepicker({
+            format: 'LT',
+            useCurrent: false, // Prevents picker from selecting current time by default
+        });
+
+        // Set minimum end date based on start date
+        $('#datepicker').on('change.datetimepicker', function (e) {
+            $('#endDatepicker').datetimepicker('minDate', e.date);
+        });
+
+        // Automatically adjust end time to have 1-hour difference from start time
+        $('#startTimepicker').on('change.datetimepicker', function (e) {
+            var startTime = e.date;
+            var endTimePicker = $('#endTimepicker');
+
+            // Calculate the end time by adding 1 hour to the start time
+            var endTime = startTime.clone().add(1, 'hours');
+
+            // Set the end time
+            endTimePicker.datetimepicker('date', endTime);
+        });
+
+        // Prevent selecting past time for end time
+        $('#endTimepicker').on('change.datetimepicker', function (e) {
+            var currentTime = moment().startOf('minute');
+            var selectedTime = e.date;
+
+            if (selectedTime.isBefore(currentTime)) {
+                $(this).datetimepicker('date', currentTime);
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        $("#BatchCode").change(function () {
+            var batchcode = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "/Coordinator/GetDurationST",
+                data: { batchcode: batchcode },
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    document.getElementById('CourseName').value = data.CourseName;
+                    document.getElementById('CourseCode').value = data.CourseCode; // Corrected property name
+                    document.getElementById('Duration').value = data.Duration;
+                    document.getElementById('CourseDuration').value = data.CourseDuration;
+                    populateStaffName(data.CourseCode);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        function populateStaffName(courseCode) {
+            $.get("/Coordinator/GetTrainerAsyncST", { CourseCode: courseCode }, function (data) {
+                var options = "";
+                $.each(data, function (i, item) {
+                    options += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                });
+                $("#StaffName").html(options);
+            });
+        }
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Event handler for Start Date change
+        $("#StartDate").change(function () {
+            calculateEndDate();
+        });
+
+        // Function to calculate End Date
+        function calculateEndDate() {
+            var startDate = $("#StartDate").val();
+            var courseDurationInSeconds = parseInt($("#CourseDuration").val());
+
+            if (!isNaN(courseDurationInSeconds) && startDate) {
+                var startTime = moment(startDate, 'YYYY/MM/DD');
+                var endTime = startTime.clone().add(courseDurationInSeconds, 'seconds').format('YYYY-MM-DD'); // Format as 'yyyy-MM-dd'
+              
+                $("#EndDate").val(endTime);
+                getLabDetails();
+            }
+
+            //var startDate = $("#StartDate").val();
+            //var courseDurationInSeconds = parseInt($("#CourseDuration").val());
+
+            //if (!isNaN(courseDurationInSeconds) && startDate) {
+            //    var startTime = moment(startDate, 'YYYY/MM/DD');
+            //    var endTime = startTime.add(courseDurationInSeconds, 'seconds').format('MM/DD/YYYY');
+            //    debugger;
+            //    $("#EndDate").val(endTime);
+            //    getLabDetails();
+            //}
+        }
+
+        function getLabDetails() {
+            var BatchCode = $("#BatchCode").val();
+            var StartDate = $("#StartDate").val();
+            var EndDate = $("#EndDate").val();
+            var StartTime = $("#startTimepicker").datetimepicker('date').toISOString();
+            var EndTime = $("#endTimepicker").datetimepicker('date').toISOString();
+
+            $.ajax({
+                url: '/Coordinator/ReadAvailableLabsBatch_BindST',
+                type: 'POST',
+                data: {
+                    BatchCode: BatchCode,
+                    StartDate: StartDate,
+                    EndDate: EndDate,
+                    StartTime: StartTime,
+                    EndTime: EndTime
+                },
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    var v = "";
+                    $.each(result, function (i, item) {
+                        v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+                    });
+                    $("#LabName").html(v);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#AddSchedule").click(function (e) {
+            e.preventDefault();
+
+            // Check for null values in required fields
+            if (!validateForm()) {
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to save this batch schedule?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If confirmed, submit the form
+                    $("form").submit();
+                    displayToast('Status change successfully', 'success');
+                    setTimeout(function () {
+                        $("#StatusModal").modal("hide");
+                        window.location.href = '/Coordinator/BatchScheduleMainViewAsyncST';
+                    }, 4000);
+                }
+            });
+        });
+    });
+
+    function validateForm() {
+        // Check for null values in required fields
+        var isValid = true;
+
+        if ($("#BatchCode").val() === null || $("#BatchCode").val() === '') {
+            displayToast('Please select Batch Name', 'error');
+            isValid = false;
+        }
+        if ($("#StaffName").val() === null || $("#StaffName").val() === '') {
+            displayToast('Please select Staff Name', 'error');
+            isValid = false;
+        }
+        // Check for start time
+        if ($("#startTimepicker").find("input").val() === null || $("#startTimepicker").find("input").val() === '') {
+            displayToast('Please select Start Time', 'error');
+            isValid = false;
+        }
+
+        // Check for end time
+        if ($("#endTimepicker").find("input").val() === null || $("#endTimepicker").find("input").val() === '') {
+            displayToast('Please select End Time', 'error');
+            isValid = false;
+        }
+        if ($("#StartDate").val() === null || $("#StartDate").val() === '' || $("#EndDate").val() === null || $("#EndDate").val() === '') {
+            displayToast('Please select Start Date and End Date', 'error');
+            isValid = false;
+        }
+        if ($("#LabName").val() === null || $("#LabName").val() === '') {
+            displayToast('Please select Lab Name', 'error');
+            isValid = false;
+        }
+        // Add similar checks for other required fields
+
+        return isValid;
+    }
+
+    function displayToast(message, type) {
+        // Display Toastr notification
+        toastr[type](message);
+    }
+
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        showMethod: 'slideDown',
+        timeOut: 4000
+    };
+</script>
+<script>
+    function showCancelConfirmation() {
+        // Using SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            //text: 'You will not be able to undo this action!',
+            icon: 'warning',
+            //showCancelButton: true,
+            confirmButtonColor: '#d33',
+            //cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Add any form cancellation logic here if needed
+
+                // Redirect to the specified URL
+                window.location.href = '@Url.Action("BatchScheduleMainViewAsyncST", "Coordinator")';
+            }
+        });
+    }
+</script>

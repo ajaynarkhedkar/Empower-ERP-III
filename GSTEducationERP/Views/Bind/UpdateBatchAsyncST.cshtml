@@ -1,0 +1,330 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<head>
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        img {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+        .scrollable-container {
+            max-height: 200px; /* Set the maximum height for the container */
+            overflow-y: auto; /* Enable vertical scrollbar */
+        }
+    </style>
+</head>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="card" style="margin:10px">
+        <div class="form-group" hidden>
+            <label class="col-md-6 control-label">Batch Code</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BatchCode, new { htmlAttributes = new { @class = "form-control", id = "BatchCode" } })
+                @Html.ValidationMessageFor(model => model.BatchCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BatchName, "Batch")
+                    @Html.EditorFor(model => model.BatchName, new { htmlAttributes = new { @class = "form-control", @required = "required", maxlength = "10" } })
+                    <span id="BatchNameValidation" class="text-danger"></span>
+                    @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CourseName, "Course")
+                    @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CourseCode, "CourseCode")
+                    @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <div class="col-md-5">
+                <label>Batch Student</label>
+                <div class="card scrollable-container mx-auto" style="width: 250px;  margin-top: 20px; border-radius: 10px; background-color: whitesmoke;  ">
+                    <div class="checkbx-column" id="list" style="scroll-margin-left: 50px;">
+                        <div id="AddStudent"></div>
+                        @Html.ValidationMessageFor(model => model.AddStudent, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div>
+                    <img src="~/Content/Coordinator/img/left-arrow (1).png" id="AddCheckStudent" style="width: 35px; height: 30px; margin-top: 90px ">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label>New Admitted Student</label>
+                <div class="card scrollable-container mx-auto" style="width: 250px;margin-top: 20px; border-radius: 10px; background-color: whitesmoke;  ">
+                    <div id="AdmittedStudent"></div>
+                    @Html.ValidationMessageFor(model => model.SelectStudent, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group col-md-12 text-center">
+            
+                <input type="submit"   value="Save" class="btn btn-success btn-sm" id="BatchSave" />
+                @*<input type="button" style="margin-top: 80px;  " value="Cancel" id="cancelButton" class="btn btn-danger btn-sm" onclick="location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")'" />*@
+                <input type="button"  value="Cancel" id="cancelButton" class="btn btn-danger btn-sm" onclick="showCancelConfirmation()" />
+            
+        </div>
+
+        <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; " onclick="location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")'">
+            <video width="35" height="35" playsinline loop>
+                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+            </video>
+        </a>
+    </div>
+}
+
+<script>
+    function showCancelConfirmation() {
+        // Using SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            //text: 'You will not be able to undo this action!',
+            icon: 'warning',
+            //showCancelButton: true,
+            confirmButtonColor: '#d33',
+            //cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Add any form cancellation logic here if needed
+
+                // Redirect to the specified URL
+                window.location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")';
+            }
+        });
+    }
+</script>
+
+
+<script>
+		$(document).ready(function () {
+            // Attach event handler to ExamName input field on keyup
+            $('#BatchName').on('keyup', function () {
+                validateBatchName();
+            });
+		});
+
+		function validateBatchNameOnCourseChange() {
+			var BatchName = $('#BatchName').val();
+			if (BatchName) {
+				$('#BatchName').val('');
+				$('#BatchNameValidation').text(''); // Clear the validation message
+			}
+		}
+
+           function validateBatchName() {
+        var BatchName = $('#BatchName').val();
+		if (BatchName) {
+			$('#BatchNameValidation').text('Please select a course before entering the Batch name.');
+            $('#BatchNameValidation').text('');
+        }
+
+        if (BatchName) {
+            // Perform AJAX check to see if the Batch name already exists
+            $.ajax({
+                url: '@Url.Action("IsBatchAvilableAsyncST", "Bind")',
+                type: 'POST',
+                data: { BatchName: BatchName},
+                success: function (data) {
+                    if (data.isAvailable===false) {
+                        // Batch name is available
+                        $('#BatchNameValidation').text('');
+                    } else {
+                        // Batch name already exists
+						$('#BatchNameValidation').text('Batch name already exists. Please choose another name.');
+
+
+                    }
+                },
+                error: function () {
+                    // Handle error
+                    console.error('Error checking Batch name availability.');
+                }
+            });
+        }
+    }
+</script>
+@*-------  Load Btach Students On Load Batch students add in  Card-----------------*@
+
+<script>
+   $(document).ready(function () {
+    var id1 = @Html.Raw(Json.Encode(Model.BatchCode));
+    $.ajax({
+        url: "/Bind/AddBatchStudNameAsyncST",
+        type: "GET",
+        data: { AddBatch: id1 },
+        success: function (data) {
+            var AddStudent = $("#AddStudent");
+            AddStudent.empty();
+            $.each(data, function (index, v1) {
+                var container = $('<div>');
+                container
+                    .append(`<input type="checkbox" id="${v1.Value}" name="${v1.Text}" value="${v1.Value}" Text="${v1.Text}" style="visibility: hidden;">`)
+                    .append(`<label for="${v1.Value}">${v1.Text}</label>`);
+                    AddStudent.append(container);
+            });
+        }
+    });
+});
+</script>
+@*-------  Transfer Student AddStudent Card to SelectStudent  Card-----------------*@
+
+<script>
+    $(document).ready(function () {
+        $("#AddCheckStudent").click(function () {
+            var atLeastOneChecked = false;
+            $('#AdmittedStudent input[type=checkbox]:checked').each(function () {
+                atLeastOneChecked = true;
+                return false; // break out of the loop once a checked checkbox is found
+            });
+
+            if (atLeastOneChecked) {
+                // Your existing code here
+                var Value = "";
+                var txt = "";
+                $('#AdmittedStudent input[type = checkbox]:checked').each(function () {
+
+                    Value = $(this).val();
+                    var t = $(this).next('label').text();
+                    $(this).next('label').remove();
+                    $(this).remove();
+                    $("#AddStudent")
+                        .append(`<input type="checkbox" id="${Value}" name="${t}" value="${Value}" Text="${t}" style= "visibility: hidden;" >`)
+                        .append(`<label for="${t}">${t}</label></div>`)
+                        .append(`<br>`);
+
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please select at least one student.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+        });
+    });
+</script>
+@*-------  Select Cource that time load student intrested in this cource load in addmitted student card-----------------*@
+
+<script>
+    $(document).ready(function () {
+        var id = @Html.Raw(Json.Encode(Model.CourseCode));
+            $("#AdmittedStudent").empty();
+            $.ajax({
+                url: "/Bind/GetAdmittedStudentAsyncST",
+                type: "GET",
+                data: { CourseCode: id },
+                success: function (data) {
+                    var SelectStudent = $("#AdmittedStudent");
+                    SelectStudent.empty();
+                    $.each(data, function (index, v1) {
+                        $("#AdmittedStudent")
+                            .append(`<input type="checkbox" id="${v1.Value}" name="${v1.Text}" value="${v1.Value}" Text="${v1.Text}"/*style=" visibility: hidden;"*/>`)
+                            .append(`<label value="${v1.Value}">${v1.Text}</label></div>`)
+                            .append(`<br>`);
+                    });
+                }
+            });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#BatchSave').on('click', function () {
+            var BatchCode = $('#BatchCode').val();
+            var BatchName = $('#BatchName').val();
+            var CourseCode = $('#CourseCode').val();
+            var student = "";
+            var NoOfStudent = 0;
+            if (!BatchName || !CourseCode) {
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'Please select Batch Name and Course Both value before saving can not save null value.',
+                    icon: 'error'
+                });
+                return false;
+            }
+            $('#AddStudent input[type = checkbox]:not(:checked)').each(function () {
+                student += $(this).val() + ',';
+                NoOfStudent++;
+            });
+
+            $.ajax({
+                url: "/Bind/UpdateBatchAsyncST",
+                type: "POST",
+                data: {
+                    BatchCode: BatchCode,
+                    BatchName: BatchName,
+                    CourseCode: CourseCode,
+                    StudentCode: student,
+                    NoOfStudent: NoOfStudent
+                },
+                success: function (result) {
+                    if (result.success) {
+                        // Show success SweetAlert
+                        Swal.fire({
+                            title: 'Success',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            // Redirect or perform any other action after success
+                            window.location.href = '/Bind/ListAllBatchAsyncST/';
+                        });
+                    } else {
+                        // Show error SweetAlert
+                        Swal.fire({
+                            title: 'Error',
+                            text: result.message,
+                            icon: 'error'
+                        });
+                    }
+                    return false;
+                },
+                error: function (xhr, status, error) {
+                    // Handle error if needed
+                    console.error(xhr, status, error);
+                }
+            });
+        });
+    });
+</script>

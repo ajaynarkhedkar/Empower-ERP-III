@@ -1,0 +1,41 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+@using (Html.BeginForm())
+{
+
+                <h2 style="text-align:center">Release Student</h2>
+                <hr />
+                <br />
+                <div class="card">
+                    @Html.HiddenFor(model => model.StudentCode)
+
+                    <div class="form-group-row">
+                        <label class="col-md-4">Student:</label> @Model.StudentName
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <label class="col-md-4">Course:</label> @Model.CourseName
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <label class="col-md-4">Batch:</label> @Model.BatchName
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <label class="col-md-4">Evaluation:</label> @Model.StatusId
+                    </div>
+                    <br />
+                    <div class="row mt-3">
+                        <div class="col-md-12 text-right">
+                            <input type="submit" class="btn btn-success" id="saveButton" value="Release" style="margin-bottom: 10px;" />
+                        </div>
+                    </div>
+                </div>
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+
+
+
+    }
+
+
+

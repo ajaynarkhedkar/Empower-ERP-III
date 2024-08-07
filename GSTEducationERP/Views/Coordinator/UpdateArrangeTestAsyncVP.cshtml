@@ -1,0 +1,208 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<html>
+<head>
+
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.AssignTestId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AssignTestId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssignTestId, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.BatchCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.HiddenFor(model => model.Duration, new { id = "DurationValue" })
+            </div>
+        </div>
+        <br />
+        <div class="input-group mb-3">
+            <label>Date : </label>
+            <div class="col-md-8" style="margin-left: 82px;">
+                <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                    <input type="text" name="StartDate" class="form-control datetimepicker-input" data-target="#reservationdate" value="@ViewBag.TestDate" />
+                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+         </div>
+            <div class="bootstrap-timepicker">
+                <div class="input-group mb-3">
+                    <label>Start Time : </label>
+                    <div class="col-md-8" style="margin-left: 45px;">
+                        <div class="input-group date" id="timepicker" data-target-input="nearest">
+                            <input type="text" name="StartTime" class="form-control datetimepicker-input" data-target="#timepicker" value="@ViewBag.TestTime" />
+                            <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="input-group mb-3">
+                <label>End Time  : </label>
+                <div class="col-md-8" style="margin-left: 51px;">
+                    <input type="text" name="EndTime" id="endTime" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <label class="control-label">Lab Name : </label>
+                <div class="col-md-8" style="margin-left: 46px;">
+                    <select id="LabCode" name="LabCode" class="form-control"> </select>
+                    @*@Html.DropDownListFor(model => model.LabCode, (IEnumerable<SelectListItem>)ViewBag.ReadAvailableLabs, "--SELECT Section--", new { @class = "form-control" })*@
+                    @Html.ValidationMessageFor(model => model.LabCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <label class="control-label">Supervisor Name : </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.SupervisorCode, (IEnumerable<SelectListItem>)ViewBag.Readsupervisers, "--SELECT Section--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SupervisorCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <label class="control-label">Status : </label>
+                <div class="col-md-5" style="margin-left: 71px;">
+                    @Html.DropDownListFor(model => model.StatusId, (IEnumerable<SelectListItem>)ViewBag.AllTestStausVp, "--Select status--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-6" style="float: right;margin-right: 40px;">
+                    <input type="submit" value="Save" id="Arrangeupdate" class="btn btn-success btn-sm" />
+                </div>
+            </div>
+            }
+            @*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+            <script src="~/Content/plugins/moment/moment.min.js"></script>
+            <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+            <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+            <script>
+        jQuery(document).ready(function ($) {
+
+            $('#reservationdate').datetimepicker({
+                format: 'YYYY-MM-DD',
+                //minDate: moment().startOf('day')
+            });
+
+            $('#timepicker').datetimepicker({
+
+                format: 'LT'
+            });
+
+            $('#timepicker').on('change.datetimepicker', function (e) {
+                calculateEndTime();
+
+            });
+            $('#reservationdate').on('change.datetimepicker', function (e) {
+                getLabDetails();
+            });
+
+            function calculateEndTime() {
+                var startTime = $('#timepicker').datetimepicker('date');
+                var durationString = $('#DurationValue').val();
+
+                // Extract numeric value from the duration string
+                var durationValue = parseInt(durationString.split(' ')[0]);
+
+                // Check if duration is in minutes or hours
+                var isHours = durationString.includes('Hour');
+
+                var duration = isHours ? 'Hour' : 'minute';
+
+                if (startTime && durationValue) {
+                    var startTimeMoment = moment(startTime, 'LT');
+                    var endTimeMoment = startTimeMoment.clone().add(durationValue, duration);
+
+                    $('#endTime').text(endTimeMoment.format('LT'));
+                    $('#endTime').val(endTimeMoment.format('LT'));
+                    getLabDetails();
+                } else {
+                    $('#endTime').text('');
+                }
+            }
+            function getLabDetails() {
+                var Batchcode = $('#BatchCode').val();
+                var startDate = $('#reservationdate').datetimepicker('date').toISOString();
+                var StartTime = $('#timepicker').datetimepicker('date').toISOString();
+                var EndTime = $('#endTime').text();
+
+                //StartTime = moment(StartTime, 'h:mm a').format('HH:mm:ss');
+                //EndTime = moment(StartTime, 'h:mm a').format('HH:mm:ss');
+
+             $.ajax({
+             url: '@Url.Action("ReadAvailableLabsBatch_Bind", "Coordinator")',
+             type: 'POST',
+             data: {
+                    Batchcode: Batchcode,
+                     startDate: startDate,
+                 StartTime: StartTime,
+                    EndTime: EndTime
+                    },
+              success: function (data) {
+              var result = JSON.parse(data);
+              var v = "<option>---Select---</option>";
+            $.each(result, function (i, item) {
+                v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+            });
+            $("#LabCode").html(v);
+        }
+    });
+}
+
+
+            $('#Arrangeupdate').on('click', function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                //var LabCode = $('#LabCode').val();
+                //if (LabCode == null || LabCode === "") {
+                //    showErrorAlert('Please select a Lab.');
+                //    return;
+                //}
+                var SupervisorCode = $('#SupervisorCode').val();
+                if (SupervisorCode == null || SupervisorCode === "") {
+                    showErrorAlert('Please select a Supervisor.');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to save this data?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If user confirms, submit the form
+                        $('form').submit();
+                    }
+                });
+            });
+            function showErrorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+                });
+            }
+        });
+            </script>
+
+
+
+</body>
+</html>

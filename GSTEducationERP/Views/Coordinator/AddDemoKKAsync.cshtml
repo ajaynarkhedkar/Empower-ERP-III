@@ -1,0 +1,482 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "NewDemoKKAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+   <html>
+   <head>
+       <style>
+
+           h2 {
+               color: #64bbc9;
+               font-weight: bold;
+               font-size: 30px;
+               margin-left: 17px;
+               margin-bottom: -10px;
+               font-family: sans-serif;
+           }
+       </style>
+
+       <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+       <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+       <script src="~/Content/plugins/moment/moment.min.js"></script>
+       <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+       <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+       <link href="~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+       <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+       <script type="text/javascript">
+
+           $(document).ready(function () {
+               $("#LabCode").change(function () {
+                   var id = $(this).val();
+                   $("#Labcapacity").empty();
+                   $.ajax({
+                       type: "GET",
+                       url: "LabCapacityBindAsync",
+                       data: { Labcode: id },
+                       dataType: "json",
+                       success: function (data) {
+                           var v = "";
+                           $.each(data, function (i, v1) {
+                               v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                           });
+                           $("#Labcapacity").html(v);
+                       },
+                       error: function (xhr, status, error) {
+                           console.error("Error:", error);
+                       }
+                   });
+               });
+
+
+
+                $("#CourseName").change(function (event) {
+                    event.preventDefault(); // Prevent the default form submission behavior
+                        var id = $(this).val();
+                    $("#TrainerName").empty();
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("CourseTrainerNameKKAsync", "Coordinator")",
+                            data: { CourseCode: id },
+                            dataType: "json",
+                            success: function (data) {
+                                var v = "<option value=''>----Select Trainer----</option>";
+                                $.each(data, function (i, v1) {
+                                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+
+                                });
+                                $("#TrainerName").html(v);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error:", error);
+                            }
+                        });
+                    });
+
+               var selectedStudentCount = 0;
+
+               $("#CourseName").change(function () {
+                   debugger;
+                   var CourseCode = $(this).val();
+                   if (CourseCode) {
+                       var studentListContainer = $("#studentListContainer");
+
+                       studentListContainer.empty();
+                       $.get("DemoWantStudentsAsync", { CourseCode: CourseCode }, function (data) {
+                           $.each(data, function (i, student) {
+                               var checkbox = $('<input type="checkbox" class="student-checkbox" name="SelectedStudents" value="' + student.Value + '">');
+                               var label = $('<label>' + student.Text + '</label>');
+                               studentListContainer.append(checkbox);
+                               studentListContainer.append(label);
+                               studentListContainer.append("<br>");
+
+                               // Attach change event to checkboxes to update selected student count
+                               checkbox.change(function () {
+                                   updateSelectedStudentCount();
+                               });
+                           });
+
+                           studentListContainer.show();
+                       });
+                   } else {
+                       $("#studentListContainer").hide();
+                   }
+               });
+               // Save selected student codes as comma-separated string
+               $("form").submit(function () {
+                   var selectedStudents = $(".student-checkbox:checked").map(function () {
+                       return $(this).val();
+                   }).get().join(',');
+
+                   // Add a hidden field to store the selected student codes
+                   $("<input>").attr("type", "hidden")
+                       .attr("name", "SelectedStudentCodes")
+                       .attr("value", selectedStudents)
+                       .appendTo("form");
+               });
+
+               // Function to update the selected student count
+
+               function updateSelectedStudentCount() {
+                   selectedStudentCount = $(".student-checkbox:checked").length;
+                   console.log("Selected Student Count: " + selectedStudentCount);
+
+                   $("#selectedStudentCount").text("Selected Student Count: " + selectedStudentCount);
+
+                   // Set the count as the value of the NoOfStudent input field
+                   // Enable the input field before setting its value
+                   $("#NoOfStudent").prop("disabled", false);
+                   $("#NoOfStudent").val(selectedStudentCount);
+
+               }
+           });
+       </script>
+
+
+       <script>
+           $(document).ready(function () {
+               debugger;
+        // Initialize start time picker
+        $('#startTimepicker').datetimepicker({
+            format: 'LT'
+        });
+        // Initialize end time picker
+        $('#endTimepicker').datetimepicker({
+            format: 'LT'
+        });
+
+
+        $("#ExpectedDate").change(function () {
+            debugger;
+            getLabDetails();
+
+        });
+
+        function getLabDetails() {
+            debugger;
+            var NoOfStudent = $("#NoOfStudent").val();
+            var ExpectedDate = $("#ExpectedDate").val();
+            var StartTime = $("#startTimepicker").datetimepicker('date').toISOString();
+            var EndTime = $("#endTimepicker").datetimepicker('date').toISOString();
+
+            $.ajax({
+                url: "@Url.Action("LabNameListAsync", "Coordinator")",
+                type: 'POST',
+                data: {
+                    NoOfStudent: NoOfStudent,
+                    ExpectedDate: ExpectedDate,
+                    StartTime: StartTime,
+                    EndTime: EndTime
+                },
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    var v = "<option>---Select---</option>";
+                    $.each(result, function (i, item) {
+                        v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+                    });
+                    $("#LabCode").html(v);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+       </script>
+       <script>
+           $(document).ready(function () {
+
+               // Add click event handler for the Cancel button
+               $('#CancelDemo').click(function () {
+                   // Reset the form
+                   $('form')[0].reset();
+                   // Redirect to the BatchScheduleMainViewAsyncST page
+                   window.location.href = '/Coordinator/ListDemoKKAsync';
+               });
+           });
+       </script>
+       <script>
+		$(document).ready(function () {
+            // Attach event handler to ExamName input field on keyup
+            $('#BatchName').on('keyup', function () {
+                validateBatchName();
+            });
+		});
+
+           function validateBatchNameOnCourseChange() {
+			var BatchName = $('#BatchName').val();
+			if (BatchName) {
+				$('#BatchName').val('');
+				$('#BatchNameValidation').text(''); // Clear the validation message
+			}
+		}
+
+           function validateBatchName() {
+        var BatchName = $('#BatchName').val();
+		if (BatchName) {
+			/*$('#BatchNameValidation').text('Please select a course before entering the Batch name.');*/
+            $('#BatchNameValidation').text('');
+        }
+
+        if (BatchName) {
+            // Perform AJAX check to see if the Batch name already exists
+            $.ajax({
+                url: '@Url.Action("IsBatchAvilableAsyncST", "Coordinator")',
+                type: 'POST',
+                data: { BatchName: BatchName},
+                success: function (data) {
+                    if (data.isAvailable===false) {
+                        // Batch name is available
+                        $('#BatchNameValidation').text('');
+                        $('#saveButton').prop('disabled', false);
+                    } else {
+                        // Batch name already exists
+                        $('#BatchNameValidation').text('Demo name already exists. Please choose another name.');
+                        $('#saveButton').prop('disabled', true);
+
+
+                    }
+                },
+                error: function () {
+                    // Handle error
+                    console.error('Error checking Batch name availability.');
+                }
+            });
+        }
+    }
+       </script>
+
+       <script>
+           document.addEventListener("DOMContentLoaded", function () {
+               var saveButton = document.getElementById('saveButton');
+              
+               saveButton.addEventListener('click', async function (event) {
+                  
+                   event.preventDefault(); // Prevent the default form submission
+                   var CourseName = document.getElementById('CourseName').value;
+                   var BatchName = document.getElementById('BatchName').value;
+                   var TrainerName = document.getElementById('TrainerName').value;
+                   var NoOfStudent = document.getElementById('NoOfStudent').value;
+                   var StartTime = document.getElementById('startTime').value;
+                   var EndTime = document.getElementById('endTime').value;
+                   var StartDate = document.getElementById('ExpectedDate').value;
+                   var LabCode = document.getElementById('LabCode').value;
+                   var StaffCode = document.getElementById('StaffCode').value;
+                   var selectedStudents = $(".student-checkbox:checked").map(function () {
+                           return $(this).val();
+                   }).get().join(',');
+
+                       // Perform client-side validation
+                   if (BatchName.trim() === '' || CourseName.trim() === '' || TrainerName.trim() === '' || selectedStudents.trim() === '' || NoOfStudent.trim() === '' || StartTime.trim() === '' || EndTime.trim() === '' || StartDate.trim() === '' || LabCode.trim() === '' || StaffCode.trim() === '') {
+                           Swal.fire('Error', 'Please fill in all fields.', 'error');
+                           return;
+                       }
+
+                       // Show confirmation dialog
+                       Swal.fire({
+                           title: 'Are you sure?',
+                           text: 'You are about to save your changes.',
+                           icon: 'warning',
+                           showCancelButton: true,
+                           confirmButtonColor: '#3085d6',
+                           cancelButtonColor: '#d33',
+                           confirmButtonText: 'Yes, save it!'
+                       }).then(async (result) => {
+                           if (result.isConfirmed) {
+                               var formData = new FormData();
+                               // Append form data to formData object
+                               var formData = new FormData();
+                               formData.append('CourseName', CourseName);
+                               formData.append('BatchName', BatchName);
+                               formData.append('TrainerName', TrainerName);
+                               formData.append('SelectedStudentCodes', selectedStudents);
+                               formData.append('NoOfStudent', NoOfStudent);
+                               formData.append('startTime', StartTime);
+                               formData.append('endTime', EndTime);
+                               formData.append('ExpectedDate', StartDate);
+                               formData.append('LabCode', LabCode);
+                               formData.append('Labcapacity', Labcapacity);
+                               formData.append('StaffCode', StaffCode);
+
+                               try {
+                                   var response = await fetch('/Coordinator/AddDemoKKAsync', {
+                                       method: 'POST',
+                                       body: formData
+                                   });
+
+                                   if (response.ok) {
+                                       Swal.fire('Success!', 'Demo Saved Successfully.', 'success').then(() => {
+                                           window.location.href = '/Coordinator/ListDemoKKAsync';
+                                       });
+                                   } else {
+                                       Swal.fire('Error', 'Error saving demo data. Please try again.', 'error');
+                                   }
+                               } catch (error) {
+                                   console.error('Error:', error);
+                                   Swal.fire('Error', 'An unexpected error occurred. Please try again later.', 'error');
+                               }
+                           }
+                       });
+               });
+           });
+         
+       </script>
+
+
+   </head>
+   <body>
+       <br />
+       <div class="container-fluid">
+           <div class="card " style="padding:15px; margin-right:0px; margin-left:0px; margin-top:10px">
+               <h2>New Demo</h2>
+               <hr />
+               @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+               <div class="input-group" hidden>
+                   @Html.LabelFor(model => model.BatchCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                   <div class="col-md-10">
+                       @Html.EditorFor(model => model.BatchCode, new { htmlAttributes = new { @class = "form-control" } })
+                       @Html.ValidationMessageFor(model => model.BatchCode, "", new { @class = "text-danger" })
+                   </div>
+               </div>
+
+               <div class="row">
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.BatchName, "Demo Name")
+                           @Html.EditorFor(model => model.BatchName, new { htmlAttributes = new { @class = "form-control", id = "BatchName" } })
+                           <span id="BatchNameValidation" class="text-danger"></span>
+                           @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.CourseName,"Course Name")
+                           @Html.DropDownListFor(Model => Model.CourseName, new SelectList(ViewBag.Course, "Value", "Text"), "----Select Course----", new { @class = "form-control" })
+                           @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.TrainerName)
+                           <select id="TrainerName" name="TrainerName" class="form-control" required="required"></select>
+                           @Html.ValidationMessageFor(model => model.TrainerName, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+               </div>
+               <br />
+               <div class="row">
+                   <div class="col-md-4">
+                       <label>Student List</label>
+                       <div class="card" style="width: 300px; height: 200px; margin-top: 20px; border-radius: 10px; background-color: white; overflow-y: auto; ">
+                           <div id="studentListContainer" style="padding-left:10px;"></div>
+                           @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.NoOfStudent)
+                           @Html.EditorFor(model => model.NoOfStudent, new { htmlAttributes = new { @class = "form-control", @id = "NoOfStudent", @readonly = "readonly" } })
+                           @Html.ValidationMessageFor(model => model.NoOfStudent, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+               </div>
+               <br />
+               <div class="row">
+                   <div class="bootstrap-timepicker col-md-4">
+                       <div class="form-group">
+                           <label>Start Time </label>
+                           <div class="input-group date" id="startTimepicker" data-target-input="nearest">
+                               <input type="text" id="startTime" name="StartTime" class="form-control datetimepicker-input" data-target="#startTimepicker" value="@ViewBag.StartTime" />
+                               <div class="input-group-append" data-target="#startTimepicker" data-toggle="datetimepicker">
+                                   <div class="input-group-text"><i class="far fa-clock"></i></div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="bootstrap-timepicker col-md-4">
+                       <div class="form-group">
+                           <label>End Time </label>
+                           <div class="input-group date" id="endTimepicker" data-target-input="nearest">
+                               <input type="text" id="endTime" name="EndTime" class="form-control datetimepicker-input" data-target="#endTimepicker" value="@ViewBag.EndTime" />
+                               <div class="input-group-append" data-target="#endTimepicker" data-toggle="datetimepicker">
+                                   <div class="input-group-text"><i class="far fa-clock"></i></div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.ExpectedDate,"Expected Date")
+                           @Html.EditorFor(model => model.ExpectedDate, new { htmlAttributes = new { @class = "form-control", min = DateTime.Now.ToString("yyyy-MM-dd"), required = "required" }, id = "ExpectedDate" })
+                           @Html.ValidationMessageFor(model => model.ExpectedDate, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+               </div>
+               <br />
+               <div class="row">
+                   <div class="input-group" hidden>
+                       @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                       <div class="col-md-8">
+                           @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" }, id = "EndDate" })
+                           @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.LabName,"Lab Name")
+                           <select id="LabCode" name="LabName" class="form-control" required="required"></select>
+                           @Html.ValidationMessageFor(model => model.LabName, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+
+                   <div class="col-md-4">
+                       <div class="form-group">
+                           @Html.LabelFor(model => model.LabCapacity,"Lab Capacity")
+                           <label id="Labcapacity" name="LabCapacity" class="form-control" required="required" readonly="readonly"></label>
+                           @Html.ValidationMessageFor(model => model.LabCapacity, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+
+                   <div class="col-md-4">
+                       @Html.LabelFor(model => model.StaffCode, "Demo ArrangedBy")
+                       <div class="form-group">
+                           @Html.DropDownListFor(Model => Model.StaffCode, new SelectList(ViewBag.Staff, "Value", "Text"), "----Staff Name----", new { @class = "form-control" })
+                           @Html.ValidationMessageFor(model => model.StaffCode, "", new { @class = "text-danger" })
+                       </div>
+                   </div>
+               </div>
+               <br />
+               <br />
+               <div class="form-row text-center" style="margin-left: 20px;margin-bottom:15px">
+                   <div class="col-12">
+                       <input type="submit" class="btn btn-success btn-sm" value="Save" id="saveButton" />
+                       <input type="button" value="Cancel" class="btn btn-danger btn-sm" id="CancelDemo" />
+                   </div>
+               </div>
+               <div>
+                   <a href="@Url.Action("ListDemoKKAsync", "Coordinator")" class="icon" title="Back To List">
+                       <!-- Embed the video element -->
+                       <video width="35" height="35" playsinline loop>
+                           <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                       </video>
+                   </a>
+               </div>
+           </div>        
+       </div>
+
+      
+       
+   </body>
+  </html>
+}

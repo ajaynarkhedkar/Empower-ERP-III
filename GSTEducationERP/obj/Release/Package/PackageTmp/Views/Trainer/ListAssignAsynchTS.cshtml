@@ -1,0 +1,132 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "ListAssignAsynchTS";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table id="allTestTable" class="table table-bordered">
+    <thead>
+        <tr>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.AssignTestId)
+            </th>
+            <th>
+                Course Name
+            </th>
+            <th>
+                Topic Name
+            </th>
+            <th>
+                Test Name
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Total Marks
+            </th>
+            <th>
+                Batch Name
+            </th>
+            <th>Action</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AssignTestList)
+        {
+            <tr>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.AssignTestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TopicName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TestName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalMarks)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchName)
+                </td>
+                <td>
+
+
+                    <a href="#" class="sectionEditLink" data-id="@item.AssignTestId"
+                       data-url="@Url.Action("UpdateAssignTestAsnchTS", "Trainer", new { id = item.AssignTestId } )"
+                       data-toggle="modal" data-target="#SectionModal">
+                        <video width="35" height="35" playsinline loop><source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" /></video>
+
+                    </a>
+                    
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<div class="modal fade" id="SectionModal">
+    <div class="modal-dialog" style="background-color: white; max-width: fit-content;">
+        <div class="modal-content" style="background-color: white;">
+            
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will be loaded dynamically here -->
+            </div>
+        </div>
+    </div>
+
+
+<!-- jQuery -->
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
+
+<script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="~/Content/plugins/jszip/jszip.min.js"></script>
+<script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#allTestTable').on('click', '.sectionEditLink', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#SectionModal .modal-body').html(data);
+                    $('#SectionModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+

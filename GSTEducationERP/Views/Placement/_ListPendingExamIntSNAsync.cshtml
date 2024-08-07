@@ -1,0 +1,182 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+	<!--<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- Bootstrap 4 -->
+	<!--@*<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+	<script src="~/Content/plugins/moment/moment.min.js"></script>-->
+	<!-- Tempusdominus Bootstrap 4 -->
+	<!--<script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>-->
+	<script src="~/Content/Admin/js/Icon.js"></script>
+	<style>
+		.error-field {
+			border: 2px solid red; /* Add your preferred styling for highlighting */
+		}
+
+		label:not(.form-check-label):not(.custom-file-label) {
+			font-size: 14px;
+		}
+
+		.form-control {
+			font-size: 14px !important;
+		}
+
+		.input-group > .custom-file {
+			font-size: 14px !important;
+		}
+
+		.btn:not(:disabled):not(.disabled) {
+			font-size: 14px !important;
+		}
+
+		.text-danger {
+			font-size: 12px !important;
+		}
+	</style>
+</head>
+<body>
+	
+	<div class="card">
+		<div class="card-body">
+			<table id="internalPendingExams" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th hidden="hidden">
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.CourseName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.BatchName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.ExamName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.SupervisorName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.LabName)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TimeString)
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.DateString)
+						</th>
+						<th>
+							Duration(hh:mm)
+
+							@*@Html.DisplayNameFor(model => model.FormattedDuration)*@
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.TotalMarks)
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					@if (Model != null && Model.lstPendingExams != null)
+					{
+						for (int i = 0; i < Model.lstPendingExams.Count; i++)
+						{
+							var item = Model.lstPendingExams[i];
+							<tr>
+								<td hidden="hidden">
+									@Html.HiddenFor(modelItem => item.AssignExamId)
+
+								</td>
+
+								<td>
+									@Html.DisplayFor(modelItem => item.CourseName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.BatchName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ExamName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.SupervisorName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.LabName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.TimeString)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DateString)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.FormattedDuration)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.TotalMarks)
+								</td>
+								<td style="text-align: center;">
+									<a href="#" class="icon" data-toggle="modal" data-target="#resultModal" data-id="@item.AssignExamId" data-action="Edit Assigned Exam" title="Edit">
+										<!-- Embed the video element -->
+										<video width="25" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4">
+										</video>
+									</a>
+								</td>
+							</tr>
+						}
+
+					}
+				</tbody>
+			</table>
+		</div>
+
+
+	</div>
+	<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title " id="resultModalLabel">Edit Pending Exam</h3>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="background-color:transparent">
+
+					<!-- Result form content will be loaded here -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function () {
+
+			$('.icon, .icon1').click(function () {
+
+				var id = $(this).data('id');
+
+				// Load partial view into modal body
+				var url = '/Placement/UpdateAssignedExamIntStuAsyncSN?id=' + id;
+
+				// Clear previous content before loading new content
+				$('#resultModal .modal-body').empty();
+
+				// Load the new content into modal body
+				$('#resultModal .modal-body').load(url, function (response, status, xhr) {
+					console.log('Load Status:', status);
+					if (status === "error") {
+						console.log('Error:', xhr.status, xhr.statusText);
+					}
+				});
+			});
+		});
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+<br>
+<head>
+    <link href="~/Content/Coordinator/css/DetailesCSS.css" rel="stylesheet" />
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        img {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<div class="container-fluid">
+    <div class="card " style="padding:5px;margin-right:-10px;margin-left:-10px; margin-top:-15px">
+        <div style="display: flex; flex-direction: column; text-align: left; padding: 10px;">
+
+            <div class="input-group" style="display: flex; justify-content: left;">
+                <label class="col-md-4">Batch Code:</label>
+                <span class="col-md-8">@Model.BatchCode</span>
+            </div>
+
+            <div class="input-group" style="display: flex; justify-content: left;">
+                <label class="col-md-4">Batch Name:</label>
+                <span class="col-md-8">@Model.BatchName</span>
+            </div>
+
+            <div style="display: flex; justify-content: left;">
+                <label class="col-md-4">Course Name:</label>
+                <span class="col-md-8">@Model.CourseName</span>
+            </div>
+            <div style="display: flex; justify-content:  left;">
+                <label class="col-md-4">Students:</label>
+                <span class="col-md-8">@Model.NoOfStudent</span>
+            </div>
+            <div style="display: flex; justify-content: left;">
+                <label class="col-md-4">Created Date:</label>
+                <span class="col-md-8">
+                    @Html.DisplayFor(model => model.CreateDate)
+                </span>
+            </div>
+            <div style="display: flex; justify-content: left;">
+                <label class="col-md-4">Created By:</label>
+                <span class="col-md-8">@Model.StaffName</span>
+            </div>
+            <div style="display: flex; justify-content: left;">
+                <label class="col-md-4">Status:</label>
+                <span class="col-md-8">@Model.Status</span>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12 text-center">
+                    <input type="button" style="margin-top:50px" value="Close" id="cancelButton" class="btn btn-danger btn-sm" onclick="location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")'" />
+
+                </div>
+            </div>
+        </div>
+        <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; " onclick="location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")'">
+            <video width="35" height="35" playsinline loop>
+                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+            </video>
+        </a>
+    </div>
+</div>
+
+@*<script>
+    function showCancelConfirmation() {
+        // Using SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            //text: 'You will not be able to undo this action!',
+            icon: 'warning',
+            //showCancelButton: true,
+            confirmButtonColor: '#d33',
+            //cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Add any form cancellation logic here if needed
+
+                // Redirect to the specified URL
+                window.location.href = '@Url.Action("ListAllBatchAsyncST", "Bind")';
+            }
+        });
+    }
+</script>*@

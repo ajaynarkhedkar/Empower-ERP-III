@@ -1,0 +1,175 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "CoordinatorDashboardPRAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+
+}
+
+<div class="card-body">
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <!-- Display the first 7 counts in a single column -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <span class="count" id="studentCount">@Html.ViewBag.StudentId</span>
+                            <p>Total Students</p>
+                        </div>                     
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <span class="count" id="batchCount">@Html.ViewBag.BatchId</span>
+                            <p>Total Batches</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <span class="count" id="activebatchCount">@Html.ViewBag.ActiveBatches</span>
+                            <p>Active Batches</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <span class="count" id="releasedbatchCount">@Html.ViewBag.ReleasedBatches</span>
+                            <p>Released Batches</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6" style="padding-left: 10px; margin-left: 150px;">
+                    <!-- small box -->
+                    <div class="small-box bg-purple">
+                        <div class="inner">
+                            <span class="count" id="courseCount">@Html.ViewBag.CourseId</span>
+                            <p>Total Courses</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <span class="count" id="labCount">@Html.ViewBag.LabId</span>
+                            <p>Total Lab</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-gradient-gray">
+                        <div class="inner">
+                            <span class="count" id="eventCount">@Html.ViewBag.EventId</span>
+                            <p>Total Event</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display two charts side by side in a single row -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="container1" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <br />
+                        <h3 class="card-title" style="font-size: 1.4em; color: rgb(51, 51, 51); font-weight: bold; text-align: center;">Fees Counts</h3>
+                        <hr />
+                        <canvas id="pieChartCanvas" style="min-width: 310px; height: 415px; max-width: 600px; margin: 0 auto"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Load Highcharts script -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- Load Chart.js script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Script for the first chart -->
+<script>
+    var activeBatchData = @Html.Raw(Json.Encode(ViewBag.ActiveBatch));
+    var xAxisCategories = @Html.Raw(Json.Encode(ViewBag.XAxisCategories));
+
+    // Draw the first chart using Highcharts
+    Highcharts.chart('container1', {
+        chart: {
+            type: 'column',
+            height: 400 // Set the desired height for the chart
+        },
+        title: {
+            text: 'Active Batches'
+        },
+        xAxis: {
+            categories: xAxisCategories
+        },
+        series: [{
+            type: 'column',
+            color: '#3366cc', // Set the desired color for all bars
+            data: activeBatchData,
+            showInLegend: false
+        }]
+    });
+</script>
+
+
+
+<!-- Script for the second chart -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var paidCount = '@ViewBag.PaidCount';
+        var unpaidCount = '@ViewBag.UnpaidCount';
+        var partialCount = '@ViewBag.PartialCount';
+
+        // Parse the counts as integers
+        paidCount = parseInt(paidCount);
+        unpaidCount = parseInt(unpaidCount);
+        partialCount = parseInt(partialCount);
+
+        // Draw the pie chart using Chart.js
+        var ctx = document.getElementById('pieChartCanvas').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Paid Fees', 'Registration Fees', 'Outstanding Fees'],
+                datasets: [{
+                    data: [paidCount, unpaidCount, partialCount],
+                    backgroundColor: ['brown', 'multicolor', 'pink'], // Add color for 'Partial Fees'
+                }]
+            },
+            options: {
+                responsive: true,
+                // Remove maintainAspectRatio and height options
+            }
+        });
+    });
+</script>

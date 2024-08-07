@@ -1,0 +1,526 @@
+﻿
+@{
+    ViewBag.Title = "ListAllCompanyAsyncPB";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<html lang="en" style="height: auto;">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<!-- Theme style -->
+	<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+	<link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+	<style>
+		h2 {
+			padding-top: 10px;
+			margin-bottom: 8px;
+			font-family: Verdana;
+			font-weight: bold;
+			font-size: medium;
+			color: #33CCCC;
+		}
+
+		.dataTables_wrapper .btn-secondary {
+			color: #235;
+			background-color: transparent !important;
+			border-color: transparent;
+			font-size: x-large;
+			margin: 0px !important;
+		}
+
+		.card-primary.card-outline-tabs > .card-header a.active {
+			border-top: 3px solid #33CCCC;
+		}
+
+		a {
+			color: #33CCCC;
+		}
+
+		.card.card-outline-tabs .card-header a:hover {
+			color: #33CCCC;
+		}
+
+		.card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+			border-top: 3px solid #33CCCC;
+		}
+
+		.card-body {
+			font-family: Calibri !important;
+			padding-bottom: 0px !important;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		th {
+			background-color: #33CCCC;
+			color: #000;
+			text-align: center !important;
+		}
+
+		td {
+			text-align: center;
+			color: black !important;
+		}
+
+		.table td {
+			padding: 0px 0px 0px 0px !important;
+			font-size: 14px !important;
+		}
+
+		.table th {
+			padding: 5px 5px 4px 10px !important;
+			font-size: 14px !important;
+		}
+
+		table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+			font-size: xx-small !important;
+		}
+
+		div.dataTables_wrapper div.dataTables_filter {
+			/*margin-top: -40px !important;*/
+		}
+
+		div.dt-buttons {
+			/*margin-top: -20px !important;*/
+		}
+
+		.btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+			padding-left: 5px !important;
+			padding-right: 5px !important;
+		}
+
+		div.dataTables_wrapper div.dataTables_filter label {
+			font-size: small !important;
+		}
+
+		div.dataTables_wrapper div.dataTables_filter input {
+			height: 20px !important;
+		}
+
+		div.dataTables_wrapper div.dataTables_info {
+			padding: 0px !important;
+			font-size: small !important;
+		}
+
+		div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+			/*margin-top: -20px !important;*/
+		}
+
+		div.dataTables_wrapper div.dataTables_paginate {
+			font-size: small !important;
+		}
+
+		.page-item.active .page-link {
+			z-index: 3;
+			color: #fff;
+			background-color: #64bbc9;
+			border-color: #007bff;
+		}
+	</style>
+</head>
+<body style="margin: 0; padding: 0;">
+	@using (Html.BeginForm("FilterDateCompanyPB", "Placement"))
+	{
+		<br />
+		<div class="card">
+			<div class="card-body" style="padding-top:0px; ">
+				<div class="row">
+					<div class="col-md-6 text-left mt-1" style="padding-left:20px;">
+						<h2>Company List</h2>
+					</div>
+
+					<div class="col-md-6 text-right mt-1" style="padding-right:10px;">
+						<a href="/Placement/RegisterCompanyAsyncPB" title="Create New Company">
+							<img src="~/Content/Admin/icon/add-button.png" style="height:30px; width:30px;" />
+						</a>
+					</div>
+				</div>
+				<hr />
+
+				<div class="row">
+
+					<div class="col-md-4" style="display:flex">
+						<label style="font-size: 15px;" class="col-md-4">Date To Date</label>
+						<input type="text" name="datefilter" id="datefilter" value="" class="form-control w-75 col-md-6" title="Filter Date" />
+					</div>
+					<div class="col-md-4 form-group" style="width:fit-content;display:flex">
+						<label style="font-size: 15px;" class="col-md-3">Industry</label>
+						<select class="form-control select2 col-md-6" name="InduastryId" id="InduastryId">
+							<option value="" disabled selected>-select Industry-</option>
+							@foreach (System.Data.DataRow Data in ViewBag.Induastry.Tables[0].Rows)
+							{
+								<option value="@Data["InduastryId"]">@Data["InduastryName"]</option>
+							}
+						</select>
+					</div>
+					<div class="col-md-4 form-group" style="width:fit-content;display:flex;">
+						<label style="font-size: 15px;" class="col-md-4">Company</label>
+						<select class="form-control col-md-6" id="company" name="company">
+						</select>
+					</div>
+
+				</div>
+				<hr />
+				@*<div class="card">*@
+				<table id="example1" class="table table-bordered table-striped" style="padding-left: 10px;">
+					<thead>
+						<tr>
+							<th hidden>CompanyCode</th>
+							<th>Company Name</th>
+							<th>Company RegiDate</th>
+							<th>Industry Name</th>
+							<th>Company Email</th>
+							<th hidden>Address</th>
+							<th hidden>CityName</th>
+							<th>HR1Name</th>
+							<th>Contact</th>
+							<th hidden>Company Description</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (System.Data.DataRow Data in ViewBag.Company.Tables[0].Rows)
+						{
+							<tr>
+
+								<td hidden>@Data["CompanyCode"]</td>
+								<td>@Data["CompanyName"]</td>
+								<td>@Data["CompanyRegiDate"]</td>
+								<td>@Data["InduastryName"]</td>
+								<td>@Data["CompanyEmail"]</td>
+								<td hidden>@Data["Address"]</td>
+								<td hidden>@Data["CityName"]</td>
+								<td>@Data["HR"]</td>
+								<td>@Data["Contact"]</td>
+								<td hidden>@Data["CompanyDescription"]</td>
+								<td>
+
+									<a onclick="UpdateViewModel('@Data["CompanyCode"]')" data-toggle="modal" data-target="#SectionModal" class="icon" title="Edit Company">
+										<video width="35" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+										</video>
+									</a>
+
+									<a onclick="ShowViewModel('@Data["CompanyCode"]')" data-toggle="modal" data-target="#SectionModal" class="icon" title="Company Details">
+										<video width="35" height="25" playsinline loop>
+											<source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+										</video>
+									</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	}
+
+	<div class="modal fade" id="SectionModal" tabindex="-1" role="dialog" aria-labelledby="SectionModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" style="max-width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+                    <h2 class="text-info modal-title"></h2>
+					<button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style=" padding-top:0px;">
+					<!-- Your modal content goes here -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+	<!-- DataTables  & Plugins -->
+	<script src="~/Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+
+	<script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/moment/moment.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+	<script src="~/Content/plugins/jszip/jszip.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/pdfmake/pdfmake.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/pdfmake/vfs_fonts.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+	<script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
+	
+	<script src="~/Content/Admin/js/Icon.js"></script>
+
+
+	<script type="text/javascript">
+        function ShowViewModel(CompanyCode) {
+            // Make an AJAX call to load the content of TrainerEditsection view
+            $.ajax({
+                url: '/Placement/DetailsCompanyAsyncPB',
+                type: 'GET',
+                data: {
+                    CompanyCode: CompanyCode
+                },
+                success: function (data) {
+                    $('#SectionModal .modal-body').html(data);
+                    $('#SectionModal .modal-header h2').text('Details Company');
+                }
+            });
+        }
+
+        function UpdateViewModel(CompanyCode) {
+            // Make an AJAX call to load the content of TrainerEditsection view
+            $.ajax({
+                url: '/Placement/UpdateCompanyAsyncPB',
+                type: 'GET',
+                data: {
+                    CompanyCode: CompanyCode
+                },
+                success: function (data) {
+                    $('#SectionModal .modal-body').html(data);
+                    $('#SectionModal .modal-header h2').text('Edit Company');
+                }
+            });
+        }
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+
+            function ShowViewModel(CompanyCode)
+            {
+                // Make an AJAX call to load the content of TrainerEditsection view
+                $.ajax({
+                    url: 'Placement/DetailsCompanyAsyncPB',
+                    type: 'GET',
+                    data: {
+                        CompanyCode: CompanyCode
+                    },
+                    success: function (data) {
+                        $('#SectionModal .modal-body').html(data);
+                        $('#SectionModal').modal('show');
+                    }
+                });
+            }
+
+            $('.sectionEditLink').mouseenter(function () {
+                $(this).find('video')[0].play();
+                $(this).addClass('running');
+            });
+
+            $('.sectionEditLink').mouseleave(function () {
+                var video = $(this).find('video')[0];
+                video.pause();
+                video.currentTime = 0; // Reset the video to the beginning
+                $(this).removeClass('running');
+            });
+
+            var table = $('#example1').DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": true, pageLength: 10,
+                lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                        titleAttr: 'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="20" width="25" />',
+                        titleAttr: 'CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                        titleAttr: 'PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                        titleAttr: 'Print'
+                    },
+                ]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+            $(function () {
+
+                $('input[name="datefilter"]').daterangepicker({
+                    autoUpdateInput: false,
+                    locale: {
+                        //cancelLabel: 'Clear'
+                    }
+                });
+
+                $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+             var startDate = picker.startDate.format('MM/DD/YYYY');
+                   var endDate = picker.endDate.format('MM/DD/YYYY');
+                    $(this).val(startDate + ' - ' + endDate);
+                    filterTable(startDate, endDate);
+                });
+
+                function AppendData(result)
+                {
+                    $("#example1 > tbody").html("");
+
+                    for (var i = 0; i < result.length; i++) {
+
+                        var data = '<tr>' +
+
+                            '<td hidden><input type="hidden" name="CompanyCode" value="' + result[i]["CompanyCode"] + '"></td>' +
+                            '<td>' + result[i]["CompanyName"] + '</td>' +
+                            '<td>' + result[i]["CompanyRegiDate"] + '</td>' +
+                            '<td>' + result[i]["InduastryName"] + '</td>' +
+                            '<td>' + result[i]["CompanyEmail"] + '</td>' +
+                            '<td hidden>' + result[i]["Address"] + '</td>' +
+                            '<td>' + result[i]["HR"] + '</td>' +
+                            '<td hidden>' + result[i]["CityName"] + '</td>' +
+                            '<td>' + result[i]["Contact"] + '</td>' +
+                            '<td hidden>' + result[i]["CompanyDescription"] + '</td>' +
+                            '<td class="text-center" style="width:100px;">' +
+                            '<a onclick="UpdateViewModel(\'' + result[i]["CompanyCode"] + '\')" data-toggle="modal" data-target="#SectionModal" class="icon">' +
+                            '<video width="35" height="25" playsinline loop>' +
+                            '<source src="/Content/Admin/icon/Edit Details.mp4" type="video/mp4" title="Edit Company"></source>' +
+                            '</video></a>' +
+
+                            '<a onclick="ShowViewModel(\'' + result[i]["CompanyCode"] + '\')" data-toggle="modal" data-target="#SectionModal" class="icon">' +
+                            '<video width="35" height="25" playsinline loop>' +
+                            '<source src="/Content/Admin/icon/view.mp4" type="video/mp4" title="View Company"></source>' +
+                            '</video></a>' +
+
+                            '</a>' + '</td>' + '</tr>';
+
+                        $('#example1').prepend(data);
+                    }
+                }
+
+                function filterTable(startDate, endDate) {
+					
+                 $.ajax({
+                   url: '@Url.Action("FilterDateCompanyPB","Placement")',
+                    type: 'Post',
+                     data: {
+						 startDate: startDate,
+						 endDate: endDate
+					 }, 
+                     success: function (response) {
+                         var result = JSON.parse(response);
+                         AppendData(result);
+
+                     },
+                        error: function () {
+                        alert('An error occurred while processing your request.');
+                          }
+                  });
+                        }
+
+                $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+                    $(this).val('');
+                });
+            });
+
+            $('#company').on('change', function (e) {
+                var CompanyCode = $('#company').val();
+                // First AJAX call
+                $.ajax({
+                    url: "/Placement/FilterDataCompanyCodePB",
+                    type: 'Post',
+                    data: {
+                        CompanyCode: CompanyCode
+                    },
+                    success: function (response) {
+                        var result = JSON.parse(response);
+                        AppendData1(result);
+                    },
+                });
+            });
+
+        $('#InduastryId').on('change', function (e) {
+            var Induastry = $('#InduastryId').val();
+
+            // First AJAX call
+            $.ajax({
+                url: "/Placement/GetInduastryIdforFilter",
+                type: 'Post',
+                data: {
+                    Induastry: Induastry
+                },
+                success: function (response) {
+                    var v = "<option disabled selected>--select Company--</option>";
+                    var result = JSON.parse(response);
+                    for (var i = 0; i < result.length; i++) {
+                        v += "<option value=" + result[i]["CompanyCode"] + ">" + result[i]["CompanyName"] + "</option>";
+                    }
+                    $("#company").html(v);
+                },
+            });
+
+            // Second AJAX call
+            $.ajax({
+                url: "/Placement/FilterDataCompanyOnInduastryIdPB",
+                type: 'Post',
+                data: {
+                    Induastry: Induastry
+                },
+                success: function (response) {
+                    var result = JSON.parse(response);
+                    AppendData1(result);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        });
+        });
+        function AppendData1(result) {
+            $("#example1 > tbody").html("");
+
+
+            for (var i = 0; i < result.length; i++) {
+                var data = '<tr>' +
+                    '<td hidden><input type="hidden" name="CompanyCode" value="' + result[i]["CompanyCode"] + '"></td>' +
+                    '<td>' + result[i]["CompanyName"] + '</td>' +
+                    '<td>' + result[i]["CompanyRegiDate"] + '</td>' +
+                    '<td>' + result[i]["InduastryName"] + '</td>' +
+                    '<td>' + result[i]["CompanyEmail"] + '</td>' +
+                    '<td hidden>' + result[i]["Address"] + '</td>' +
+                    '<td>' + result[i]["HR"] + '</td>' +
+                    '<td hidden>' + result[i]["CityName"] + '</td>' +
+                    '<td>' + result[i]["Contact"] + '</td>' +
+                    '<td hidden>' + result[i]["CompanyDescription"] + '</td>' +
+                    '<td class="text-center" style="width:100px;">' +
+
+                    '<a onclick="UpdateViewModel(\'' + result[i]["CompanyCode"] + '\')" data-toggle="modal" data-target="#SectionModal" class="icon">' +
+                    '<video width="35" height="35" playsinline loop>' +
+                    '<source src="/Content/Admin/icon/Edit Details.mp4" type="video/mp4" title="Edit Company"></source>' +
+                    '</video></a>' +
+
+                         '<a onclick="ShowViewModel(\'' + result[i]["CompanyCode"] + '\')" data-toggle="modal" data-target="#SectionModal" class="icon">' +
+                        '<video width="35" height="35" playsinline loop>' +
+                          '<source src="/Content/Admin/icon/view.mp4" type="video/mp4" title="View Company"></source>' +
+                          '</video></a>' +
+                             '</td>' + '</tr>';
+
+                $('#example1').prepend(data);
+            }
+        }
+
+        function viewDetails(row) {
+
+            var rowData = result[9];
+        }
+	</script>
+</body>
+</html>
+

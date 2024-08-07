@@ -1,0 +1,95 @@
+﻿@model GSTEducationERPLibrary.Bind.Bind
+
+<html>
+<head>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+    <style>
+        .btn-green:hover {
+            color: white;
+            background: #2b83cb;
+        }
+
+        .btn-black {
+            color: white;
+            background: rgb(169,169,169);
+        }
+
+            .btn-black:hover {
+                background: black;
+            }
+
+        .timer {
+            position: absolute;
+            left: calc(50% - 120px / 2);
+            width: 120px;
+            height: 120px;
+            opacity: 0;
+        }
+
+        .flex {
+            display: flex;
+            font: xx-small;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="pl-3">Contact Details</h2> <hr />
+    <div class="card-body mb-4" style=" padding-top: 0px;">
+        <div class="row mt-4 col-md-10">
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">Type :</label>
+                <span id="TypeId" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["Type"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">Name :</label>
+                <span id="FullName" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["Name"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">Contact :</label>
+                <span id="ContactNumber" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["Contact"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">Email :</label>
+                <span id="EmailId" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["EmailId"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">Country :</label>
+                <span id="CountryName" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["Country"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">State :</label>
+                <span id="StateName" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["State"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-3">City :</label>
+                <span id="City" class="form-control-plaintext col-md-9">@ViewBag.ContacEdit.Tables[0].Rows[0]["City"]</span>
+            </div>
+
+            <div class="col-md-6 form-group flex">
+                <label class="col-md-4">Address :</label>
+                <span id="presentaddress" class="form-control-plaintext col-md-8">@ViewBag.ContacEdit.Tables[0].Rows[0]["Address"]</span>
+            </div>
+
+            <input type="hidden" id="Id" name="Id" value="@ViewBag.ContacEdit.Tables[0].Rows[0]["Id"]" required />
+        </div>
+
+        <div class="text-left">
+            <a href="/Bind/ListContactAsyncPB" class="icon">
+                <video width="25" height="25" playsinline loop title="Back">
+                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                </video>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+@{
+    ViewBag.Title = "ViewTestimonialPD";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<style>
+    /* Define custom styles */
+    .placement-details {
+        margin-bottom: 20px;
+        border: 2px solid #ccc;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Customize the video and audio elements */
+    video, audio {
+        width: 100%;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    h2 {
+        padding-top: 10px;
+        margin-bottom: 10px;
+        font-family: Verdana;
+        font-weight: bold;
+        font-size: medium;
+        color: #33CCCC;
+    }
+</style>
+<style>
+    .card-primary.card-outline-tabs > .card-header a.active {
+        border-top: 3px solid #33CCCC;
+    }
+
+    a {
+        color: #33CCCC;
+    }
+
+    .card.card-outline-tabs .card-header a:hover {
+        color: #33CCCC;
+    }
+
+    .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+        border-top: 3px solid #33CCCC;
+    }
+
+    .card-body {
+        font-family: Calibri !important;
+        padding-bottom: 0px !important;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
+
+<div class="placement-details">
+	<h2>View Testimonial</h2>
+	<hr />
+	<table>
+		<tr>
+			<th>Student Name :</th>
+			<td>@Html.DisplayFor(model => model.StudentName)</td>
+		</tr>
+		<tr>
+			<th>Saved Date :</th>
+			<td>@Html.DisplayFor(model => model.TodayDate)</td>
+		</tr>
+		<tr>
+			<th>Qualification :</th>
+			<td>@Html.DisplayFor(model => model.Qualification)</td>
+		</tr>
+		<tr>
+			<th>Company Name :</th>
+			<td>@Html.DisplayFor(model => model.CompanyName)</td>
+		</tr>
+		<tr>
+			<th>Designation Name :</th>
+			<td>@Html.DisplayFor(model => model.DesignationName)</td>
+		</tr>
+		<tr>
+			<th>CTC :</th>
+			<td>@Html.DisplayFor(model => model.CTC)</td>
+		</tr>
+		<tr>
+			<th><label>Joining Date :</label></th>
+			<td>@Html.DisplayFor(model => model.JoiningDatePM)</td>
+		</tr>
+		<tr>
+			<th>Location :</th>
+			<td>@Html.DisplayFor(model => model.Location)</td>
+		</tr>
+		<tr>
+			<th>Comment :</th>
+			<td>@Html.DisplayFor(model => model.Comment)</td>
+		</tr>
+		<tr>
+			<th>Video :</th>
+			<td>
+				<div>
+					@Html.ValidationMessageFor(model => model.Video, "", new { @class = "text-danger" })
+					@if (!string.IsNullOrEmpty(Model.Video))
+					{
+						<video controls width="200" height="200">
+							<source src="@Url.Content(Model.Video)" type="video/mp4">
+							Your browser does not support the video tag.
+						</video>
+					}
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>Audio :</th>
+			<td>
+
+				<div>
+					@Html.ValidationMessageFor(model => model.Audio, "", new { @class = "text-danger" })
+					@if (!string.IsNullOrEmpty(Model.Audio))
+					{
+						<audio controls>
+							<source src="@Url.Content(Model.Audio)" type="audio/mpeg">
+							Your browser does not support the audio tag.
+						</audio>
+					}
+
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>PDF :</th>
+			<td>
+				<div>
+					@Html.ValidationMessageFor(model => model.Pdf, "", new { @class = "text-danger" })
+					@if (!string.IsNullOrEmpty(Model.Pdf))
+					{
+						<embed src="@Url.Content(Model.Pdf)" type="application/pdf" width="100%" height="300px" />
+					}
+				</div>
+			</td>
+		</tr>
+	</table>
+	<div class="col-md-1">
+		<a href="@Url.Action("ListTestimonialPD")" class="back-link">
+			<video width="30" height="30" playsinline loop>
+				<source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+			</video>
+		</a>
+	</div>
+</div>
+
+    

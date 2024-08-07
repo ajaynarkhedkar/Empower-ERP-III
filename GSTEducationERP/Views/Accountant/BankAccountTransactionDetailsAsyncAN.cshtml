@@ -1,0 +1,84 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+
+<head>
+    <script src="/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <style>
+        .card {
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 8px;
+        }
+
+            td p {
+                margin: 0;
+            }
+
+        strong {
+            font-weight: bold;
+        }
+    </style>
+    <style>
+        thead th {
+            position: sticky;
+            top: 0;
+ 
+            z-index: 2;
+        }
+
+        tbody tr td:first-child, thead tr th:first-child {
+            position: sticky;
+            left: 0;
+
+            z-index: 1;
+        }
+
+        .credit-text {
+            color: red !important;
+        }
+
+        .debit-text {
+            color: green !important;
+        }
+    </style>
+
+
+
+</head>
+<div>
+    <div class="card">
+
+        <table>
+            <tr>
+                <td><p><strong>Bank Name:</strong> @Model.BankName</p></td>
+                <td><p><strong>Branch:</strong> @Model.BankBrach</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Bank Opening Date:</strong> @Model.BankAccountOpeningDate</p></td>
+                <td><p><strong>Account Type:</strong> @Model.AccountType</p></td>
+
+            </tr>
+            <tr>
+                <td><p><strong>Account Holder:</strong> @Model.AccountHolderName</p></td>
+                <td><p><strong>Account Number:</strong> @Model.BankAccountNumber</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>IFSC Code:</strong> @Model.IFSCCode</p></td>
+                <td><p><strong>MICR Code:</strong> @Model.MICRCode</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Closing Balace:</strong> @String.Format("{0:N2} ₹", Model.BankAmount)</p></td>
+                <td><p><strong>Opening Balance:</strong> @String.Format("{0:N2} ₹", Model.BankAccountOpeningBalance)</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Minimum Balace:</strong> @String.Format("{0:N2} ₹", Model.BankAccountMinimumBalance)</p></td>
+                <td><p><strong>Bank Account Added Date:</strong> @Model.Date</p></td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>

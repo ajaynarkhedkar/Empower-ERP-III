@@ -1,0 +1,109 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+   // ViewBag.Title = "ListConductedTestAsyncTS";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+    // Layout = "~/Views/Shared/_LayoutTrainer.cshtml";
+}
+
+
+
+<table id="example2" class="table table-bordered">
+    <thead>
+        <tr>
+            <th hidden>AssignTestId</th>
+            <th>Course Name</th>
+            <th>Batch Name</th>
+            <th>Test Name</th>
+            <th>Staff Name</th>
+            <th>Lab Name</th>
+            <th>Test Date</th>
+            <th>Test Time</th>
+            <th hidden>Topic Name</th>
+            <th>Duration</th>
+            <th>Total Marks</th>
+            <th hidden>Status</th>
+            <th hidden>Batch Code</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ConductedTestList)
+        {
+            <tr>
+                <td hidden>@Html.DisplayFor(modelItem => item.AssignTestId)</td>
+                <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
+                <td>@Html.DisplayFor(modelItem => item.BatchName)</td>
+                <td>@Html.DisplayFor(modelItem => item.TestName)</td>
+                <td>@Html.DisplayFor(modelItem => item.StaffName)</td>
+                <td>@Html.DisplayFor(modelItem => item.LabName)</td>
+                <td>@item.TestDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.TestTime.ToString("HH:mm")</td>
+                <td hidden>@Html.DisplayFor(modelItem => item.TopicName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Duration)</td>
+                <td>@Html.DisplayFor(modelItem => item.TotalMarks)</td>
+                <td hidden>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td hidden>@Html.DisplayFor(modelItem => item.BatchCode)</td>
+                <td>
+                    @if (item.TestResultExists)
+                    {
+                        @*@Html.ActionLink("View Result", "ViewRResutltTSAsynch", new { id = item.AssignTestId }, new { @class = "btn btn-primary btn-sm" })*@
+                        <a href="#" class="sectionEditLink" data-id="@item.TestId"
+                           data-url="@Url.Action("ViewRResutltTSAsynch", "Trainer", new { id = item.AssignTestId } )"
+                           data-toggle="modal" data-target="#SectionModal">
+                            <video width="35" height="35" playsinline loop><source src="~/Content/Admin/icon/view.mp4" type="video/mp4" /></video>
+                        </a>
+
+                    }
+                    else
+                    {
+                        @*@Html.ActionLink("Add Result", "AddRResutltTSAsynch", new { id = item.AssignTestId }, new { @class = "btn btn-success btn-sm" })*@
+                        <a href="#" class="sectionEditLink" data-id="@item.TestId"
+                           data-url="@Url.Action("AddRResutltTSAsynch", "Trainer", new { id = item.AssignTestId } )"
+                           data-toggle="modal" data-target="#SectionModal">
+                            <video width="35" height="35" playsinline loop><source src="~/Content/Admin/icon/add.mp4" type="video/mp4" /></video>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="SectionModal">
+    <div class="modal-dialog" style="background-color: white;max-width:fit-content">
+        <div class="modal-content" style="background-color: white;">
+
+            <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 6px;">&times;</button>
+            <div class="modal-body">
+                <!-- Content will be loaded dynamically here -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery -->
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example2').on('click', '.sectionEditLink', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            var AssignTestId = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#SectionModal .modal-body').html(data);
+                    $('#SectionModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    // Handle errors if any
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

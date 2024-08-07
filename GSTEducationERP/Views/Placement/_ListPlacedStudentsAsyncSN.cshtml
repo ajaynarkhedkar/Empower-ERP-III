@@ -1,0 +1,114 @@
+﻿
+@model GSTEducationERPLibrary.Placement.Placement
+
+<div class="card">
+	<div class="card-body">
+
+		<table id="PlacedStudents" class="table table-bordered table-striped">
+			<thead>
+
+				<tr>
+					<th hidden></th>
+					<th></th>
+					<th>
+						@Html.DisplayNameFor(model => model.StudentName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.CompanyName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.DesignationName)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.CTC)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Experience)
+					</th>
+					<th>
+						@Html.DisplayNameFor(model => model.Location)
+					</th>
+					<th>
+						Action
+					</th>
+
+				</tr>
+			</thead>
+			<tbody>
+
+				@if (Model != null && Model.lstInterviewPerformance != null)
+				{
+					for (int i = 0; i < Model.lstInterviewPerformance.Count; i++)
+					{
+						var item = Model.lstInterviewPerformance[i];
+						<tr>
+							<td hidden>
+								@Html.HiddenFor(modelItem => item.StudentCode)
+							</td>
+							<td >
+								@Html.DisplayFor(modelItem => item.Date)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.StudentName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.CompanyName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.DesignationName)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.CTC)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.Experience)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.Location)
+							</td>
+							<td style="text-align: center;">
+								<a href="#" class="icon" data-toggle="tooltip" title="View Details" data-studentCode="@item.StudentCode" onclick="updateSecondCard('@item.StudentCode')">
+									<video width="25" height="25" playsinline loop>
+										<source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+									</video>
+								</a>
+							</td>
+
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="card">
+	<div id="secondCard" style="display: none;"></div>
+</div>
+
+<script src="~/Content/Admin/js/Icon.js"></script>
+<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+<script>
+
+	function updateSecondCard(studentCode) {
+
+		// Use AJAX to fetch data based on the student code
+		$.ajax({
+			url: '/Placement/DetailsPlacedStudentsAsyncSN', // Replace with the actual controller and action
+			type: 'GET',
+			data: { studentCode: studentCode },
+			success: function (data) {
+				// Update the content of the second card
+				$('#secondCard').html(data);
+				// Show the second card
+				$('#secondCard').show();
+				$('html, body').animate({
+					scrollTop: $('#secondCard').offset().top
+				}, 500);
+			},
+			error: function (error) {
+				console.error('Error fetching data:', error);
+			}
+		});
+	}
+</script>
+

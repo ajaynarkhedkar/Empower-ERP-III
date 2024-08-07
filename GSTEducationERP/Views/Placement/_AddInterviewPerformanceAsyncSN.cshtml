@@ -1,0 +1,199 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+	<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
+	<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+	@*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">*@
+	@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">*@
+	<script src="/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+
+</head>
+<body>
+	<div class="card">
+		<br />
+		@Html.HiddenFor(model => model.PlacementId)
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.StudentName, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.StudentName
+		</div>
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.CompanyName
+		</div>
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.DesignationName, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.DesignationName
+		</div>
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.HR1Name, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.HR1Name
+		</div>
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.Location
+		</div>
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.InterviewDate, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.InterviewDate.ToString("dd-MM-yyyy")
+		</div>
+		<div class="col-md-10">
+			@Html.LabelFor(model => model.Time, htmlAttributes: new { @class = "control-label col-md-5" })
+			@Model.Time.ToString("hh:mm")
+		</div>
+		<div class="col-md-12">
+			@Html.LabelFor(model => model.InterviewRound, htmlAttributes: new { @class = "control-label col-md-4" })
+			@Model.InterviewRound
+		</div>
+		<div class="input-group col-md-12">
+			@Html.LabelFor(model => model.StatusId, "Feedback Status", htmlAttributes: new { @class = "control-label col-md-5" })
+			<div class="col-md-6">
+				@Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.InterviewStatus, "Value", "Text"), "Select Status", new { @class = "form-control col-md-10" })
+				@Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<br />
+		<div class="input-group col-md-12">
+			@Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+			<div class="col-md-6">
+				@Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-12", rows = 2, maxlength = 1000 }) <!-- Adjust 'rows' attribute as needed -->
+				@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<br />
+		<div class="row justify-content-center">
+			<div class="col-md-4 text-center">
+				<!-- Added text-center class for centering content -->
+				<button type="button" class="btn btn-success btn-block" id="btnSave">Save</button>
+			</div>
+		</div>
+		<br />
+	</div>
+	<script>
+		$(document).ready(function () {
+			    var interviewDateStr = '@Model.InterviewDate.ToString("dd-MM-yyyy")';
+        var interviewDateArr = interviewDateStr.split("-");
+        var interviewDateFormatted = interviewDateArr[1] + '-' + interviewDateArr[0] + '-' + interviewDateArr[2];
+
+        var interviewDate = new Date(interviewDateFormatted);
+
+        var today = new Date();
+		
+			if (interviewDate > today) {
+				// Interview date is after today, disable the form or show a message
+				$('#btnSave').prop('disabled', true); // Disable the save button
+				// You can also show a message to inform the user
+				Swal.fire({
+					icon: 'info',
+					title: 'Oops...',
+					text: 'Interview is not done yet...',
+					confirmButtonColor: '#3085d6',
+					confirmButtonText: 'Got it!',
+					background: '#ffffff',
+					customClass: {
+						title: 'text-info',
+						popup: 'bg-light',
+						confirmButton: 'btn btn-info'
+					},
+				}).then(function () {
+					// Close the current window or navigate back to the previous page
+					$('#resultModal').modal('hide');
+					// Alternatively, you can use the following to navigate back to the previous page:
+					//window.history.back();
+				});
+			} else {
+				$('#btnSave').click(function () {
+					// Validate StatusId
+					var statusId = $('#StatusId').val();
+					if (!statusId || statusId === "") {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Please select Status.',
+							confirmButtonColor: '#3085d6',
+							confirmButtonText: 'Got it!',
+							background: '#ffffff',
+							customClass: {
+								title: 'text-danger',
+								popup: 'bg-light',
+								confirmButton: 'btn btn-danger'
+							},
+						});
+						return;
+					}
+					// Validate Description
+					var description = $('#Description').val();
+					if (!description || description.trim() === "") {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Please enter a Description.',
+							confirmButtonColor: '#3085d6',
+							confirmButtonText: 'Got it!',
+							background: '#ffffff',
+							customClass: {
+								title: 'text-danger',
+								popup: 'bg-light',
+								confirmButton: 'btn btn-danger'
+							},
+						});
+						return;
+					}
+					$.ajax({
+					     type: 'POST',
+						 url: '/Placement/AddInterviewPerformanceAsyncSN', // Update with the correct URL
+						  data: {
+						   PlacementId: '@Model.PlacementId',
+							StatusId: $('#StatusId').val(),
+							 Description: $('#Description').val()
+    },
+    success: function (response) {
+        // Handle the success response from the server (if needed)
+        displayToast('Performance Added successfully!', 'success');
+
+        // Wait for the toast to be shown before redirecting
+        setTimeout(function () {
+            window.location.href = '/Placement/ListAllInterviewAsyncSN'; // Replace '/home' with the URL you want to redirect to
+        }, 2000); // Adjust the timeout value as needed
+    },
+    error: function (xhr, status, error) {
+        // Handle the error response from the server
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while adding interview performance.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Got it!',
+            background: '#ffffff',
+            customClass: {
+                title: 'text-danger',
+                popup: 'bg-light',
+                confirmButton: 'btn btn-danger'
+            },
+        });
+    } // Add a closing brace here
+});
+
+				});
+				// If validation passes, you can proceed with saving the data
+			}	// Add your AJAX request or form submission logic here
+		});
+	</script>
+	<script>
+		function displayToast(message, type) {
+			// Display Toastr notification
+			toastr[type](message);
+		}
+
+		toastr.options = {
+			closeButton: true,
+			progressBar: true,
+			positionClass: 'toast-top-right',
+			showMethod: 'slideDown',
+			timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+		};
+	</script>
+</body>
+</html>

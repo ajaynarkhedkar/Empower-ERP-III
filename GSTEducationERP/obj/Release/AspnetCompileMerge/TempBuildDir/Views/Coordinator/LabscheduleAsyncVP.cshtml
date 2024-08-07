@@ -1,0 +1,126 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "LabscheduleAsyncVP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lab Schedule</h2>
+
+
+<table border="1">
+    <tr>
+        <th>Lab Name</th>
+        <th>8am to 9am</th>
+        <th>9am to 10am</th>
+        <th>10am to 11am</th>
+        <th>11am to 12pm</th>
+        <th>12pm to 1pm</th>
+        <th>1pm to 2pm</th>
+        <th>2pm to 3pm</th>
+        <th>3pm to 4pm</th>
+        <th>4pm to 5pm</th>
+        <th>5pm to 6pm</th>
+        <th>6pm to 7pm</th>
+        <th>7pm to 8pm</th>
+    </tr>
+
+    @{
+        var scheduleColors = new Dictionary<string, string>();
+    }
+    @foreach (var lab in Model.lstlabseduleGridvp)
+    {
+        <tr>
+            <td style="font-weight:bold">@lab.LabName</td>
+            @{
+                var timeSlots = new string[12];
+                for (int i = 0; i < timeSlots.Length; i++)
+                {
+                    timeSlots[i] = "";
+                }
+                int scheduleIndex = 1;
+                var scheduleItems = lab.LabSchedule.Split(',');
+                foreach (var schedule in scheduleItems)
+                {
+                    var parts = schedule.Trim().Split('-');
+                    if (parts.Length == 2)
+                    {
+                        var startTime = parts[0].Trim();
+                        var endTime = parts[1].Trim();
+
+                        var startIndex = GetTimeSlotIndex(startTime);
+                        var endIndex = GetTimeSlotIndex(endTime);
+
+                        if (startIndex >= 0 && endIndex >= 0 && endIndex <= timeSlots.Length) // Check array bounds
+                        {
+                            for (int i = startIndex; i < endIndex; i++)
+                            {
+                                if (!string.IsNullOrEmpty(timeSlots[i]))
+                                {
+                                    timeSlots[i] += "<br/>";
+                                }
+                                if (scheduleIndex < scheduleItems.Length) // Check array bounds
+                                {
+                                    timeSlots[i] += scheduleItems[scheduleIndex];
+                                }
+                            }
+
+                            // Assign a unique background color for each schedule data
+                            if (!scheduleColors.ContainsKey(scheduleItems[scheduleIndex]) && scheduleIndex < scheduleItems.Length) // Check array bounds
+                            {
+                                scheduleColors[scheduleItems[scheduleIndex]] = $"#{Guid.NewGuid().ToString().Substring(0, 6)}";
+                            }
+
+                            
+                        }
+                        scheduleIndex += 1;
+                    }
+                }
+            }
+            @foreach (var slot in Enumerable.Range(0, 12))
+            {
+                <td style="background-color: @(string.IsNullOrEmpty(timeSlots[slot]) ? "white" : scheduleColors[timeSlots[slot]])">
+                    @if (string.IsNullOrEmpty(timeSlots[slot]))
+                    {
+                        <a href="#">No schedule</a>
+                    }
+                    else
+                    {
+                        @Html.Raw(timeSlots[slot])
+                    }
+                </td>
+            }
+        </tr>
+    }
+
+</table>
+
+
+
+@functions {
+
+    private int GetTimeSlotIndex(string time)
+    {
+        switch (time)
+        {
+            case "08:00": return 0;
+            case "09:00": return 1;
+            case "10:00": return 2;
+            case "11:00": return 3;
+            case "12:00": return 4;
+            case "13:00": return 5;
+            case "14:00": return 6;
+            case "15:00": return 7;
+            case "16:00": return 8;
+            case "17:00": return 9;
+            case "18:00": return 10;
+            case "19:00": return 11;
+            case "20:00": return 12;
+            //case "21:00": return 13;
+            default: return -1;
+        }
+    }
+}
+
+
+

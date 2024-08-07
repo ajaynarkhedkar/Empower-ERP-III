@@ -1,0 +1,333 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+@{
+    ViewBag.Title = "AddTestimonialPDAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .control-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .text-danger {
+            color: #a94442;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group div {
+            margin-bottom: 10px;
+        }
+
+        /* Additional styles for select element */
+        select.form-control {
+            height: 34px;
+        }
+
+        /* Additional styles for labels */
+        label.form-control {
+            display: inline-block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 0;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .comment-textarea {
+            max-height: 100px; /* Set maximum height */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+    </style>
+    <style>
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <form id="testimonialForm" action="/Placement/SaveTestimonial" method="post" enctype="multipart/form-data">
+
+		<div class="card col-md-10 mx-auto p-3">
+			<h2>Add Testimonial</h2>
+			<hr>
+			<div class="row">
+				<div class="input-group col-md-6">
+					<label for="Course" class="control-label col-md-4">Course Name: </label>
+					<div class="col-md-8">
+						@Html.DropDownList("Course", (IEnumerable<SelectListItem>)ViewBag.CourseList, "Select Course", new { @class = "form-control", required = "required" })
+						@Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<div class="input-group col-md-6">
+					<label for="StudentName" class="control-label col-md-4">Student Name: </label>
+					<div class="col-md-8">
+						<select id="StudentName" name="StudentName" class="form-control" required></select>
+						@Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+
+				<div class="input-group col-md-6">
+					<label for="Qualification" class="control-label col-md-4">Qualification:</label>
+					<label id="Qualification" class="form-control col-md-8"></label>
+					@Html.ValidationMessageFor(model => model.Qualification, "", new { @class = "text-danger" })
+				</div>
+				<div class="input-group col-md-6">
+					<label for="Company Name" class="control-label col-md-4">Company Name:</label>
+					<label id="CompanyName" class="form-control col-md-8"></label>
+					@Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<br />
+			<div class="row">
+
+				<div class="input-group col-md-6">
+					<label for="Designation" class="control-label col-md-4">Designation:</label>
+					<label id="DesignationName" class="form-control col-md-8"></label>
+					@Html.ValidationMessageFor(model => model.DesignationName, "", new { @class = "text-danger" })
+				</div>
+				<div class="input-group col-md-6">
+					<label for="Salary Offered" class="control-label col-md-4">Salary Offered :</label>
+					<label id="CTC" class="form-control col-md-8"></label>
+					@Html.ValidationMessageFor(model => model.CTC, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="input-group col-md-6">
+					<label for="JoiningDate" class="control-label col-md-4">Joining Date:</label>
+					<input type="text" id="JoiningDatePM" class="form-control col-md-8 datepicker" readonly>
+					@Html.ValidationMessageFor(model => model.JoiningDatePM, "", new { @class = "text-danger" })
+				</div>
+				<div class="input-group col-md-6">
+					<label for="Location" class="control-label col-md-4">Location :</label>
+					<label id="Location" class="form-control col-md-8"></label>
+					@Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<br />
+			<div class="row">
+
+				<div class="input-group col-md-4">
+					<div class="form-group">
+						<label class="control-label">Upload PDF File</label>
+						<div id="fileInputs" class="file-container" required>
+							<input type="file" name="PDFFILE" class="fileInput" accept=".pdf" multiple required />
+						</div>
+					</div>
+				</div>
+				<div class="input-group col-md-4">
+					<div class="form-group">
+						<label class="control-label">Upload Audio File</label>
+						<div id="fileInputs" class="file-container">
+							<input type="file" name="AudioFIle" class="fileInput" accept=".mp3" multiple required />
+						</div>
+					</div>
+				</div>
+				<div class="input-group col-md-4">
+					<div class="form-group">
+						<label class="control-label">Upload Video File</label>
+						<div id="fileInputs" class="file-container">
+							<input type="file" name="VideoFIle" class="fileInput" accept=".mp4" multiple required />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group col-md-12">
+				<label for="Comment" class="control-label">Comment :</label>
+				@Html.TextAreaFor(model => model.Comment, new { @class = "form-control", rows = 2, required = "required", maxlength = "50" })
+				@Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+			</div>
+			<div class="form-group" style="text-align: center;">
+				<input type="submit" value="Save" class="btn btn-success" id="SaveButton">
+			</div>
+			<div>
+				<a href="@Url.Action("ListTestimonialPD")" class="back-link">
+					<video width="30" height="30" playsinline loop>
+						<source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+					</video>
+				</a>
+			</div>
+		</div>
+    </form>
+
+
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+    <script>
+        $(document).ready(function () {
+            $("#testimonialForm").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Confirmation',
+                    text: 'Are you sure you want to submit this testimonial?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform form submission via AJAX
+                        $.ajax({
+                            url: $(this).attr("action"),
+                            type: $(this).attr("method"),
+                            data: new FormData(this),
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                // Clear form fields
+                                $("#testimonialForm")[0].reset();
+
+                                // Show success message using Toastr
+                                toastr.success('Testimonial added successfully!', 'Success');
+                                setTimeout(function () {
+                                    window.location.href = 'ListTestimonialPD'; // Replace 'list-view-url' with your actual URL
+                                }, 1000);
+                            },
+                            error: function () {
+                                // Show error message if the AJAX request fails
+                                toastr.error('An error occurred. Please try again later.', 'Error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#Course").change(function () {
+                var courseCode = $(this).val();
+                $.ajax({
+                    url: '/Placement/StudentName_Bind?Coursecode=' + courseCode,
+                    type: 'GET',
+                    success: function (data) {
+                        var options = '<option value="">Select Student</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            options += '<option value="' + data[i].Value + '">' + data[i].Text + '</option>';
+                        }
+                        $("#StudentName").html(options);
+                    }
+                });
+            });
+        });
+
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#StudentName").change(function () {
+                var candidateCode = $(this).val();
+                $.ajax({
+                    url: '/Placement/StudentData?CandidateCode=' + candidateCode,
+                    type: 'GET',
+                    success: function (data) {
+                        $("#Qualification").text(data.Qualification);
+                        $("#CompanyName").text(data.CompanyName);
+                        $("#DesignationName").text(data.DesignationName);
+                        $("#CTC").text(data.CTC);
+                        $("#Location").text(data.Location);
+
+                        // Set the value of the input field for JoiningDate
+                        $("#JoiningDatePM").val(data.JoiningDatePM); // assuming data.JoiningDate is a valid date format
+                    }
+                });
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Function to clear all input fields
+            function clearFields() {
+                $('#Qualification').text(''); // Clear qualification label
+                $('#CompanyName').text(''); // Clear company name label
+                $('#DesignationName').text(''); // Clear designation label
+                $('#CTC').text(''); // Clear salary offered label
+                $('#JoiningDatePM').val(''); // Clear joining date input
+                $('#Location').text(''); // Clear location label
+                $('#Comment').val(''); // Clear comment textarea
+                $('.fileInput').val(''); // Clear file inputs
+            }
+            // Event handler for CourseName change
+            $('#Course').change(function () {
+                clearFields(); // Call the clearFields function to reset all fields
+            });
+            $('#StudentName').change(function () {
+                clearFields(); // Call the clearFields function to reset all fields
+            });
+        });
+    </script>
+
+</body>
+</html>

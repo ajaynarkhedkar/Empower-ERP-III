@@ -1,0 +1,434 @@
+﻿
+@model GSTEducationERPLibrary.Placement.Placement
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <html>
+    <head>
+        <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+
+        <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+        <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+
+        <!-- Bootstrap 4 -->
+
+        <script src="~/Content/plugins/moment/moment.min.js"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="~/Content/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+        <style>
+            /* Add a custom style to adjust the width */
+            .form-control.datetimepicker-input {
+                width: 50%; /* Set the desired width */
+            }
+
+
+            .datetimepicker-input {
+                pointer-events: none;
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#MockDate").val(new Date().toISOString().slice(0, 10));
+                $("#CourseCode").change(function () {
+                    var id = $(this).val();
+                    $("#BatchCode").empty();
+                    $.get("BatchBindSHAsync", { coursecode: id }, function (data) {
+                        var v = "<option>---Select---</option>";
+                        $.each(data, function (i, v1) {
+                            v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                        });
+                        $("#BatchCode").html(v);
+                    });
+                });
+
+
+
+                $("#BatchCode, #MockId").change(function () {
+                    var batchCode = $("#BatchCode").val();
+                    var mockId = $("#MockId").val(); // Ensure this is an integer
+
+                    if (batchCode && mockId) {
+                        $.get("IntrnalStudentBindSHAsync", { batchcode: batchCode, MockId: parseInt(mockId) }, function (data) {
+                            var studentListContainer = $("#studentListContainer");
+                            studentListContainer.empty();
+
+                            $.each(data, function (i, student) {
+                                var checkbox = $('<input type="checkbox" class="student-checkbox" name="SelectedStudents" value="' + student.Value + '">');
+                                var label = $('<label>' + student.Text + '</label>');
+                                studentListContainer.append(checkbox);
+                                studentListContainer.append(label);
+                                studentListContainer.append("<br>");
+
+                                checkbox.change(function () {
+                                    updateSelectedStudentCount();
+                                });
+                            });
+
+                            studentListContainer.show();
+                        });
+                    } else {
+                        $("#studentListContainer").hide();
+                    }
+                });
+                $("form").submit(function () {
+                    var selectedStudents = $(".student-checkbox:checked").map(function () {
+                        return $(this).val();
+                    }).get().join(',');
+
+                    // Add hidden fields for selected batch and mock
+                    $("<input>").attr("type", "hidden")
+                        .attr("name", "SelectedBatch")
+                        .attr("value", $("#Batch").val())
+                        .appendTo("form");
+
+                    $("<input>").attr("type", "hidden")
+                        .attr("name", "SelectedMock")
+                        .attr("value", $("#MockId").val())
+                        .appendTo("form");
+
+                    // Add a hidden field to store the selected student codes
+                    $("<input>").attr("type", "hidden")
+                        .attr("name", "SelectedStudentCodes")
+                        .attr("value", selectedStudents)
+                        .appendTo("form");
+                });
+                $('#timepicker').datetimepicker({
+                    format: 'LT'
+                });
+
+                $('#reservationdate').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    minDate: moment().startOf('day')
+                });
+
+                $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+                function updateSelectedStudentCount() {
+                    selectedStudentCount = $(".student-checkbox:checked").length;
+                    console.log("Selected Student Count: " + selectedStudentCount);
+
+                    $("#selectedStudentCount").text("Selected Student Count: " + selectedStudentCount);
+
+                    // Set the count as the value of the NoOfStudent input field
+                    // Enable the input field before setting its value
+                    $("#NoOfStudent").prop("disabled", false);
+                    $("#NoOfStudent").val(selectedStudentCount);
+
+                }
+                $('#timepicker, #SelectedDuration').on('change', function () {
+                    calculateEndTime();
+                });
+
+                // Function to calculate end time based on start time and duration
+                function calculateEndTime() {
+                    var startTime = $('#timepicker').val();
+                    var duration = $('#SelectedDuration').val();
+
+                    // Check if start time and duration are not empty
+                    if (startTime && duration) {
+                        // Parse duration to get hours and minutes
+                        var durationHours = parseInt(duration.split(':')[0]);
+                        var durationMinutes = parseInt(duration.split(':')[1]);
+
+                        // Parse start time to get hours and minutes
+                        var startTimeHours = parseInt(startTime.split(':')[0]);
+                        var startTimeMinutes = parseInt(startTime.split(':')[1]);
+
+                        // Calculate end time hours and minutes
+                        var endTimeHours = startTimeHours + durationHours;
+                        var endTimeMinutes = startTimeMinutes + durationMinutes;
+
+                        // Adjust end time if minutes overflow 60
+                        if (endTimeMinutes >= 60) {
+                            endTimeHours += 1;
+                            endTimeMinutes -= 60;
+                        }
+
+                        // Format end time
+                        var endTime = ('0' + endTimeHours).slice(-2) + ':' + ('0' + endTimeMinutes).slice(-2);
+
+                        // Display end time
+                        $('#endTime').val(endTime);
+                        fetchLabs();
+                    } else {
+                        $('#endTime').val('');
+                    }
+                }
+                function fetchLabs() {
+                    // Get the values of MockDate, StartTime, EndTime, and BatchCode
+                    var mockDate = $('#MockDate').val();
+                    var startTime = $('#timepicker').val();
+                    var endTime = $('#endTime').val();
+                    var batchCode = $('#BatchCode').val();
+
+                    // Make an AJAX request to fetch labs based on the parameters
+                    $.ajax({
+                        url: '/Placement/ReadAvailableLabBatch_Bind', // Update the URL to your server endpoint
+                        method: 'POST',
+                        data: {
+                            Batchcode: batchCode,
+                            startDate: mockDate,
+                            StartTime: startTime,
+                            EndTime: endTime
+                               
+                        },
+                        success: function (data) {
+                            debugger;
+                            var result = JSON.parse(data);
+                            var v = "<option>---Select---</option>";
+                            $.each(result, function (i, item) {
+                                v += "<option value='" + item.LabCode + "'>" + item.LabName + "</option>";
+                            });
+                            $("#LabCode").html(v);
+                        }
+                    });
+                }
+
+            });
+        </script>
+
+        <script>
+
+            var saveButton = $('#saveButton');
+
+            // Add a click event listener to the save button
+            saveButton.click(async function (event) {
+                event.preventDefault(); // Prevent the default form submission
+                // Get form data
+                var mockName = $('#MockId').val();
+                var batchCode = $('#BatchCode').val();
+                var studentCode = $(".student-checkbox:checked").map(function () {
+                    return $(this).val();
+                }).get().join(',');
+                var duration = $('#SelectedDuration').val();
+                var mockDate = $('#MockDate').val();
+                var interviewerName = $('#StaffCode').val();
+                var startTime = $('#timepicker').val();
+                var endTime = $('#endTime').val();
+                var labName = $('#LabCode').val();
+
+
+                // Validate form data
+                if (mockName.trim() === '' || studentCode.trim() === '' || mockDate.trim() === '' || interviewerName.trim() === '' || startTime.trim() === '' || labName.trim() === '' || endTime.trim() === '') {
+                    Swal.fire('Error', 'Please fill in all fields.', 'error');
+                    return;
+                }
+
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to schedule your mock.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then(async (result) => {
+                    // If the user clicks "Yes, save it!" execute your save logic here
+                    if (result.isConfirmed) {
+                        debugger;
+                        // Prepare form data to send to the server
+                        var formData = new FormData();
+                        formData.append('MockId', mockName);
+                        formData.append('BatchCode', batchCode);
+                        formData.append('SelectedStudentCodes', studentCode); // Adjusted to SelectedStudentCodes
+                        formData.append('MockDate', mockDate);
+                        formData.append('SelectedDuration', duration);
+                        formData.append('StaffCode', interviewerName);
+                        formData.append('StartTime', startTime);
+                        formData.append('endTime', endTime)
+                        formData.append('LabCode', labName)
+
+                        try {
+                            // Send form data to the server using Fetch API
+                            var response = await fetch('/Placement/ScheduleInternalMockSHAsync', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                              if (response.ok) {
+                            // Success message
+                            Swal.fire({
+                                title: 'Schedule Successful',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '@Url.Action("ListAllMock", "Placement")';
+                            });
+                        } else {
+                            // Handle error
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An error occurred while assigning the exam.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        // Handle unexpected error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An unexpected error occurred. Please try again later.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+            });
+        });
+
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // Function to display an alert if the user selects a batch without selecting a course
+                function validateBatchSelection() {
+                    var selectedCourse = $("#CourseCode").val();
+                    var selectedBatch = $("#BatchCode").val();
+
+                    if (!selectedCourse && selectedBatch) {
+                        // If a batch is selected without a course, show an alert
+                        alert("Please select a course before selecting a batch.");
+                        // Clear the selected batch
+                        $("#BatchCode").val("");
+                    }
+                }
+
+                // Call the function when the batch selection changes
+                $("#BatchCode").change(function () {
+                    validateBatchSelection();
+                });
+
+                // Call the function when the form is submitted
+                $("form").submit(function () {
+                    validateBatchSelection();
+                    // Perform other form submission tasks
+                });
+            });
+        </script>
+
+    </head>
+    <body>
+        <h2>Schedule Mock</h2>
+        <hr>
+
+        <div class="card " style="padding:15px; margin-right:0px; margin-left:0px; margin-top:10px">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group" style="display:none">
+                <div class="col-md-10">
+                    <input type="text" name="EndTime" id="endTime" class="form-control" readonly />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.CourseName, "Course Name")
+                    @Html.DropDownListFor(model => model.CourseCode, new SelectList(ViewBag.CourseList, "Value", "Text"), "Select", new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.BatchName, "Batch Name")
+                    @Html.DropDownListFor(model => model.BatchCode, new SelectList(Enumerable.Empty<SelectListItem>()), "Select", new { @class = "form-control", id = "BatchCode", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.BatchCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.MockName, "Mock Name")
+                    @Html.DropDownListFor(model => model.MockId, new SelectList(ViewBag.MockName, "Value", "Text"), "Select Mock", new { @class = "form-control", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.MockId, "", new { @class = "text-danger" })
+                </div>
+
+
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.StudentName, "Student Name")
+                    <div class="col-md-8">
+                        <!-- Adjusted column size -->
+                        <div class="card" style="max-height: 300px; overflow-y: auto; margin-left: 13px; width: 150%;">
+                            <!-- Added width -->
+                            <div id="studentListContainer">
+                                <!-- Student checkboxes will be displayed here -->
+                            </div>
+                            @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.MockDate, "Mock Date")
+                    @Html.EditorFor(model => model.MockDate, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control col-md-12 datepicker",
+                            min = DateTime.Now.ToString("yyyy-MM-dd"),
+                            required = "required",
+                            id = "MockDate",
+                            value = DateTime.Now.ToString("yyyy-MM-dd") // Set default value to today's date
+                        }
+                    })
+                    @Html.ValidationMessageFor(model => model.MockDate, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.StartTime, "Mock Time")
+                    <div class="input-group date" data-target-input="nearest">
+                        <input type="text" name="StartTime" id="timepicker" class="form-control datetimepicker-input" data-target="#timepicker" />
+                        <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="far fa-clock"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.StartTime, "Duration")
+                    <input type="time" id="SelectedDuration" name="SelectedDuration" value="@Model.SelectedDuration.ToString("hh\\:mm")" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.SelectedDuration, "", new { @class = "text-danger" })
+                </div>
+
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.LabName, "Lab Name")
+                    <select id="LabCode" name="LabCode" class="form-control col-md-12" required> </select>
+                    @Html.ValidationMessageFor(model => model.LabCode, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.InterviewrName, "Interviewr Name")
+                    @Html.DropDownListFor(model => model.StaffCode, new SelectList(ViewBag.StaffList, "Value", "Text"), "---Select Interviewer---", new { @class = "form-control", id = "StaffCode" })
+                    @Html.ValidationMessageFor(model => model.StaffCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+
+
+            <div class="form-group row">
+                <div class="offset-md-5 col-md-12">
+                    <input type="button" class="btn btn-success btn-sm" value="Save" id="saveButton" style="margin-right:20px" />
+
+                </div>
+            </div>
+        </div>
+
+        <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+        <a href="@Url.Action("ListAllMock")" class="back-link">
+            <video width="45" height="45" playsinline loop>
+                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+            </video>
+        </a>
+    </body>
+
+</html>
+}

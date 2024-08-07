@@ -1,0 +1,321 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <!-- Bootstrap Switch -->
+    <script src="~/Content/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <!-- Bootstrap 4 -->
+    @*<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+
+</head>
+<body>
+	<div class="card">
+		<div class="card-body">
+			@Html.HiddenFor(model => model.AssignExamId)
+			@Html.HiddenFor(model => model.PassingMarks)
+			<div class="row justify-content-center">
+				<div class="input-group col-md-4">
+					<label class="col-md-6">Course: </label>
+					@Model.CourseName
+				</div>
+				<div class="input-group col-md-4">
+					<label class="col-md-6">Batch:</label>
+					@Model.BatchName
+				</div>
+				<div class="input-group col-md-4">
+					<label class="col-md-51">Exam:</label>
+					@Model.ExamName
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="input-group col-md-4">
+					<label class="col-md-6">Exam Date: </label>
+					@Model.ExamDate.ToString("yyyy-MM-dd")
+				</div>
+				<div class="input-group col-md-4">
+					<label class="col-md-6">Exam Time: </label>
+					@Model.ExamTime.ToString("hh:mm tt")
+				</div>
+				<div class="input-group col-md-4">
+					<label class="col-md-6">Total Marks: </label>
+					@Model.TotalMarks
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-group col-md-4">
+					<label class="col-md-6">Passing Marks: </label>
+					@Model.PassingMarks
+				</div>
+			</div>
+			<div class="card pl-3 mt-2">
+				<br />
+				<div class="row form-group">
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.StudentCode, "Student Name:", htmlAttributes: new { @class = "control-label" })
+					</div>
+					<div class="col-md-6">
+						@Html.DropDownListFor(model => model.StudentCode, new SelectList(ViewBag.Student, "Value", "Text"), "--Select Student--", new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+					</div>
+				</div>
+
+				<div class="row form-group">
+					<div class="col-md-4">
+						@Html.Label("Attendance:", htmlAttributes: new { @class = "control-label" })
+					</div>
+					<div class="col-md-6">
+						<input type="checkbox" id="attendance" name="Attendance" checked data-bootstrap-switch data-off-color="danger" data-on-color="success" data-on-text="Present" data-off-text="Absent">
+						@Html.HiddenFor(model => model.AttendanceStatusId, new { id = "AttendanceStatusId" })
+					</div>
+				</div>
+
+				<div class="row form-group">
+					<div class="col-md-4">
+						@Html.Label("Obtained Marks:", htmlAttributes: new { @class = "control-label" })
+					</div>
+					<div class="col-md-6">
+						@Html.EditorFor(model => model.ObtainedMarks, new { htmlAttributes = new { @class = "form-control", id = "ObtainedMarks", maxlength = 3 } })
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<button type="button" class="btn btn-primary btn-sm" id="add-button">ADD</button>
+					</div>
+				</div>
+				<br />
+			</div>
+
+
+			<div class="mt-2">
+				<div style="max-height: 100px; overflow-y: auto;">
+					<!-- Adjust the max-height as needed -->
+					<table class="table table-bordered" id="studentTable">
+						<thead>
+							<tr>
+								<th scope="col">No.</th>
+								<th scope="col">Student Name</th>
+								<th scope="col">Obtained Marks</th>
+								<th scope="col">Attendance</th>
+								<th scope="col">Status</th>
+								<th scope="col">Action</th>
+								<th scope="col" style="display:none;">Student Code</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-md-12 text-center">
+					<button type="button" class="btn btn-success btn-sm" id="save-button">Save</button>
+				</div>
+			</div>
+		</div>
+		</div>
+
+</body>
+</html>
+<script>
+	
+	$(document).ready(function () {
+		$("#ObtainedMarks").val('');
+
+		$('input[name="Attendance"]').bootstrapSwitch();
+		// Initialize Bootstrap Switch for input elements
+		//$("input[data-bootstrap-switch]").each(function () {
+		//	$(this).bootstrapSwitch('state', $(this).prop('checked'));
+		//});
+
+		$("#attendance").bootstrapSwitch({
+			// Your Bootstrap Switch options...
+		}).on('switchChange.bootstrapSwitch', function (event, state) {
+			// Enable or disable obtained marks input based on attendance switch state
+			$("#ObtainedMarks").prop("readonly", !state);
+		});
+
+        // Declare the studentDropdown variable
+        var studentDropdown = $("#StudentCode");
+
+        // Handle adding student to the list
+        $("#add-button").click(function () {
+            var selectedStudent = studentDropdown.val();
+            var studentName = $("#StudentCode option:selected").text();
+            var attendance = $("#attendance").prop("checked") ? "Present" : "Absent";
+            var obtainedMarks = attendance === "Absent" ? 0 : parseFloat($("#ObtainedMarks").val()); // Set obtained marks to 0 if absent
+            var totalMarks = parseFloat("@Model.TotalMarks");
+
+            // Validate student selection
+            if (!selectedStudent) {
+				// Replace the alert with SweetAlert
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Please select a student.',
+				});
+                return;
+            }
+
+            // Validate obtained marks based on attendance
+            if (attendance === "Present" && (isNaN(obtainedMarks) || obtainedMarks < 0 || obtainedMarks > totalMarks)) {
+				// Replace the alert with SweetAlert
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Obtained marks must be a valid number between 0 and ' + totalMarks + '.',
+				});
+                return;
+            }
+
+            // Set obtained marks input to 0 if the student is absent
+            $("#ObtainedMarks").val(attendance === "Absent" ? 0 : obtainedMarks);
+
+            // Disable obtained marks input if the student is absent
+            $("#ObtainedMarks").prop("readonly", attendance === "Absent");
+
+            // Determine student status based on passing marks
+            var passingMarks = parseFloat("@Model.PassingMarks");
+			// Determine student status based on attendance and obtained marks
+			var status;
+			if (attendance === "Absent") {
+				status = "Not Attended";
+			} else {
+				status = obtainedMarks >= passingMarks ? "Pass" : "Fail";
+			}
+
+			// Append a row to the table
+			var serialNumber = $("#studentTable tbody tr").length + 1;
+			$("#studentTable tbody").append(
+				'<tr>' +
+				'<td>' + serialNumber + '</td>' +
+				'<td class="student-name">' + studentName + '</td>' +
+				'<td class="obtained-marks">' + obtainedMarks + '</td>' +
+				'<td class="attendance">' + attendance + '</td>' +
+				'<td class="status" id="result-status">' + status + '</td>' +
+				'<td><button type="button" class="btn-xs float-center delete-button" style="background: none; border: none;"><i class="fas fa-trash-alt"></i></button></td>' +
+				'<td class="student-code" style="display:none;">' + selectedStudent + '</td>' +
+				'</tr>'
+			);
+
+            // Remove the selected student from the dropdown
+			studentDropdown.find('option[value="' + selectedStudent + '"]').remove();
+
+            // Reset form fields
+            studentDropdown.val('');
+            $("#ObtainedMarks").val('');
+			$("#ObtainedMarks").prop("readonly", false); // Enable obtained marks input after adding the student
+			if (attendance === "Absent") {
+				// Reinitialize the Bootstrap Switch
+				$('#attendance').bootstrapSwitch('state', true);
+			} else {
+				// Attendance is "Present", no need to reinitialize the switch
+			}
+        });
+
+		// Handle deleting a student from the table
+		$("#studentTable tbody").on("click", ".delete-button", function () {
+			var deletedRow = $(this).closest("tr");
+			var deletedStudentName = deletedRow.find(".student-name").text();
+			var deletedStudentCode = deletedRow.find(".student-code").text();
+
+			// Add the deleted student back to the dropdown
+			studentDropdown.append('<option value="' + deletedStudentCode + '">' + deletedStudentName + '</option>');
+
+			// Remove the deleted row from the table
+			deletedRow.remove();
+
+			// Update serial numbers
+			updateSerialNumbers();
+		});
+
+        // Handle Save button click
+        $("#save-button").click(function () {
+			// Check if there are any selected students
+			var selectedStudentsCount = $("#StudentCode option:selected").length;
+			var allStudentsCount = $("#StudentCode option").length;
+
+			if (selectedStudentsCount < allStudentsCount) {
+				// Display SweetAlert error message
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Please select students before saving.',
+				});
+				return; // Exit the function if validation fails
+			}
+
+			var studentDataArray = [];
+
+			$("#studentTable tbody tr").each(function () {
+				var studentName = $(this).find(".student-name").text();
+				var obtainedMarks = parseFloat($(this).find(".obtained-marks").text());
+				var attendance = $(this).find(".attendance").text();
+				var status = $(this).find(".status").text();
+
+				var studentData = {
+					AssignExamId: "@Model.AssignExamId",
+					StudentCode: $(this).find(".student-code").text(), // Get student code from the table
+					ObtainedMarks: obtainedMarks,
+					AttendanceStatusId: attendance === "Present" ? 30 : 31, // Use 30 for Present and 31 for Absent
+					ResultStatus: status
+				};
+
+				studentDataArray.push(studentData);
+			});
+
+			Swal.fire({
+				title: 'Confirm Save',
+				text: 'Are you sure you want to save the results?',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonText: 'Yes, save it!',
+				cancelButtonText: 'Cancel'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// Send the array of student data to the server using AJAX
+					$.ajax({
+						url: '/Placement/SaveResultInternalStudentAsyncSN', // Replace with your actual controller and action method
+						type: 'POST',
+						contentType: 'application/json; charset=utf-8',
+						data: JSON.stringify(studentDataArray),
+						success: function (response) {
+							// Display success toaster after save is completed
+							displayToast('Resut Added successfully!', 'success');
+							// Wait for the toast to be shown before redirecting
+							setTimeout(function () {
+                                $("#resultModal").modal("hide"); // Replace "myModal" with the actual ID of your modal
+								$('.modal-backdrop').remove();
+							}, 2000);
+						},
+						error: function (error) {
+							// Handle error if needed
+							console.log(error);
+						}
+					});
+				}
+
+				// Reset the student list and dropdown
+				$("#studentList").empty();
+				studentDropdown.empty();
+
+				// Reset form fields
+				$("#attendance").bootstrapSwitch('state', true);
+				$("#ObtainedMarks").val('');
+				$("#ObtainedMarks").prop("readonly", false);
+				$("#result-status").text("");
+			});
+		});
+
+		// Function to update serial numbers in the table
+		function updateSerialNumbers() {
+			$("#studentTable tbody tr").each(function (index) {
+				$(this).find("td:first").text(index + 1);
+			});
+		}
+    });
+</script>

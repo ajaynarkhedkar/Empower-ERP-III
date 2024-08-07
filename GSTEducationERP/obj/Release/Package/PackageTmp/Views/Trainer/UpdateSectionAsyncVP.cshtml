@@ -1,0 +1,128 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.SectionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SectionId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <label class="control-label">Course Name :</label>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <label class="control-label">Section Name :</label>
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SectionName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" id="SaveSection1" class="btn btn-success btn-sm" />
+        </div>
+    </div>
+    }
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+
+        <script>
+    $(document).ready(function () {
+        $('#SaveSection1').click(function (e) {
+            e.preventDefault();
+
+            var sectionName = $('#SectionName').val();
+            if (sectionName == null || sectionName === "") {
+                showErrorAlert('Please select a Section.');
+                return;
+            }
+
+            // Use Swal.fire for confirmation
+            Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    // Serialize form data
+                    var formData = $('form').serialize();
+
+                    // Submit the form using AJAX
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("UpdateSectionAsyncVP")',
+                        data: formData,
+                        success: function (result) {
+                            if (result.success) {
+                                // Show success SweetAlert
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: result.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(function () {
+                                    // Redirect or perform any other action after success
+                                    window.location.href = '@Url.Action("DetailsSectionAsyncVP")';
+                                });
+                            } else {
+                                // Show error SweetAlert
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: result.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        },
+                        error: function () {
+                            // Show error SweetAlert for unexpected errors
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An unexpected error occurred',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                } else if (result.isDenied) {
+                    // Handle case where changes are not saved
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        });
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+            });
+        }
+    });
+        </script>
+</body>
+</html>

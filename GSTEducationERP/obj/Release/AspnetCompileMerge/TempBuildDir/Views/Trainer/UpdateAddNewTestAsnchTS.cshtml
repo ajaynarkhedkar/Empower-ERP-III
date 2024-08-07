@@ -1,0 +1,464 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@*@{
+    ViewBag.Title = "EditTestAsnchTS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+<html>
+
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="path/to/jquery.min.js"></script>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="path/to/bootstrap.min.css">
+    <!-- Include Bootstrap JavaScript (make sure it comes after jQuery) -->
+    <script src="path/to/bootstrap.min.js"></script>
+    <!-- Include locally hosted jQuery Timepicker -->
+    <link rel="stylesheet" href="path/to/jquery.timepicker.min.css" />
+    <script src="path/to/jquery.timepicker.min.js"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <style>
+        h4 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 38px;
+        }
+
+        .col-md-10 {
+            margin-top: 5px;
+        }
+
+        .row .form-group {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .bootstrap-duallistbox-container {
+            margin-top: 20px;
+        }
+
+        .box1, .box2 {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .btn-sm {
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .filter {
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            font-size: 16px;
+            height: 40px;
+            width: 100px;
+        }
+
+        .spacer {
+            margin-left: 10px;
+        }
+
+        .form-group.text-center {
+            text-align: center;
+        }
+
+            .form-group.text-center .col-md-6 {
+                display: inline-block;
+            }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .date-input {
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        .date-picker {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .file-upload-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+            .file-upload-box label {
+                font-weight: bold;
+            }
+
+            .file-upload-box input[type="file"] {
+                margin-top: 5px;
+            }
+        .form-group > p {
+            margin-bottom: 10px; /* Adjust the margin as needed */
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+    @using (Html.BeginForm("EditAddNewTestAsnchTS", "Trainer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div class="form-container">
+
+            <div class="form-horizontal">
+
+                <div class="form-horizontal" style="text-align:center,">
+                    <h4> Edit Test</h4>
+                </div>
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.TestId)
+                <!--@Html.HiddenFor(model => model.SectionName)--> <!-- Add hidden field for SectionName -->
+                <!--@Html.HiddenFor(model => model.TopicName)-->
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.TestName, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TestName, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+
+                        @Html.ValidationMessageFor(model => model.TestName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+
+                        @*@Html.DropDownListFor(model => model.CourseName, new SelectList(ViewBag.Course6, "value", "Text"), new { @class = "form-control", style = "width: 300px;" })*@
+
+                        @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.SectionName, "Section Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+
+                        @*@Html.DropDownListFor(model => model.SectionName, new SelectList(ViewBag.sectionlist2, "value", "Text"), new { id = "SectionId", @class = "form-control", style = "width: 300px;" })*@
+                        @Html.ValidationMessageFor(model => model.SectionName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.TopicId, "Topic Name", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TopicId, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;" } })
+
+                        @*@Html.DropDownListFor(model => model.TopicId, new SelectList(ViewBag.topic1, "value", "Text"), new { id = "TopicId", @class = "form-control", style = "width: 300px;" })*@
+                        @Html.ValidationMessageFor(model => model.TopicId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <label for="SDuration" class="control-label">Duration:</label>
+
+                    <div class="input-group">
+                        <div class="col-md-10">
+                            <input type="time" id="SDuration" name="SDuration" value="@Model.SDuration.ToString("hh\\:mm")" class="form-control" />
+                            @Html.ValidationMessageFor(model => model.SDuration, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="TotalMarks" class="control-label">Total Marks:</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TotalMarks, new { htmlAttributes = new { @class = "form-control numeric-input", style = "width: 300px;" } })
+                            @Html.ValidationMessageFor(model => model.TotalMarks, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="PassingMarks" class="control-label">Passing Marks:</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PassingMarks, new { htmlAttributes = new { @class = "form-control numeric-input", style = "width: 300px;" } })
+                            @Html.ValidationMessageFor(model => model.PassingMarks, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--<div class="col-md-6">
+                <label for="Files" class="control-label">File Upload:</label>
+                <div class="col-md-10">
+                    <div id="fileInputs">
+                        <div class="file-container">
+                            <input type="file" name="Files" class="fileInput" multiple />-->
+                @*<span class="delete-icon" onclick="removeFileInput(this)">Delete</span>*@
+                <!--</div>
+                    <button type="button" onclick="addFileInput()">Add More</button>
+                </div>-->
+                @*@Html.EditorFor(model => model.TestPaperFile, new { htmlAttributes = new { @class = "form-control" } })*@
+                <!--@Html.ValidationMessageFor(model => model.TestPaperFile, "", new { @class = "text-danger" })
+                    </div>
+                </div>-->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="Files" class="control-label">File Upload:</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+
+                                @if (!string.IsNullOrEmpty(Model.TestPaperFile))
+                                {
+
+                                    <p>Current File: <a href="@Url.Content("~/Path/To/Uploaded/Files/" + Model.TestPaperFile)" target="_blank">@Model.TestPaperFile</a></p>
+                                    <input type="checkbox" name="DeleteFile" value="true" />@:<br />Delete current file<br />
+                                }
+                                <br />
+
+                                <div>
+                                    <input type="file" name="NewFile" class="custom-file-input fileInput" onchange="validateFileType(this)" id="Files">
+                                    <label class="custom-file-label" for="Files">Choose file</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Upload</span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.TestPaperFile, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="form-group text-center">
+                        <div class="col-md-10">
+                            <input type="submit" value="SUBMIT" formaction="/Trainer/EditAddNewTestAsnchTS" class="btn btn-primary btn-success btn-custom" />
+                            <span class="spacer"></span>
+                            <input type="reset" value="CLEAR" class="btn btn-warning btn-custom" id="btnClear" onclick="clearForm()" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    }
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            debugger
+            $("#CourseName").change(function () {
+                var id = $(this).val();
+
+                $("#SectionId").empty();
+                // alert("Course is selected!");
+                $.get("/Trainer/Section_Bind", { CourseCode: id }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#SectionId").html(v);
+                });
+            });
+            $("#SectionId").change(function () {
+                var id = $(this).val();
+                console.log("Selected SectionId: " + id);
+                $("#TopicId").empty();
+                // alert("Section is selected!");
+                $.get("/Trainer/Topic_Bind", { SectionId: id }, function (data) {
+                    var v = "<option>---Select---</option>";
+                    $.each(data, function (i, v1) {
+                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                    });
+                    $("#TopicId").html(v);
+                });
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#PassingMarks").change(function () {
+                var passingMarks = parseFloat($(this).val());
+                var totalMarks = parseFloat($("#TotalMarks").val());
+
+                if (passingMarks > totalMarks) {
+                    alert("Passing marks cannot be greater than total marks.");
+                    $(this).val(""); // Clear the passing marks input
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Add event listener for input events on elements with class 'numeric-input'
+            $('.numeric-input').on('input', function () {
+                // Get the current value of the input
+                var inputValue = $(this).val();
+
+                // Remove any non-digit characters using a regular expression
+                var sanitizedValue = inputValue.replace(/\D/g, '');
+
+                // Update the input value with the sanitized value
+                $(this).val(sanitizedValue);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.form-control').on('input', function () {
+                var inputValue = $(this).val();
+
+                // If the input value is greater than 99, set it to 99
+                if (parseInt(inputValue) > 99) {
+                    $(this).val('99');
+                }
+            });
+        });
+    </script>
+    <script>
+        function validateFileType(input) {
+            const allowedExtensions = /(\.pdf)$/i;
+            if (!allowedExtensions.exec(input.value)) {
+                alert('Please select a PDF file.');
+                input.value = '';
+                return false;
+            }
+        }
+    </script>
+
+
+    <script>
+        function addFileInput() {
+            var fileContainer = $('<div class="file-container"></div>');
+            var fileInput = $('<input type="file" name="Files" class="fileInput" multiple />');
+            var deleteIcon = $('<span class="delete-icon" onclick="removeFileInput(this)">Delete</span>');
+
+            fileContainer.append(fileInput);
+            fileContainer.append(deleteIcon);
+
+            $('#fileInputs').append(fileContainer);
+        }
+
+        function removeFileInput(deleteIcon) {
+            $(deleteIcon).parent('.file-container').remove();
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Disable course, section, and topic fields
+            $('#CourseName, #SectionName, #TopicId').prop('disabled', true);
+
+            // Add event listener for form submission
+            $('form').submit(function (event) {
+                // Flag to check if any field is empty
+                var formIsValid = true;
+
+                // Check each input field
+                $('.form-control').each(function () {
+                    if ($(this).val().trim() === '') {
+                        formIsValid = false;
+                        return false; // Exit the loop if an empty field is found
+                    }
+                });
+
+
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Disable or make fields read-only when the page loads
+            $('#CourseName, #SectionId, #TopicId, #SDuration, #TotalMarks, #PassingMarks').prop('disabled', true);
+
+            // Add event listener for form submission
+            $('form').submit(function (event) {
+
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Disable or make fields read-only when the page loads
+            $('#CourseName, #SectionId, #TopicId, #SDuration, #TotalMarks, #PassingMarks').prop('disabled', true);
+
+            // Add event listener for form submission
+            $('form').submit(function (event) {
+               
+            });
+
+            // Function to clear the form data when the "CLEAR" button is clicked
+            $('#btnClear').click(function () {
+                // Reset the values of the form fields to their default or empty values
+                $('#CourseName, #SectionId, #TopicId, #SDuration, #TotalMarks, #PassingMarks').val('');
+            });
+        });
+    </script>
+
+</body>
+</html>

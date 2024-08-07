@@ -1,0 +1,80 @@
+E:\MVCProject\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+E:\MVCProject\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+E:\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+E:\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+E:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+E:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+E:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+E:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+C:\Users\hp\Desktop\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CopyComplete
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CopyComplete
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+F:\MeregedProjectERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+F:\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+F:\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+F:\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+F:\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+F:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+F:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+F:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CopyComplete
+F:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+F:\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CopyComplete
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+D:\.NET\GSTEduERP\GSTEducationERP\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+C:\EduERP\GayaEmpowerERP\GSTEducationERP 19-03-2024 even 5.08PM\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CopyComplete
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\bin\Debug\Helper.dll
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+E:\EducationERP\EmpowerERPIII\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb

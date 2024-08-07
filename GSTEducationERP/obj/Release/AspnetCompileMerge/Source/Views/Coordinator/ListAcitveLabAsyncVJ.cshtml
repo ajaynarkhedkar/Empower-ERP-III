@@ -1,0 +1,260 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "ListAcitveLabAsyncVJ";
+   // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <style>
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #01a6a6;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #01a6a6;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #01a6a6;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #64bbc9;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+        .dataTables_filter {
+            margin-top: -50px;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="card">
+
+        <div class="card-body">
+            <p hidden>
+                @Html.ActionLink("Create New Lab", "AddNewLab")
+            </p>
+            <table id="example2" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th hidden>
+                            @*@Html.DisplayNameFor(model => model.LabId)*@
+                            <label> Lab Id</label>
+                        </th>
+                        <th align="center">
+                            @*@Html.DisplayNameFor(model => model.LabCode)*@
+                            <label> Lab Code</label>
+                        </th>
+                        <th align="center">
+                            @*@Html.DisplayNameFor(model => model.LabName)*@
+                            <label> Lab Name</label>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListAcitveLabAsyncVJ)
+                    {
+                        <tr>
+                            <td hidden>
+                                @Html.DisplayFor(modelItem => item.LabId)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.LabCode)
+                            </td>
+                            <td align="center">
+                                @Html.DisplayFor(modelItem => item.LabName)
+                            </td>
+                            <td align="center">
+                                <a href="#" class="sectionEditLink" data-id="@item.LabCode"
+                                   data-url="@Url.Action("DetailsActiveLabAsyncVJ", "Coordinator",
+                                        new { LabCode = item.LabCode })" data-toggle="modal" data-target="#ViewLabSchedule">
+                                    <video width="25" height="25" playsinline loop><source src="~/Content/Admin/icon/view.mp4" type="video/mp4" /></video>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <div>
+        @Html.ActionLink("Back to List", "DetailsLabManagementAsyncVJ")
+    </div>
+
+
+    <div class="modal fade" id="SectionModal">
+        <div class="modal-dialog" style="background-color: white;max-width:fit-content">
+            <div class="modal-content" style="background-color: white;">
+                @*<h1 class="text-info modal-title">Lab Details</h1>*@
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 20px; right: 20px;">&times;</button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+    jQuery(document).ready(function ($) {
+        function loadTabContent(tabContentUrl) {
+            $.ajax({
+                url: tabContentUrl,
+                type: 'GET',
+                success: function (data) {
+                    $('#example1').html(data);
+                    var table = $('#example1 table').DataTable({
+                        "responsive": true,
+                        "lengthChange": false,
+                        "autoWidth": false,
+						"stateSave": true,
+						"dom": 'Bfrtip', // Only buttons without other elements
+						"buttons": [
+							{
+								extend: 'copy',
+								text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+								titleAttr: 'Copy'
+							},
+							{
+								extend: 'csv',
+								text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+								titleAttr: 'CSV'
+							},
+							{
+								extend: 'excel',
+								text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+								titleAttr: 'Excel'
+							},
+							{
+								extend: 'pdf',
+								text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+								titleAttr: 'PDF'
+							},
+							{
+								extend: 'print',
+								text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+								titleAttr: 'Print'
+							},
+							{
+								extend: 'colvis',
+								text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+								titleAttr: 'Columns'
+							}
+						]
+					});
+                    table.buttons().container().appendTo('#example1 .col-md-6:eq(0)');
+                },
+                error: function () {
+                    alert('Error loading content.');
+                }
+            });
+        }
+
+        @*$('.nav-link').on('click', function (e) {
+            e.preventDefault();
+            var tabContentUrl = $(this).attr('href');
+            loadTabContent(tabContentUrl);
+        });
+
+
+        var defaultTabUrl = '@Url.Action("ViewLabList", "Coordinator")';
+        loadTabContent(defaultTabUrl);*@
+    });
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example2').on('click', '.sectionEditLink', function () {
+                var LabCode = $(this).data('id');
+                var url = $(this).data('url');
+                // Make an AJAX call to load the content of TrainerEditsection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the modal body with the content of TrainerEditsection view
+                        $('#SectionModal .modal-body').html(data);
+                        // Show the modal
+                        $('#SectionModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

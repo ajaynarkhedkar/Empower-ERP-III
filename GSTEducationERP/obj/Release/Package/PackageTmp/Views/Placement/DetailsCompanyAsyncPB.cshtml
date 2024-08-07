@@ -1,0 +1,176 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+    <html>
+
+    <head>
+        <script src="~/Content/Admin/js/Icon.js"></script>
+        <style>
+            h2 {
+                padding-top: 10px;
+                margin-bottom: 8px;
+                font-family: Verdana;
+                font-weight: bold;
+                font-size: medium;
+                color: #33CCCC;
+            }
+
+            .card-primary.card-outline-tabs > .card-header a.active {
+                border-top: 3px solid #33CCCC;
+            }
+
+            a {
+                color: #33CCCC;
+            }
+
+            .card.card-outline-tabs .card-header a:hover {
+                color: #33CCCC;
+            }
+
+            .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+                border-top: 3px solid #33CCCC;
+            }
+
+            .card-body {
+                font-family: Calibri !important;
+                padding-bottom: 0px !important;
+            }
+
+            .flex {
+                display: flex;
+                font: 15px !important;
+            }
+
+            #CompanyDescription {
+                height: 100px !important;
+                width: 300px;
+            }
+        </style>
+    </head>
+    <body>
+
+
+
+        @using (Html.BeginForm())
+        {
+            if (ViewBag.Detalis.Tables.Count > 0 && ViewBag.Detalis.Tables[0].Rows.Count > 0)
+            {
+                <br />
+                <div class="card">
+                    <div class="row col-md-12">
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">Company Name:</label>
+                            <span id="CompanyName" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["CompanyName"]</span>
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">Induastry Name:</label>
+                            <span id="IndustryName" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["InduastryName"]</span>
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">Company Email:</label>
+                            <span id="CompanyEmail" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["CompanyEmail"]</span>
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">Address:</label>
+                            <span id="Address" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["Address"]</span>
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">Country:</label>
+                            <span id="Country" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["CountryName"]</span>
+
+                        </div>
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">State:</label>
+                            <span id="StateName" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["StateName"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">City:</label>
+                            <span id="City" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["CityName"]</span>
+
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR1 Name:</label>
+                            <span id="HR1Name" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR1Name"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR1 Mail:</label>
+                            <span id="CompanyEmail" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["CompanyEmail"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR1 Contact:</label>
+                            <span id="HR1Mail" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR1Contact"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR2 Name:</label>
+                            <span id="HR2Name" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR2Name"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR2 Mail:</label>
+                            <span id="HR2Mail" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR2Mail"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR2 Contact:</label>
+                            <span id="HR2Contact" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR2Contact"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR3 Name:</label>
+                            <span id="HR3Name" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR3Name"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label class="col-md-6">HR3 Mail:</label>
+                            <span id="HR3Mail" class="form-control-plaintext col-md-7">@ViewBag.Detalis.Tables[0].Rows[0]["HR3Mail"]</span>
+
+                        </div>
+
+                        <div class="col-md-6 form-group flex">
+                            <label>HR3 Contact:</label>
+                            <span id="HR3Contact" class="form-control-plaintext">@ViewBag.Detalis.Tables[0].Rows[0]["HR3Contact"]</span>
+
+                        </div>
+
+
+                        <input type="hidden" id="CompanyCode" name="CompanyCode" value="@ViewBag.Detalis.Tables[0].Rows[0]["CompanyCode"]" />
+                    </div>
+                    <div class="form-group flex">
+                        <label class="col-md-2">Description:</label>
+                        <textarea class="form-control onlynumberchar col-md-7" id="CompanyDescription" name="CompanyDescription" readonly>
+                         @ViewBag.Detalis.Tables[0].Rows[0]["CompanyDescription"]
+                          </textarea>
+                    </div>
+
+                    <div class="text-left mb-2">
+                        <a href="/Placement/ListAllCompanyAsyncPB" class="icon">
+                            <video width="30" height="30" playsinline loop>
+                                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                            </video>
+                        </a>
+                    </div>
+                </div>
+
+            }
+            
+
+        }
+    </body>
+</html>

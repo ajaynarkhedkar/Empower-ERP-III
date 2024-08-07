@@ -1,0 +1,238 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "SaveResultStudentTSAsynch";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    @*<style>
+            .radio-container {
+                display: inline-block;
+                border: 1px solid #ccc; /* Add a border to create a square shape */
+                padding: 5px; /* Adjust padding as needed */
+                border-radius: 5px; /* Adjust border-radius to make it more squared */
+            }
+
+                .radio-container label {
+                    display: inline-block;
+                    width: 50%; /* Adjust width as needed */
+                    text-align: center;
+                    border-radius: 5px;
+                }
+
+                .radio-container input[type="radio"] {
+                    display: none; /* Hide the default radio button */
+                }
+
+                    .radio-container input[type="radio"] + label {
+                        padding: 10px;
+                        background-color: #fff; /* Set background color */
+                        border: 2px solid #007bff; /* Set border color */
+                        border-radius: 50%; /* Create a circular shape */
+                        cursor: pointer;
+                    }
+
+                    .radio-container input[type="radio"]:checked + label {
+                        background-color: #007bff; /* Change background color when selected */
+                        color: #fff; /* Change text color when selected */
+                    }
+        </style>*@
+
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            @Html.HiddenFor(model => model.AssignTestId)
+            @Html.HiddenFor(model => model.PassingMarks)
+            <div class="row justify-content-center">
+                <div class="input-group col-md-4">
+                    <label class="col-md-6">Course: </label>
+                    @Model.CourseName
+                </div>
+                <div class="input-group col-md-4">
+                    <label class="col-md-6">Batch:</label>
+                    @Model.BatchName
+                </div>
+                <div class="input-group col-md-4">
+                    <label class="col-md-51">Exam:</label>
+                    @Model.TestName
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="input-group col-md-4">
+                    <label class="col-md-6">Exam Date: </label>
+                    @Model.TestDate.ToString("yyyy-MM-dd")
+                </div>
+                <div class="input-group col-md-4">
+                    <label class="col-md-6">Exam Time: </label>
+                    @Model.TestTime.ToString("hh:mm tt")
+                </div>
+                <div class="input-group col-md-4">
+                    <label class="col-md-6">Total Marks: </label>
+                    @Model.TotalMarks
+                </div>
+            </div>
+            <div class="card pl-3 mt-2">
+                <br />
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.StudentCode, "Student Name:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.StudentCode, new SelectList(ViewBag.Student, "Value", "Text"), "--Select Student--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="Attendance" class="control-label">Attendance:</label>
+                    <div class="form-group rectangular-radio">
+
+                        <input type="radio" id="presentRadio" name="Attendance" value="Present">
+                        <label for="presentRadio">Present</label>
+
+                        <input type="radio" id="absentRadio" name="Attendance" value="Absent">
+                        <label for="absentRadio">Absent</label>
+
+                        @Html.ValidationMessageFor(model => model.Attendance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+                    <div class="col-md-4">
+                        @Html.Label("Obtained Marks:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.ObtainedMarks, new { htmlAttributes = new { @class = "form-control", id = "ObtainedMarks", maxlength = 3 } })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary btn-sm" id="add-button">ADD</button>
+                    </div>
+                </div>
+                <br />
+            </div>
+
+
+            <div class="card pl-3 mt-2">
+                <table class="table table-bordered" id="studentTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Student Name</th>
+                            <th scope="col">Obtained Marks</th>
+                            <th scope="col">Attendance</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                            <th scope="col" style="display:none;">Student Code</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-primary btn-success btn-custom" id="save-button">Save</button>
+                    <span class="spacer"></span>
+                    <input type="reset" value="CLEAR" class="btn btn-warning btn-custom" id="btnClear" onclick="clearForm()" />
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+
+    <script>
+       $(document).ready(function () {
+    $("#add-button").click(function () {
+        // Get the selected student's name
+        var studentName = $("#StudentCode option:selected").text();
+
+        // Get the obtained marks
+        var obtainedMarks = parseFloat($("#ObtainedMarks").val());
+
+        // Get the attendance status
+        var attendance = $("input[name='Attendance']:checked").val();
+
+        // Get the passing marks
+        var passingMarks = parseFloat("@Model.PassingMarks");
+
+        // Determine the status based on the obtained marks and passing marks
+        var status = obtainedMarks >= passingMarks ? "Pass" : "Fail";
+
+        // Append a row to the table with the student's information
+        var serialNumber = $("#studentTable tbody tr").length + 1;
+        $("#studentTable tbody").append(
+            '<tr>' +
+            '<td>' + serialNumber + '</td>' +
+            '<td class="student-name">' + studentName + '</td>' +
+            '<td class="obtained-marks">' + obtainedMarks + '</td>' +
+            '<td class="attendance">' + attendance + '</td>' +
+            '<td class="status">' + status + '</td>' +
+            '<td><button type="button" class="btn btn-danger btn-xs float-center delete-button">Remove</button></td>' +
+            '<td style="display:none;">' + $("#StudentCode").val() + '</td>' +
+            '</tr>'
+        );
+
+        // Clear the form fields after adding the student
+        $("#StudentCode").val('');
+        $("#ObtainedMarks").val('');
+        $("input[name='Attendance']").prop('checked', false);
+    });
+           $("#save-button").click(function () {
+    // Create an array to store student data
+    var studentDataArray = [];
+
+    // Iterate through each row in the table
+    $("#studentTable tbody tr").each(function () {
+        // Get student data from the table row
+        var studentName = $(this).find(".student-name").text();
+        var obtainedMarks = parseFloat($(this).find(".obtained-marks").text());
+        var attendance = $(this).find(".attendance").text();
+        var status = $(this).find(".status").text();
+        var studentCode = $(this).find("td:last").text();
+
+        // Create a student object
+        var studentData = {
+            AssignTestId: "@Model.AssignTestId",
+            StudentName: studentName,
+            ObtainedMarks: obtainedMarks,
+            AttendanceStatusId: attendance === "Present" ? 30 : 31,
+            Status: status,
+            StudentCode: studentCode
+        };
+
+        // Add student object to the array
+        studentDataArray.push(studentData);
+    });
+
+    // Make an AJAX request to the controller
+    $.ajax({
+        url: '/Trainer/AddRResultTSAsynch', // Replace ControllerName with your actual controller name
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(studentDataArray),
+        success: function (response) {
+            // Handle success response
+            console.log(response);
+        },
+        error: function (xhr, status, error) {
+            // Handle error response
+            console.error(xhr.responseText);
+        }
+    });
+});
+
+});
+
+    </script>
+  
+</body>
+</html>

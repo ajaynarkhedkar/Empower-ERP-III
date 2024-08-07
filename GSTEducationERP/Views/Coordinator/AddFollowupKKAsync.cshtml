@@ -1,0 +1,232 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+@{
+    ViewBag.Title = "AddFollowupKKAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <html>
+    <head>
+        <style>
+            .readonly-transparent {
+                background-color: transparent;
+                border: none;
+            }
+            h2 {
+                padding-top: 10px;
+                margin-bottom: 10px;
+                font-family: Verdana;
+                font-weight: bold;
+                font-size: medium;
+                color: #33CCCC;
+            }
+        </style>
+
+         <!-- Include SweetAlert2 CSS and JS files -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.3/dist/sweetalert2.all.min.js"></script>
+
+    </head>
+    <body>
+        <br />
+        <div class="container-fluid">
+            <div class="card " style="padding:15px; margin-right:0px; margin-left:0px; margin-top:20px">
+                <h2>Add Followup</h2>
+                <hr />
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StudentCode, "Student Code")
+                                @Html.EditorFor(model => model.StudentCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.StudentCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StudentName, "Student Name")
+                                @Html.EditorFor(Model => Model.StudentName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CourseName, "Course Name")
+                                @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control readonly-transparent", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AlternateNumber, "Alternate Number")
+                                @Html.EditorFor(model => model.AlternateNumber, new { htmlAttributes = new { @class = "form-control readonly-transparent", @readonly = "readonly" } })
+
+                                @Html.ValidationMessageFor(model => model.AlternateNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.FollowUpNote, "Followup Note", htmlAttributes: new { @class = "control-label" })
+                        <div class="col-md-12">
+                        <textarea id="FollowUpNote" name="FollowUpNote" class="form-control onlycharacters" minlength="10" maxlength="200"></textarea>
+                            @Html.ValidationMessageFor(model => model.FollowUpNote, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DateofJoin, "Date Of Join")
+                                @Html.EditorFor(model => model.DateofJoin, new { htmlAttributes = new { @class = "form-control datepicker", min = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(model => model.DateofJoin, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NextFollowUpDate, "Next Followup Date")
+                                @Html.EditorFor(model => model.NextFollowUpDate, new { htmlAttributes = new { @class = "form-control datepicker", min = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(model => model.NextFollowUpDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StatusName, "Status")
+                                @Html.DropDownListFor(Model => Model.StatusName, new SelectList(ViewBag.Status, "Value", "Text"), "----Select Status----", new { @class = "form-control", id = "statusDropdown" })
+                                @Html.ValidationMessageFor(model => model.StatusName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FollowUpTaken, "Followup Taken")
+                                @Html.DropDownListFor(Model => Model.FollowUpTaken, new SelectList(ViewBag.Staff, "Value", "Text"), "----Select Staff----", new { @class = "form-control", id = "ftakenDropdown" })
+                                @Html.ValidationMessageFor(model => model.FollowUpTaken, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <br />
+                        <div class="offset-md-5 col-md-12">
+                            <input type="submit" class="btn btn-success btn-sm" value="Save" id="saveButton" style="margin-right:20px" />
+                            <button type="button" class="btn btn-danger btn-sm" id="cancel-button" onclick="goBack()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a href="@Url.Action("ListShowAttendanceFollowUpKKAsync", "Coordinator")" class="icon" title="Back To List">
+                        <!-- Embed the video element -->
+                        <video width="35" height="35" playsinline loop>
+                            <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                        </video>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+
+        <script>
+            // Wait for the document to fully load before executing the script
+            document.addEventListener("DOMContentLoaded", function () {
+                // Get the save button element
+                var saveButton = document.getElementById('saveButton');
+
+                // Add a click event listener to the save button
+                saveButton.addEventListener('click', async function (event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    // Get form data
+                    var studentCode = document.getElementById('StudentCode').value;
+                    var followUpNote = document.getElementById('FollowUpNote').value;
+                    var nextFollowUpDate = document.getElementById('NextFollowUpDate').value;
+                    var statusName = document.getElementById('statusDropdown').value;
+                    var dateOfJoin = document.getElementById('DateofJoin').value;
+                    var followUpTaken = document.getElementById('ftakenDropdown').value;
+
+                    // Validate form data
+                    if (followUpNote.trim() === '' || nextFollowUpDate.trim() === '' || statusName.trim() === '' || dateOfJoin.trim() === '' || followUpTaken.trim() === '') {
+                        Swal.fire('Error', 'Please fill in all fields.', 'error');
+                        return;
+                    }
+
+                    // Show confirmation dialog
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to save your changes.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, save it!'
+                    }).then(async (result) => {
+                        // If the user clicks "Yes, save it!" execute your save logic here
+                        if (result.isConfirmed) {
+                            // Prepare form data to send to the server
+                            var formData = new FormData();
+                            formData.append('StudentCode', studentCode);
+                            formData.append('FollowUpNote', followUpNote);
+                            formData.append('NextFollowUpDate', nextFollowUpDate);
+                            formData.append('StatusName', statusName);
+                            formData.append('DateofJoin', dateOfJoin);
+                            formData.append('FollowUpTaken', followUpTaken);
+
+                            try {
+                                // Send form data to the server using Fetch API
+                                var response = await fetch('/Coordinator/AddFollowupKKAsync', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+
+                                if (response.ok) {
+                                    Swal.fire('Success!', 'FollowUp Data Saved Successfully.', 'success').then(() => {
+                                        // Redirect to the list page after saving
+                                        window.location.href = '/Coordinator/ListShowAttendanceFollowUpKKAsync';
+                                    });
+                                } else {
+                                    Swal.fire('Error', 'Error saving followup data. Please try again.', 'error');
+                                }
+                            } catch (error) {
+                                console.error('Error:', error);
+                                Swal.fire('Error', 'An unexpected error occurred. Please try again later.', 'error');
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            function goBack() {
+                window.history.go(-1);
+            }
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#statusDropdown option[value=""]').attr('disabled', 'disabled');
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#ftakenDropdown option[value=""]').attr('disabled', 'disabled');
+            });
+        </script>
+        
+
+    </body>
+</html>
+}

@@ -1,0 +1,637 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<html>
+<head>
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<link href="~/Content/plugins/select2/css/select2.min.css" rel="stylesheet" />
+	<script src="~/Content/plugins/select2/js/select2.min.js"></script>
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
+	<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+	<script src="~/Content/Admin/js/Icon.js"></script>
+	@*<link rel="stylesheet" href="~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">*@
+	@*<script src="~/Content/plugins/select2/js/select2.full.min.js"></script>*@
+
+	<style>
+		.card-header {
+			cursor: pointer;
+		}
+		.error-field {
+			border: 2px solid red; /* Add your preferred styling for highlighting */
+		}
+
+		label:not(.form-check-label):not(.custom-file-label) {
+			font-size: 16px;
+		}
+
+		.form-control {
+			font-size: 16px !important;
+		}
+
+		.input-group > .custom-file {
+			font-size: 16px !important;
+		}
+
+		.btn:not(:disabled):not(.disabled) {
+			font-size: 14px !important;
+		}
+
+		.text-danger {
+			font-size: 12px !important;
+		}
+
+		.select2-container {
+			font-size: x-small;
+		}
+
+		.select2-container--default .select2-selection--multiple .select2-selection__choice {
+			background-color: #33CCCC;
+		}
+	</style>
+</head>
+<body>
+	<div id="ExamList">
+		<div id="addExam">
+			@using (Html.BeginForm("AddNewExamSNAsync", "Placement", FormMethod.Post, new { enctype = "multipart/form-data", id = "examForm" }))
+
+			{
+				@Html.AntiForgeryToken()
+			<div class="card card-default ">
+				<div class="card-header" style="background-color: #33CCCC">
+					<h4 class="card-title">Add Exam</h4>
+				</div>
+				<div class="card-body collapse">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.CourseCode, "Course Name", htmlAttributes: new { @class = "control-label col-md-4" })
+								<div class="col-md-8">
+									@Html.DropDownListFor(model => model.CourseCode, new SelectList(ViewBag.Course, "Value", "Text"), "---Select Course---", new { @class = "form-control col-md-12" })
+									@Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.ExamName, htmlAttributes: new { @class = "control-label col-md-4" })
+								<div class="col-md-8">
+									@Html.EditorFor(model => model.ExamName, new { htmlAttributes = new { @class = "form-control col-md-12", id = "ExamName", } })
+									@Html.ValidationMessageFor(model => model.ExamName, "", new { @class = "text-danger" })
+								</div>
+								<span id="examNameValidation" class="text-danger"></span>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.Technology, "Technology", htmlAttributes: new { @class = "control-label col-md-4" })
+								<div class="col-md-8">
+									@Html.DropDownListFor(model => model.Technology, ViewBag.Technology as MultiSelectList, new { @class = "form-control col-md-12", @id = "technologyDropdown", @multiple = "multiple" })
+									@Html.ValidationMessageFor(model => model.Technology, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.SelectedDuration, htmlAttributes: new { @class = "control-label col-md-4" })
+								<div class="col-md-8">
+									<input type="time" id="SelectedDuration" name="SelectedDuration" value="@Model.SelectedDuration.ToString("hh\\:mm")" class="form-control col-md-6" />
+									@Html.ValidationMessageFor(model => model.SelectedDuration, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.TotalMarks, htmlAttributes: new { @class = "control-label col-md-4" })
+								<div class="col-md-8">
+									@Html.EditorFor(model => model.TotalMarks, new { htmlAttributes = new { @class = "form-control col-md-12", @maxlength = "3" } })
+									@Html.ValidationMessageFor(model => model.TotalMarks, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.PassingMarks, htmlAttributes: new { @class = "control-label col-md-4 " })
+								<div class="col-md-8">
+									@Html.EditorFor(model => model.PassingMarks, new { htmlAttributes = new { @class = "form-control col-md-12", @maxlength = "3" } })
+									@Html.ValidationMessageFor(model => model.PassingMarks, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-4">
+							<div class="input-group">
+								@Html.LabelFor(model => model.TotalNoOfQuestion, htmlAttributes: new { @class = "control-label col-md-4" })
+								<div class="col-md-8">
+									@Html.EditorFor(model => model.TotalNoOfQuestion, new { htmlAttributes = new { @class = "form-control col-md-6", @oninput = "limitIntegerLength(this, 2)" } })
+									@Html.ValidationMessageFor(model => model.TotalNoOfQuestion, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+						<div class="input-group col-md-4" id="offer-section">
+							@Html.LabelFor(model => model.TestPaperFile, htmlAttributes: new { @class = "control-label col-md-4" })
+							<div class="input-group col-md-7">
+								<div class="custom-file ">
+									<input type="file" class="custom-file-input" name="TestPaperFile" id="TestPaperFile" onchange="updateFileName(this)">
+									<label class="custom-file-label" for="TestPaperFile">Choose file</label>
+								</div>
+							</div>
+							<span class="input-group-append">
+								<img src="~/Content/Admin/img/eyeicon.jpg" alt="View" style="cursor: pointer; margin-top: 7px; height:20px;width:20px;" id="btnPreviewFile">
+							</span>
+							<span style="margin-left:150px" id="offerValidation" class="text-danger"></span>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group justify-content-end " style="margin-top:10px; padding-right:40px;">
+								<div class="col-md-3">
+									<button type="submit" class="btn btn-block bg-gradient-success btn-block" onclick="return confirmSave(event)">Save</button>
+								</div>
+								<div class="col-md-3">
+									<button type="button" class="btn btn-block bg-gradient-danger btn-block" onclick="cancelForm()">Clear</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<br />
+				</div>
+			</div>
+			}
+		</div>
+
+		<div class="card">
+			<div class="card-body">
+				<table id="AllExam" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th hidden>
+								@Html.HiddenFor(model => model.ExamId)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.CourseName)
+							</th>
+
+							<th>
+								@Html.DisplayNameFor(model => model.ExamName)
+							</th>
+							<th>
+								Technology Name
+							</th>
+							<th>
+								Duration(hh:mm)
+								@*@Html.DisplayNameFor(model => model.FormattedDuration)*@
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.TotalMarks)
+							</th>
+
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model != null && Model.lstAllExams != null)
+						{
+							for (int i = 0; i < Model.lstAllExams.Count; i++)
+							{
+								var item = Model.lstAllExams[i];
+								<tr>
+									<td hidden>
+										@Html.HiddenFor(modelItem => item.ExamId)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.CourseName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.ExamName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TechnologyName)
+									</td>
+
+									<td>
+										@Html.DisplayFor(modelItem => item.FormattedDuration)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.TotalMarks)
+									</td>
+
+
+									<td style="text-align: center;">
+										<a href="#" class="icon" data-toggle="tooltip" title="View Exam File" data-studentCode="@item.ExamId" onclick="viewExamFile('@item.FilePth')">
+											<video width="25" height="25" playsinline loop>
+												<source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+											</video>
+										</a>
+										@*<a href="#" class="icon1" data-toggle="tooltip" title="Edit Exam" data-examid="@item.ExamId">
+											<video width="25" height="25" playsinline loop>
+												<source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4">
+											</video>
+										</a>*@
+
+
+									</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function () {
+			initializeSelect2();
+
+			$('#CourseCode').on('change', function () {
+				$('#ExamName').val('');
+				validateExamNameOnCourseChange();
+			});
+            // Attach event handler to ExamName input field on keyup
+            $('#ExamName').on('keyup', function () {
+                validateExamName();
+			});
+			$('#technologyDropdown').select2({
+				multiple: true,
+				maximumSelectionLength: 5 // Set the maximum number of selections allowed
+			});
+			$("#btnPreviewFile").hide(); // Initially hide the "View" button
+			// Handle card collapse/expand events
+			$('.card').on('shown.bs.collapse hidden.bs.collapse', function () {
+				// Reinitialize select2 when the card is expanded or collapsed
+				initializeSelect2();
+			});
+
+		});
+		function initializeSelect2() {
+			// Initialize Select2 Elements
+			$('.select2').select2();
+
+			// Initialize Select2 Elements with Bootstrap 4 theme
+			$('.select2bs4').select2({
+				theme: 'bootstrap4'
+			});
+		}
+		function validateExamNameOnCourseChange() {
+			var examName = $('#ExamName').val();
+			var courseCode = $('#CourseCode').val();
+
+			if (examName && courseCode) {
+				// If both exam name and course code are provided, clear the exam name field
+				$('#ExamName').val('');
+				$('#examNameValidation').text(''); // Clear the validation message
+			}
+		}
+
+           function validateExamName() {
+        var examName = $('#ExamName').val();
+        var courseCodeText = $('#CourseCode option:selected').text();
+
+			   if (courseCodeText === '---Select Course---' && examName) {
+            // Course not selected, but exam name entered
+				   $('#examNameValidation').text('Please select a course before entering the exam name.');
+				   $('#CourseCode').focus(); // Set focus on the CourseCode dropdown
+        } else {
+            // Either course is selected or exam name is not entered, clear the validation message
+            $('#examNameValidation').text('');
+        }
+
+        if (examName && courseCodeText !== '---Select Course---') {
+            // Perform AJAX check to see if the exam name already exists
+            $.ajax({
+                url: '@Url.Action("IsExamAvailableAsyncSN", "Placement")',
+                type: 'POST',
+                data: { examName: examName, courseCode: $('#CourseCode').val() },
+                success: function (data) {
+                    if (data.isAvailable===false) {
+                        // Exam name is available
+                        $('#examNameValidation').text('');
+                    } else {
+                        // Exam name already exists
+						$('#examNameValidation').text('Exam name already exists. Please choose another name.');
+
+
+                    }
+                },
+                error: function () {
+                    // Handle error
+                    console.error('Error checking exam name availability.');
+                }
+            });
+        }
+    }
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.card-header').click(function () {
+				var cardBody = $(this).closest('.card').find('.card-body:first');
+				cardBody.slideToggle();
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			// Attach event handler to Passing Marks input field
+			$('#PassingMarks').on('blur', function () {
+				validatePassingMarks();
+			});
+
+
+
+		});
+
+		function validatePassingMarks() {
+			// Validate Passing Marks against Total Marks
+			var totalMarks = parseFloat($('#TotalMarks').val());
+			var passingMarks = parseFloat($('#PassingMarks').val());
+
+			var passingMarksField = $('#PassingMarks');
+
+			if (!isNaN(totalMarks) && !isNaN(passingMarks) && passingMarks > totalMarks) {
+				// Show a SweetAlert error message and highlight the field
+				Swal.fire({
+					title: 'Error',
+					text: 'Passing Marks cannot be greater than Total Marks.',
+					icon: 'error',
+					confirmButtonText: 'OK'
+				});
+				passingMarksField.val(''); // Clear the Passing Marks field
+				passingMarksField.addClass('error-field');
+			} else {
+				// Remove the error class if validation passes
+				passingMarksField.removeClass('error-field');
+			}
+
+		}
+
+function confirmSave(event) {
+    console.log("Before validation");
+
+    // Prevent default form submission
+    event.preventDefault();
+
+    // Validate fields before showing the confirmation dialog
+    var courseCode = $('#CourseCode').val();
+    var examName = $('#ExamName').val();
+    var selectedDuration = $('#SelectedDuration').val();
+    var totalMarks = parseFloat($('#TotalMarks').val());
+    var passingMarks = parseFloat($('#PassingMarks').val());
+    var totalNoOfQuestion = $('#TotalNoOfQuestion').val();
+	var testPaperFile = $('#TestPaperFile').prop('files')[0];
+	var technology = $('#technologyDropdown').val();
+
+	// Check if any required field is empty
+	if (!courseCode || !examName || !selectedDuration || !totalMarks || !passingMarks || !totalNoOfQuestion || !testPaperFile || !technology) {
+        // If any required field is empty, show an error message
+        Swal.fire({
+            title: 'Error',
+            text: 'All fields must be filled in.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return false; // Prevent further execution and form submission
+    }
+
+    // Check if TestPaperFile is null
+    if (!testPaperFile) {
+        // If TestPaperFile is null, show an error message
+        Swal.fire({
+            title: 'Error',
+            text: 'Please select a test paper file.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return false; // Prevent further execution and form submission
+    }
+
+    // If all required fields are filled and Passing Marks is valid, proceed to show the confirmation dialog
+    Swal.fire({
+        title: 'Are you sure you want to add the exam?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, add it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed, submit the form with file data using FormData
+            var formData = new FormData($('#examForm')[0]);
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddNewExamSNAsync", "Placement")',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+					displayToast('Data saved successfully!', 'success');
+					$('#examForm')[0].reset();
+					$('#technologyDropdown').val(null).trigger('change');
+					$('.custom-file-label').html('Choose File'); // Reset the file input label text
+
+					// Wait for the toast to be shown before redirecting
+					setTimeout(function () {
+						//window.location.href = '/Placement/ListAllInterviewAsyncSN'; // Replace '/home' with the URL you want to redirect to
+					}, 2000); // Adjust the timeout value as needed
+					refreshExamList();
+                },
+                error: function (error) {
+    // Handle error
+    Swal.fire({
+        title: 'Error',
+        text: 'An error occurred while adding the exam.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then(() => {
+        // Redirect to the AddNewExamSNAsync action
+        window.location.href = '@Url.Action("AddNewExamSNAsync", "Placement")';
+    });
+}
+
+            });
+        }
+    });
+
+    return false; // Prevent default form submission
+		}
+		function cancelForm() {
+			$('#examForm')[0].reset();
+			$('#technologyDropdown').val(null).trigger('change');
+			$('#examNameValidation').text('');
+			$('.custom-file-label').html('Choose File'); // Reset the file input label text
+		}
+
+		function refreshExamList() {
+    // Make an AJAX request to fetch the updated exam list
+    $.ajax({
+        type: 'GET',
+        url: '@Url.Action("ListAllExamsSNAsync", "Placement")', // Replace with the actual action to get the updated exam list
+        success: function (data) {
+            // Replace the existing exam list with the updated list
+			$('#ExamList').html(data);
+        },
+        error: function (error) {
+            console.error('Error fetching the updated exam list.');
+        }
+    });
+}
+	</script>
+	<script>
+		function displayToast(message, type) {
+			// Display Toastr notification
+			toastr[type](message);
+		}
+
+		toastr.options = {
+			closeButton: true,
+			progressBar: true,
+			positionClass: 'toast-top-right',
+			showMethod: 'slideDown',
+			timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+		};
+	</script>
+
+	<script>
+		function limitIntegerLength(inputField, maxLength) {
+			let inputValue = inputField.value;
+
+			// Remove any non-digit characters
+			inputValue = inputValue.replace(/\D/g, '');
+
+			// Limit the input to the specified maxLength
+			inputValue = inputValue.substring(0, maxLength);
+
+			// Update the input field with the limited value
+			inputField.value = inputValue;
+		}
+	</script>
+
+	<script>
+		$(document).ready(function () {
+
+
+			$("#btnPreviewFile").on("click", function () {
+				var documentInput = $("#TestPaperFile")[0];
+				var documentFile = documentInput.files.length > 0 ? documentInput.files[0] : null;
+
+				if (documentFile) {
+					var reader = new FileReader();
+
+					reader.onload = function (e) {
+						var documentData = new Uint8Array(e.target.result);
+
+						// Check the file type
+						if (documentFile.type === 'application/pdf') {
+							openPdfInNewTab(documentData);
+						} else if (documentFile.type === 'application/msword' || documentFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+							openWordInNewTab(documentData);
+						} else {
+							alert('Unsupported document type. Unable to preview.');
+						}
+					};
+
+					// Read the file as an ArrayBuffer
+					reader.readAsArrayBuffer(documentFile);
+				} else {
+					alert('No document selected for preview.');
+				}
+			});
+
+			function openPdfInNewTab(pdfData) {
+				// Create a Blob from the PDF data
+				var blob = new Blob([pdfData], { type: 'application/pdf' });
+
+				// Create a URL for the Blob
+				var url = URL.createObjectURL(blob);
+
+				// Open a new window or tab with the PDF
+				window.open(url, '_blank');
+
+				// Release the URL object when it's no longer needed
+				URL.revokeObjectURL(url);
+			}
+
+			function openWordInNewTab(wordData) {
+				// Create a Blob from the Word data
+				var blob = new Blob([wordData], { type: 'application/msword' });
+
+				// Create a URL for the Blob
+				var url = URL.createObjectURL(blob);
+
+				// Open a new window or tab with the Word document
+				window.open(url, '_blank');
+
+				// Release the URL object when it's no longer needed
+				URL.revokeObjectURL(url);
+			}
+		});
+		function updateFileName(input) {
+			var fileName = input.value.split('\\').pop();
+			$(input).next('.custom-file-label').html(fileName);
+		}
+		$("#TestPaperFile").on("change", function () {
+			// Validate file type
+			var testPaperFile = this.files[0];
+			var allowedFileTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+			if (testPaperFile && allowedFileTypes.indexOf(testPaperFile.type) === -1) {
+				// Invalid file type
+				Swal.fire({
+					title: 'Error',
+					text: 'Invalid file type. Please select a PDF or Word document.',
+					icon: 'error',
+					confirmButtonText: 'OK'
+				});
+
+				// Clear the file input
+				$(this).val('');
+				// Update the file label to the default text
+				$(this).next('.custom-file-label').html('Choose file');
+				// Hide the "View" button
+				$("#btnPreviewFile").hide();
+			} else {
+				// Valid file type
+				// Update the file label to show the selected file name
+				var fileName = $(this).val().split('\\').pop();
+				$(this).next('.custom-file-label').html(fileName);
+				// Show the "View" button
+				$("#btnPreviewFile").show();
+			}
+		});
+	</script>
+	<script>
+		function viewExamFile(filePath) {
+		// Open a new tab with the offer letter using the file path
+    window.open('@Url.Content("~/Content/Placement/docs/TestFiles/")' + filePath, '_blank');
+		}
+
+	</script>
+	<script>
+		$(document).ready(function () {
+		$('#ExamList').on('click', '.icon1', function (e) {
+			e.preventDefault(); // Prevent the default behavior of the link
+
+            // Get the ExamId from the data attribute
+            var examId = $(this).data('examid');
+
+            // Use AJAX to load the Edit Exam view
+            $.ajax({
+                url: '@Url.Action("UpdateExamAsyncSN", "Placement")',
+                type: 'GET',
+                data: { id: examId },
+                success: function (data) {
+                    // Replace the content of the addExam div with the loaded Edit Exam view
+					$('#addExam').html(data);
+                },
+                error: function () {
+                    // Handle error
+                    console.error('Error loading Edit Exam view.');
+                }
+            });
+		});
+		});
+	</script>
+</body>
+</html>

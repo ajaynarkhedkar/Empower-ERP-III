@@ -1,0 +1,130 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+<html>
+<head>
+</head>
+<body style="margin: 0; padding: 0;">
+    <br />
+    <div class="card " style="padding: 10px;">
+        <h2>Student Leave</h2>
+        <hr />
+        <div class="card">
+            <div class="card-body">
+                <table id="AttTopic" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th hidden="hidden">
+                                @Html.DisplayNameFor(model => model.StudentCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.StudentName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.BatchName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.StartDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EndDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Reason)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.lststudentleave.Count; i++)
+                        {
+                            var item = Model.lststudentleave[i];
+                            <tr>
+                                <td hidden="hidden">
+                                    @Html.DisplayFor(modelItem => item.StudentCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StudentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BatchName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StartDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EndDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Reason)
+                                </td>
+                                <td>
+                                    @{
+                                        string labelClass = "";
+                                        if (item.Status == "Approved")
+                                        {
+                                            labelClass = "form-check-label text-success";
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            labelClass = "form-check-label text-danger";
+                                        }
+                                        else if (item.Status == "Pending")
+                                        {
+                                            labelClass = "form-check-label text-warning";
+                                        }
+                                    }
+                                    <span class="@labelClass">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <a href="#" class="icon" data-id="@item.StudentCode"
+                                           data-url="@Url.Action("DetailStudentLeaveAsyncYT", "Trainer", new { id = item.StudentCode } )"
+                                           data-toggle="modal" data-target="#SectionModal" title="Update Leave">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4" />
+                                            </video>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="modal fade" id="SectionModal">
+                    <div class="modal-dialog" style="background-color: white;max-width:auto">
+                        <div class="modal-content" style="background-color: white;">
+                            <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 6px;">&times;</button>
+                            <div class="modal-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#AttTopic').on('click', '.icon', function () {
+                var LabId = $(this).data('id');
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#SectionModal .modal-body').html(data);
+                        $('#SectionModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

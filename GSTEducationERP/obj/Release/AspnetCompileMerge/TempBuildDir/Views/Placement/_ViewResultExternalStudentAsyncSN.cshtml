@@ -1,0 +1,59 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+<div class="card mx-auto pl-3">
+	<br />
+	<div class="input-group">
+		<label class="col-md-4">Course Name: </label>
+		<div class="col-md-8">
+			@Model.CourseName
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Student Name:</label>
+		<div class="col-md-8">
+			@Model.StudentName
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Exam Name:</label>
+		<div class="col-md-8">
+			@Model.ExamName
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Exam Date:</label>
+		<div class="col-md-8">
+			@Model.ExamDate.ToString("yyyy-MM-dd")
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Total Marks:</label>
+		<div class="col-md-8">
+			@Model.TotalMarks
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Obtained Marks:</label>
+		<div class="col-md-8">
+			@Model.ObtainedMarks
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Status:</label>
+		<div class="col-md-8">
+			@Model.Status
+		</div>
+	</div>
+	<div class="input-group">
+		<label class="col-md-4">Result:</label>
+		<div class="col-md-8">
+			@Model.ResultStatus
+		</div>
+	</div>
+	@*<label class="col-md-10">Student Name:@Model.StudentName</label>
+	<label class="col-md-10">Exam Name:@Model.ExamName</label>
+	<label class="col-md-10">Exam Date:@Model.ExamDate.ToString("yyyy-MM-dd")</label>
+	<label class="col-md-10">Total Marks:@Model.TotalMarks</label>
+	<label class="col-md-10">Obtained Marks:@Model.ObtainedMarks</label>
+	<label class="col-md-10">Status:@Model.Status</label>
+	<label class="col-md-10">Result:@Model.ResultStatus</label>*@
+</div>

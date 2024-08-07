@@ -1,0 +1,585 @@
+﻿
+@{
+    ViewBag.Title = "SendMessageAsyncPB";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/select2/js/select2.min.js"></script>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/Admin/css/adminlte.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/summernote/summernote-bs4.min.js"></script>
+    <link href="~/Content/plugins/dist/css/adminlte.min.css" rel="stylesheet" />
+
+    <style>
+        .btn-green:hover {
+            color: white;
+            background: #2b83cb;
+        }
+
+        .btn-black {
+            color: white;
+            background: rgb(169,169,169);
+        }
+
+            .btn-black:hover {
+                background: black;
+            }
+
+        .timer {
+            position: absolute;
+            left: calc(50% - 120px / 2);
+            width: 120px;
+            height: 120px;
+            opacity: 0;
+        }
+
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: #dc3545;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: bold;
+            margin-right: 2px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #007bff;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            cursor: default;
+            float: left;
+            margin-right: 5px;
+            margin-top: 5px;
+            padding: 0 5px
+        }
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #6fe3f4;
+        }
+        .rich-textbox {
+            border: 1px solid #6fe3f4;
+            min-height: 100px;
+            padding: 10px;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        .side-by-side-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+        }
+
+            .side-by-side-list li {
+                margin-right: 10px;
+            }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+    </style>
+</head>
+<body>
+
+
+    @using (Html.BeginForm("SendSMSAsyncPB", "Bind", new { @id = "form1", @enctype = "multipart/form-data" }))
+    {
+        <section class="content card">
+            <div class="container-sm">
+                <div class="row">
+                    <div class="col-md-8 form-group">
+                        <div class="card card-primary card-outline mt-4">
+                            <div class="card-header">
+                                <h2 class="card-title">Compose New Message</h2>
+                            </div>
+
+                            @*FOR INSERT REMAING EMAIL*@
+                            <input type="hidden" name="remainingEmails" id="remainingEmails" value="">
+                            <div class="card-body">
+                                <div class="form-group" style="font:xx-small;">
+                                    <label>Template</label>
+                                    @*<input class="form-control" id="To" name="To" placeholder="To:" required type="email">*@
+                                    <select class="form-control" name="EmailTemplate" id="EmailTemplate" required>
+                                        <option value="" disabled selected>--Select Template--</option>
+                                        @foreach (System.Data.DataRow Data in ViewBag.TemplateName.Tables[0].Rows)
+                                        {
+                                            <option value="@Data["TemplateId"]">@Data["EmailTemplate"]</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" id="Subject" name="Subject" placeholder="Title:" required style="font: xx-small;" min="40" maxlength="220">
+                                </div>
+
+                                <div class="form-group card" style="font:xx-small;">
+
+                                    <div id="phoneBox" style="font: xx-small; padding-left:5px; overflow-y: auto; max-height: 200px; "></div>
+                                </div>
+
+                                <textarea id="compose" name="compose" class="form-control" style="height:100px;font:xx-small;">  </textarea>
+                                <!--<textarea id="compose-textarea" class="form-control" style="height: 30px" name="compose" Id="compose" required>
+                                </textarea>-->
+                                @*<div class="form-group">
+                                        <div class="btn btn-default btn-file">
+                                            <i class="fas fa-paperclip"></i> Attachment
+                                            <input type="file" name="FileUploader" id="FileUploader">
+                                        </div>
+                                        <p class="help-block">Max. 32MB</p>
+                                    </div>*@
+
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="float-right">
+                                    @*<button type="submit" id="send" name="send" class="btn-sm btn-primary" onclick="CheckValidation()">
+                                            Send
+                                        </button>*@
+                                    <button type="button" id="send" name="send" class="btn-sm btn-primary" onclick="return CheckValidation()">
+                                        Send
+                                    </button>
+                                </div>
+                                <button type="reset" id="discard" name="discard" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Clear</button>
+                            </div>
+                            <a href="" class=" icon" style="padding-left:2px;">
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                                </video>
+                            </a>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="col-12 col-sm-4 mt-4">
+                        <div class="card card-primary card-outline card-outline-tabs">
+                            <div class="card-header p-0 border-bottom-0">
+                                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="false">Group</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link onlynumber" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Individual</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Batches</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="true">Today's Birthday</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body" id="cardId">
+                                <div class="tab-content tab-pane fade active show" id="custom-tabs-four-tabContent">
+                                    @*Group Div*@
+                                    <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab" style="font:xx-small;">
+                                        <input type="checkbox" name="group" id="student" value="0" /> Student <br />
+                                        <input type="checkbox" name="group" id="admin" value="1" /> Counsellor <br />
+                                        <input type="checkbox" name="group" id="admin" value="2" /> Coordinator <br />
+                                        <input type="checkbox" name="group" id="trainer" value="3" /> Trainer <br />
+                                        <input type="checkbox" name="group" id="admin" value="4" /> Admin <br />
+                                        <input type="checkbox" name="group" id="admin" value="5" /> Placement Coordinator <br />
+                                        <input type="checkbox" name="group" id="admin" value="6" /> HR <br />
+                                        <input type="checkbox" name="group" id="accountant" value="7" /> Accountant <br />
+                                    </div>
+                                    @*Individual Div*@
+                                    <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                                        <input type="text" class="onlynumber" name="To" id="To" placeholder="EnterNumber" min="10" maxlength="10" />
+                                    </div>
+                                    @*Batch Div*@
+                                    <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                                        <div class="col-md-6" data-select2-id="30">
+                                            <div class="form-group" data-select2-id="29">
+                                                <label>Batches</label>
+                                                <select class="select2bs4 select2-hidden-accessible" multiple="" name="Batches" data-placeholder="Select Batch" style="width: 200%;" data-select2-id="23" tabindex="-1" aria-hidden="true">
+                                                    <option value="" id="BatchOption">--Select Batches---</option>
+                                                    @foreach (System.Data.DataRow data in ViewBag.Batch.Tables[0].Rows)
+                                                    {
+                                                        <option value="@data["BatchCode"]">@data["BatchName"]</option>
+                                                    }
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
+                                        <table class="table" id="example1" style="width:100px; font:xx-small;" name="TodaysBirthday">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:35px">
+                                                        <input type="checkbox" id="checkBoxAll" class="custom-checkbox" name="SelectedEmail1" />
+                                                    </th>
+                                                    <th>Name</th>
+                                                    <th hidden>DOB</th>
+                                                    <th>EmailId</th>
+                                                </tr>
+
+
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="">
+                                    <button class="btn btn-sm btn-primary" type="button" id="ok" name="ok" title="Select and Click ok">Ok</button>
+                                </div>
+                                <br />
+                                @*<div class="col-md-6" id="secondcard" style="display:none;">
+                                        <label>Batches</label>
+                                        <select name="field2" id="field2" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3" onchange="console.log(this.selectedOptions)" style="width:200px;">
+                                            @foreach (System.Data.DataRow data in ViewBag.Batch.Tables[0].Rows)
+                                            {
+                                                <option value="@data["BatchCode"]">@data["BatchName"]</option>
+                                            }
+                                        </select>
+                                    </div>*@
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div> <!-- /.container-fluid -->
+
+        </section> <!-- /.content -->
+    }
+
+    <script src="~/Content/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/Content/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js" type="text/javascript"></script>
+
+    <script src="~/Content/plugins/toastr/toastr.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <script src="~/Content/Admin/js/adminlte.min.js" type="text/javascript"></script>
+
+    <script src="~/Content/plugins/dist/js/demo.js" type="text/javascript"></script>
+
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+
+
+    <script>
+        $(".onlynumber").keyup(function (e) {
+            if (/\D/g.test(this.value)) {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+
+        $('#EmailTemplate').on('change', function () {
+            var template = $('#EmailTemplate').val();
+            $.ajax({
+                url: "/Bind/GetAllTemplateDetailsPB",
+                method: 'Post',
+                data: {
+                    TemplateId: template
+                },
+                success: function (response) {
+                    var result = JSON.parse(response);
+                    $("#Subject").val(result[0]["Title"]);
+                    $("#compose").val(result[0]["Message"]);
+                }
+            });
+        });
+
+        function CheckValidation() { // THIS SCRIPT IS USE TO NOT NULL VALUE GET IN SHORT VALIDATION.
+
+            var selectedValue = $('input[type="checkbox"]:checked').val();
+            var IndividualEmail = $("#To").val();
+            var selectedOption = $('.select2bs4 option:selected').length;
+            var selectedBirthday = $('.chkCheckBoxId:checked').length;
+            console.log(selectedBirthday);
+            if ((selectedValue !== null && selectedValue !== undefined && selectedValue !== '') || IndividualEmail !== '' || selectedOption > 0 || selectedBirthday > 0) {
+                return true;
+            }
+            else {
+                alert("Please select Any One !!");
+                return false;
+            }
+        }
+
+        $('#checkBoxAll').change(function () {
+            $('.chkCheckBoxId').prop('checked', $(this).prop('checked'));
+        });
+
+        function multiselectCheckbox() {  // THIS SCRIPT IS USE TO MULTIPLESELECT CHECKBOX AND DELETE.
+            var container = $('#custom-tabs-four-home');
+
+            $('#form').on('send', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var checkedIds = $('div#custom-tabs-four-home input[type="checkbox"]:checked').map(function () {
+                    return this.id;
+                }).get();
+
+                // Log the IDs to the console (you can use them as needed)
+                console.log(checkedIds);
+            });
+        }
+
+        $('#custom-tabs-four-home-tab').on('click', function () {  // THIS SCRIPT IS USE FOR VALIDATION.
+            $('input[type="text"], input[type="email"], input[type="password"]').val('');
+            var selectedOption = $('.select2bs4 option:selected');
+            selectedOption.remove();
+            $('li.select2-selection__choice').remove();
+            $("#ok").show();
+        });
+
+        $('#custom-tabs-four-profile-tab').on('click', function () { // THIS SCRIPT IS USE TO VALIDATION.
+            $('input[type="checkbox"]').prop('checked', false);
+            var selectedOption = $('.select2bs4 option:selected');
+            selectedOption.remove();
+            $('li.select2-selection__choice').remove();
+            $("#ok").hide();
+
+        });
+
+        $('#custom-tabs-four-messages-tab').on('click', function () { // THIS SCRIPT IS USE TO VALIDATION.
+            $('input[type="text"], input[type="email"], input[type="password"]').val('');
+            $('input[type="checkbox"]').prop('checked', false);
+            $("#ok").show();
+        });
+
+        $('.select2bs4').select2();
+
+        $('#custom-tabs-four-settings-tab').on('click', function () {  // THIS SCRIPT IS USE TO GET TODYAS BIRTHDAY LIST.
+            $("#ok").hide();
+            $.ajax({
+                url: "/Bind/GetTodaysBirthdayAsyncPB",
+                type: 'Post',
+                data: {
+
+                },
+                success: function (response) {
+                    var result = JSON.parse(response);
+
+                    $("#example1 > tbody").html("");
+                    for (var i = 0; i < result.length; i++) {
+
+                        var data = '<tr>' +
+                            '<td>' +
+                            '<input type="checkbox" name="SelectedEmail" value="' + result[i]["Email"] + '" class="custom-checkbox chkCheckBoxId"  />' +
+                            '</td>' +
+                            '<td>' + result[i]["StaffName"] + '</td>' +
+                            '<td hidden>' + result[i]["DOB"] + '</td>' +
+                            '<td>' + result[i]["Email"] + '</td>' +
+                            + '</tr>';
+
+                        $('#example1').prepend(data);
+
+                    }
+                }
+            });
+        });
+
+        $('#field2').select2();  // THIS SCRIPT IS USE TO GET MULTIPLE SELECTE BATCHES.
+
+        $('input[type="checkbox"]').change(function () {
+            var checkboxId = $(this).attr('id');
+            var targetDivId = 'phoneBox';
+
+            // Check if the checkbox is checked
+            if ($(this).prop('checked')) {
+                // Show the target div
+                $('#phoneBox').html('');
+                $('#' + targetDivId).parent().show();
+            } else {
+                // Hide the target div
+                $('#' + targetDivId).parent().hide();
+            }
+        });
+
+        var emails;
+        $('#ok').click(function () {
+            var checkvalues = "";
+            var selectedBatches = [];
+            $('#cardId input[type="checkbox"]:checked').each(function () {
+                checkvalues += $(this).val() + ',';
+
+            });
+
+            selectedBatches = $('[name="Batches"]').val().join(',');
+
+            $.ajax({
+                url: "/Bind/GetSmsDataShowAsyncPB",
+                type: 'POST',
+                data: {
+                    checkvalues: checkvalues,
+                    selectedBatches: selectedBatches // Corrected the variable name
+                },
+                success: function (response) {
+                    var result = JSON.parse(response);
+
+                    emails = result;
+                    renderEmails(emails);
+                },
+            });
+        });
+
+        function renderEmails(result) {
+            console.log(result);
+            var emailHtml = result.map(function (item) {
+                return '<div class="email-item ">' + item.PhoneNo + ' <span class="remove-email" data-email="' + item.PhoneNo + '"><i class="fas fa-times" style="color: red;"></i></span></div>';
+            }).join('');
+
+            $("#phoneBox").html(emailHtml);
+
+            var remainingEmails = result.map(function (item) {
+                return item.PhoneNo;
+            }).join(',');
+            console.log(remainingEmails);
+            $("#remainingEmails").val(remainingEmails);
+        }
+
+        $(document).on('click', '.remove-email', function () {
+            var emailToRemove = $(this).data('email');
+
+            // Remove the email from the 'emails' array
+            emails = emails.filter(function (item) {
+                return item.PhoneNo !== emailToRemove;
+            });
+            // Render the updated email list
+            renderEmails(emails);
+        });
+
+        $(".onlynumber").keyup(function (e) {
+            if (/\D/g.test(this.value)) {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+                        /* $('#field').select2();*/
+                        //var phoneNo;
+                        //$('#ok').click(function () {
+                        //    var checkvalues = "";
+                        //    var selectedBatches = [];
+                        //    $('#cardId input[type="checkbox"]:checked').each(function () {
+                        //        checkvalues += $(this).val() + ',';
+
+                        //    });
+
+                        //    selectedBatches = $('[name="Batches"]').val().join(',');
+
+                        //    $.ajax({
+                        //        url: "/Trainer/GetSmsDataShowAsyncPB",
+                        //        type: 'POST',
+                        //        data: {
+                        //            checkvalues: checkvalues,
+                        //            selectedBatches: selectedBatches // Corrected the variable name
+                        //        },
+                        //        success: function (response) {
+                        //            var result = JSON.parse(response);
+
+                        //            PhoneNo = result;
+                        //            renderEmails(phoneNo);
+                        //        },
+                        //    });
+                        //});
+
+                        //function renderEmails(result) {
+                        //    var phoneHtml = result.map(function (item) {
+                        //        return '<div class="phone-item ">' + item.PhoneNo + ' <span class="remove-phone" data-phone="' + item.PhoneNo + '"><i class="fas fa-times" style="color: red;"></i></span></div>';
+                        //    }).join('');
+
+                        //    $("#phoneBox").html(phoneHtml);
+                        //    var remainingPhoneNumbers = result.map(function (item) {
+                        //        return item.PhoneNo;
+                        //    }).join(',');
+                        //    console.log(remainingPhoneNumbers);
+                        //    $("#remainingPhoneNumbers").val(remainingPhoneNumbers);
+                        //}
+
+                        //$(document).on('click', '.remove-phone', function () {
+                        //    var phoneNumberToRemove = $(this).data('PhoneNo'); // Assuming data-phone attribute contains the phone number
+                        //    // Remove the phone number from the 'PhoneNo' array
+                        //    phoneNo = phoneNo.filter(function (item) {
+                        //        return item.PhoneNo !== phoneNumberToRemove;
+                        //    });
+                        //    // Render the updated phone number list
+                        //    renderEmails(phoneNo);
+                        //});
+
+                        //$(document).on('click', '.remove-email', function () {
+                        //    var phoneNumberToRemove = $(this).data('phone');
+                        //    // Remove the email from the 'emails' array
+                        //    phoneNo = PhoneNo.filter(function (item) {
+                        //        return item.PhoneNo !== phoneNumberToRemove;
+                        //    });
+                        //    // Render the updated email list
+                        //    renderEmails(phoneNo);
+                        //});
+
+                    //    function renderEmails(result) {
+                    //        //var emailHtml = result.map(function (item) {
+                    //        //    return '<div class="email-item ">' + item.EmailId + ' <span class="remove-email" data-email="' + item.EmailId + '"><i class="fas fa-times" style="color: red;"></i></span></div>';
+                    //        //}).join('');
+                    //        console.log(result);
+                    //        var emailHtml = result.map(function (item) {
+                    //           return '<div class="email-item">' +
+                    //        '<span class="remove-email" data-email="' + item.EmailId + '"><i class="fas fa-times" style="color: red;"></i></span>' +
+                    //        '</div>';
+                    //}).join('');
+
+                    //        $("#emailBox").html(emailHtml);
+
+                    //        var remainingEmails = result.map(function (item) {
+                    //            return item.EmailId;
+                    //        }).join(',');
+                    //        //console.log(remainingEmails);
+                    //        $("#remainingEmails").val(remainingEmails);
+                    //    }
+                    //    $(document).on('click', '.remove-email', function () {
+                    //        var emailToRemove = $(this).data('email');
+
+                    //        // Remove the email from the 'emails' array
+                    //        emails = emails.filter(function (item) {
+                    //            return item.EmailId !== emailToRemove;
+                    //        });
+                    //        // Render the updated email list
+                    //        renderEmails(emails);
+                  // });
+
+    </script>
+</body>
+</html>

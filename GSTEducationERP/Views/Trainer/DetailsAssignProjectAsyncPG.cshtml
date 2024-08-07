@@ -1,0 +1,79 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    // Parse duration string to extract numerical value and unit
+    string duration = Model.Duration;
+    int durationValue = int.Parse(duration.Split(' ')[0]); // Extract numerical value
+    string durationUnit = duration.Split(' ')[1]; // Extract unit
+    DateTime startDate = Model.StartDate;
+
+    // Calculate tentative end date based on start date and duration
+    DateTime tentativeEndDate = startDate;
+    switch (durationUnit.ToLower())
+    {
+        case "month":
+            tentativeEndDate = startDate.AddMonths(durationValue);
+            break;
+        case "year":
+            tentativeEndDate = startDate.AddYears(durationValue);
+            break;
+        case "week":
+            tentativeEndDate = startDate.AddDays(durationValue * 7);
+            break;
+        // Add more cases if needed for other units
+        default:
+            // Handle unsupported duration units
+            break;
+    }
+}
+
+<div class="trainer-details">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>Course Name</th>
+                <td>@Html.DisplayFor(model => model.CourceName)</td>
+            </tr>
+            <tr>
+                <th>Assigned Trainer</th>
+                <td>@Html.DisplayFor(model => model.AssignTrainer)</td>
+            </tr>
+            <tr>
+                <th>Project Name</th>
+                <td>@Html.DisplayFor(model => model.ProjectName)</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>@Html.DisplayFor(model => model.Duration)</td>
+            </tr>
+            <tr>
+                <th>Start Date</th>
+                <td>@Html.DisplayFor(model => model.StartDate)</td>
+            </tr>
+            <tr>
+                <th>Tentative End Date</th>
+                <td>@tentativeEndDate.ToShortDateString()</td>
+            </tr>
+            <tr>
+                <th>Batch Name</th>
+                <td>@Html.DisplayFor(model => model.BatchName)</td>
+            </tr>
+            <tr>
+                <th>Team Leader Name</th>
+                <td>@Html.DisplayFor(model => model.TeamLeaderName)</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>@Html.DisplayFor(model => model.Status)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center">
+    <a href="@Url.Action("ListAllAssignedProjectAsyncPG")" class="back-link" title="Back to List">
+        <video width="45" height="45" playsinline loop>
+            <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+        </video>
+    </a>
+</div>

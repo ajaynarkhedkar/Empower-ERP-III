@@ -1,0 +1,210 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "UpdateAssingSeduleAsyncVP";
+    //Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<style>
+/*    body {
+        background-color: #f4f4f4;
+        color: #333;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+    }*/
+
+    h2 {
+        color: #007bff;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .back-button {
+        font-size: 20px;
+        margin-right: 180px;
+        color: #007bff; /* Set the desired color */
+        transition: color 0.3s ease; /* Add a smooth transition effect on hover */
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        position: absolute;
+        top: 80px;
+    }
+
+    
+</style>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.AssignScheduleId, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AssignScheduleId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssignScheduleId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Batch Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BatchName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Section Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SectionName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.SectionName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Topic Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TopicName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.TopicName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">No Of Session</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NoOfSessions, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.NoOfSessions, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Duration, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Duration, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Start Date</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Status</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StatusId, (IEnumerable<SelectListItem>)ViewBag.AssingStatus, "--Select Status--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" id="AssignSedule" class="btn btn-success btn-sm" />
+            </div>
+        </div>
+    </div>
+}
+@*<a class="back-button" onclick="goBack()">
+    <video width="35" height="35" playsinline loop>
+        <source src="~/Content/Admin/icon/back.mp4" type="video/mp4">
+    </video>
+    </a>*@
+
+
+@*<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#AssignSedule').click(function (e) {
+            e.preventDefault();
+
+            var StartDate = $('#StartDate').val();
+            if (StartDate == null || StartDate === "") {
+                showErrorAlert('Please enter a Start Date.');
+                return;
+            }
+
+            var Status = $('#StatusId').val();
+            if (Status == null || Status === "") {
+                showErrorAlert('Please enter a Status.');
+                return;
+            }
+            Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var formData = $('form').serialize();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("UpdateAssingSeduleAsyncVP")',
+                        data: formData,
+                        success: function (result) {
+                            if (result.success) {
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: result.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(function () {
+                                    window.location.href = '@Url.Action("DetailsAssignScheduleAsyncVP")';
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: result.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An unexpected error occurred',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        });
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+            });
+        }
+    });
+    $(document).ready(function () {
+        $('.back-button').mouseenter(function () {
+            // Select the video element inside the link and play it
+            $(this).find('video')[0].play();
+            $(this).addClass('running');
+        });
+
+        $('.back-button').mouseleave(function () {
+            // Select the video element inside the link and pause it
+            var video = $(this).find('video')[0];
+            video.pause();
+            video.currentTime = 0; // Reset the video to the beginning
+            $(this).removeClass('running');
+        });
+
+    });
+</script>

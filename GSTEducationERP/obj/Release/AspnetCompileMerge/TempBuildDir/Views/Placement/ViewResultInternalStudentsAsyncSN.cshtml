@@ -1,0 +1,100 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+
+<html>
+<head>
+
+</head>
+<body>
+	<div class="card p-3">
+		<div class="row justify-content-center">
+			<div class="input-group col-md-6">
+				<label class="col-md-7">Course Name: </label>
+				@Model.CourseName
+			</div>
+			<div class="input-group col-md-6">
+				<label class="col-md-7">Batch Name:</label>
+				@Model.BatchName
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="input-group col-md-6">
+				<label class="col-md-7">Exam Date: </label>
+				@Model.ExamDate.ToString("yyyy-MM-dd")
+			</div>
+			<div class="input-group col-md-6">
+				<label class="col-md-5">Exam:</label>
+				@Model.ExamName
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="input-group col-md-6">
+				<label class="col-md-7">Exam Time: </label>
+				@Model.ExamTime.ToString("hh:mm tt")
+			</div>
+			<div class="input-group col-md-6">
+				<label class="col-md-7">Total Marks: </label>
+				@Model.TotalMarks
+			</div>
+		</div>
+		<div class="card-body">
+			<div style="max-height: 400px; overflow-y: auto;">
+
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>
+								@Html.DisplayNameFor(model => model.StudentName)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.ObtainedMarks)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Attendance)
+							</th>
+							<th>
+								Result
+							</th>
+
+						</tr>
+					</thead>
+
+					<tbody>
+
+						@if (Model != null && Model.lstConductedExams != null)
+						{
+							foreach (var item in Model.lstConductedExams)
+							{
+
+								<tr>
+
+									<td>
+										@Html.DisplayFor(modelItem => item.StudentName)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.ObtainedMarks)
+									</td>
+									<td>
+										@Html.DisplayFor(modelItem => item.Attendance)
+									</td>
+									<td>
+										@if (item.ResultStatus == "Pass")
+										{
+											<span class="badge bg-success">@Html.DisplayFor(modelItem => item.ResultStatus)</span>}
+										else
+										{
+											<span class="badge bg-danger">@Html.DisplayFor(modelItem => item.ResultStatus)</span>
+										}
+									</td>
+
+								</tr>
+							}
+
+						}
+					</tbody>
+				</table>
+			</div>
+			</div>
+		</div>
+</body>
+</html>

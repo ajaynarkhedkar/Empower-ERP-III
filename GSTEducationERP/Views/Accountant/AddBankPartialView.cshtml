@@ -1,0 +1,198 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@{
+    ViewBag.Title = "AddNewBankAccountAsyncAN";
+   // Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<head>
+    <script src="/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 8px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .btn-green:hover {
+            color: white;
+            background: #2b83cb;
+        }
+
+        .btn-black {
+            color: white;
+            background: rgb(169,169,169);
+        }
+
+        a {
+            color: #13c6e6;
+        }
+
+        .btn-black:hover {
+            background: black;
+        }
+
+        .addlogo {
+            width: 65%;
+            aspect-ratio: 3/2;
+            object-fit: contain;
+            /*mix-blend-mode: color-burn;*/
+        }
+
+        .sectionEditLink:hover {
+            background-color: darkturquoise;
+        }
+
+        .card {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            /*margin-right: 10px;*/
+            font: xx-small !important;
+        }
+
+        input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    @using (Html.BeginForm("AddNewBankAccountAsyncAN", "Accountant", new { @id = "AddBank", @enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <br />
+        <div class="card" style="width: 800px; border-left-width: 0px; padding-left: 50px; left: 52px; ">
+            <div class="card-body">
+                <h2>Add New Bank Account</h2>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BankName, "Bank Name:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BankBrach, "Branch:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.BankBrach, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BankBrach, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.AccountHolderName, "Account Holder Name:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.AccountHolderName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AccountHolderName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BankAccountNumber, "Account Number:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.BankAccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.IFSCCode, "IFSC Code:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.IFSCCode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IFSCCode, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.MICRCode, "MICR Code:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.MICRCode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MICRCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.AccountType, "Account Type", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.AccountType, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BankAccountOpeningDate, "Account Opening Date:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.BankAccountOpeningDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountOpeningDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BankAccountOpeningBalance, "Opening Balance:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.BankAccountOpeningBalance, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountOpeningBalance, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BankAccountMinimumBalance, "Minimum Balance:", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.BankAccountMinimumBalance, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BankAccountMinimumBalance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="text-center pt-2 mb-2">
+                    <button type="submit" id="submit" name="submit" class="btn btn-sm btn-success">Save</button>
+                    <button type="button" name="clear" id="clear" class="btn btn-sm btn-warning" onclick="clearForm()">Clear</button>
+                    <div class="text-left">
+                        <a href="/Placement/ListAllCompanyAsyncPB" class="icon">
+                            <video width="30" height="30" playsinline loop>
+                                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                            </video>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+    <script>
+        function clearForm() {
+            document.getElementById("AddBank").reset();
+        }
+    </script>
+
+</body>
+
+
+

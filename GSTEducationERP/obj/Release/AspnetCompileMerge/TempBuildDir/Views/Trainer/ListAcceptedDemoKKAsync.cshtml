@@ -1,0 +1,230 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+<html>
+<head>
+    <!-- Theme style -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <!-- Bootstrap 4 -->
+    <style>
+        .success-button {
+            display: inline-block;
+            padding: 2px 2px;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <table id="DemoList" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.BatchCode)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.ScheduleId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DemoName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DemoArrangedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LabName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NoOfStudent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusName)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.StatusId)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lstArrangeDemo)
+            {
+            <tr>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.BatchCode)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.ScheduleId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DemoName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DemoArrangedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LabName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.strtDate)
+                </td>
+                <td>
+                    @if (item.StatusId == 19)
+                    {
+                        <u>
+                            <a href="#" class="icon1" data-id="@item.BatchCode" data-url="@Url.Action("ListDemoAttendanceStudentKKAsync", "Trainer", new { batchcode = item.BatchCode })"
+                               data-toggle="modal" data-target="#StudentModal" title="Student List">
+                                @item.NoOfStudent
+                            </a>
+                        </u>
+                    }
+                    @if (item.StatusId == 25)
+                    {
+                        <u>
+                            <a href="#" class="icon1" data-id="@item.BatchCode" data-url="@Url.Action("ListDemoStudentKKAsync", "Trainer", new { batchcode = item.BatchCode })"
+                               data-toggle="modal" data-target="#StudentModal" title="Student List">
+                                @item.NoOfStudent
+                            </a>
+                        </u>
+                    }
+                </td>
+                <td>
+                    @if (item.StatusName == "Arranged")
+                    {
+                        <span class="badge bg-orange">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                    }
+                    @if (item.StatusName == "Assigned")
+                    {
+                        <span class="badge bg-pink">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                    }
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.StatusId)
+                </td>
+                <td>
+                    @if (item.StatusId == 25)
+                    {
+                        <a href="#" class="sectionEditLink" data-id="@item.ScheduleId" data-url="@Url.Action("DemoAcceptedKKAsync", "Trainer" ,new { ScheduleId = item.ScheduleId })"
+                           data-toggle="modal" data-target="#FollowupModal">
+                            <span class="success-button" id="acceptButton">Accept</span>
+                        </a>
+                    }
+                    else if (item.StatusId == 19)
+                    {
+                        <a href="#" class="demodetails" data-id="@item.ScheduleId" data-url="@Url.Action("DetailsDemoAcceptedKKAsync", "Trainer",new { ScheduleId = item.ScheduleId })"
+                           data-toggle="modal" data-target="#DemoModal" title="Demo Details">
+                            <video width="35" height="35" playsinline loop>
+                                <source src="~/Content/Admin/icon/view.mp4" type="video/mp4" />
+                            </video>
+                        </a>
+                    }
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="StudentModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Student List</h1>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="FollowupModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Demo Request</h1>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DemoModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Demo Details</h1>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="AttendanceModal">
+        <div class="modal-dialog" style="background-color: white;">
+            <div class="modal-content" style="background-color: white;">
+                <h1 class="text-info modal-title">Demo Details</h1>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+
+            $('#DemoList').on('click', '.icon1', function () {
+                var BatchCode = $(this).data('id');
+                var url = $(this).data('url');
+                var startDate = $(this).closest('tr').find('td:eq(5)').text();
+                var startTime = $(this).closest('tr').find('td:eq(10)').text(); 
+
+                // Make an AJAX call to load the content of DemoDetailssection view
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: { startDate: startDate, startTime: startTime }, 
+                    success: function (data) {    
+                        $("#StudentModal").find(".modal-content").html(data);
+                        $('#StudentModal').modal('show');
+                    }
+                });
+            });
+            $('#DemoList').on('click', '.sectionEditLink', function () {
+                var BatchCode = $(this).data('id');
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $("#FollowupModal").find(".modal-content").html(data);
+                        $('#FollowupModal').modal('show');
+                    }
+                });
+            });
+            $('#DemoList').on('click', '.demodetails', function () {
+                var ScheduleId = $(this).data('id');
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $("#DemoModal").find(".modal-content").html(data);
+                        $('#DemoModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

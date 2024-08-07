@@ -1,0 +1,574 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+@{
+    ViewBag.Title = "PlcementDashboardPCAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <meta name="viewport" content="width=device-width" />
+    <title>Pie Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+    <script src="assets/js/lib/chart-js/Chart.bundle.js"></script>
+    <style>
+        .graph-card-parent .card {
+            min-height: 180px;           
+        }
+        .dash-chart{
+            height:120px !important;
+        }
+        .count-subtext {
+            min-height: 40px;
+        }
+        .ht-card {
+            /* height:600px;*/
+        }
+    </style>
+</head>
+<body>
+   <!-- Main content -->
+   <div>
+      <div class="pt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    @*<div class="card-header bg-gradient-pink text-white">
+                        <h5 class="mb-0">Course Selection</h5>
+                    </div>*@
+                    <div class="card-body">
+                        <div class="form-group row mb-0">
+                            @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "col-md-3 col-form-label text-right" })
+                            <div class="col-md-9">
+                                @Html.DropDownList("CourseName", (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    @*<div class="card-header bg-gradient-pink text-white">
+                        <h5 class="mb-0">Batch Selection</h5>
+                    </div>*@
+                    <div class="card-body">
+                        <div class="form-group row mb-0">
+                            @Html.LabelFor(model => model.BatchName, htmlAttributes: new { @class = "col-md-3 col-form-label text-right" })
+                            <div class="col-md-9">
+                                <select id="BatchName" name="BatchName" class="form-control"></select>
+                                @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+     <section class="content">
+         <div class="container-fluid">
+             <!-- Info boxes -->
+             <div class="row">
+                 <div class="ht-card">
+                     <div class="row graph-card-parent">
+                         <div class="col-sm-6 col-md-4 col-lg-4" style="padding-left: 10px; padding-right: 20px;">
+                             <div class="card text-white bg-flat-color-1 bg-cyan">
+                                 <div class="d-flex justify-content-between align-items-baseline p-3 pb-0">
+                                     <h4 class="mb-0">
+                                         <span class="count" id="placedCount">@Html.ViewBag.PlacedStudent</span>
+                                     </h4>
+                                     <p class="text-light mb-0">Placed</p>
+                                 </div>
+                                 <!--<div id="counter">-->
+                                 <!-- counts -->
+                                 <!--</div>-->
+                                 <canvas id="myPlacedChart" class="dash-chart"></canvas>
+                             </div>
+                         </div>
+                         <div class="col-sm-6 col-md-4 col-lg-4" style="padding-right: 20px;">
+                             <div class="card text-white bg-flat-color-1 bg-gradient-danger">
+                                 <div class="d-flex justify-content-between align-items-baseline p-3 pb-0">
+                                     <h4 class="mb-0">
+                                         <span class="count" id="activeCount">@Html.ViewBag.ActiveStudent</span>
+                                     </h4>
+                                     <p class="text-light mb-0">Active</p>
+                                 </div>
+                                 <!--<div id="counter">-->
+                                 <!-- counts -->
+                                 <!--</div>-->
+                                 <canvas id="myActiveChart" class="dash-chart"></canvas>
+                             </div>
+                         </div>
+                         <div class="col-sm-6 col-md-4 col-lg-4">
+                             <div class="card text-white bg-flat-color-1 bg-gradient-yellow">
+                                 <div class="d-flex justify-content-between align-items-baseline p-3 pb-0">
+                                     <h4 class="mb-0">
+                                         <span class="count" id="counter">@Html.ViewBag.Companies</span>
+                                     </h4>
+                                     <p class="text-light mb-0">Companies</p>
+                                 </div>
+                                 <div id="counter">
+                                     <!-- counts -->
+                                 </div>
+                                 <canvas id="myLineChart" class="dash-chart"></canvas>
+                             </div>
+                         </div>        
+                         <div class="col-lg-2" style="padding-left: 10px; padding-right:16px;"></div>
+                             <div class="col-sm-6 col-md-4 col-lg-4" style="padding-left: 10px; padding-right:16px;">
+                                 <div class="card text-white bg-flat-color-1 bg-gradient-green">
+                                     <div class="d-flex justify-content-between align-items-baseline p-3 pb-0">
+                                         <h4 class="mb-0">
+                                             <span class="count" id="counter">@Html.ViewBag.Openings</span>
+                                         </h4>
+                                         <p class="text-light mb-0">Openings</p>
+                                     </div>
+                                     <div id="counter">
+                                         <!-- counts -->
+                                     </div>
+                                     <canvas id="myOpeningChart" class="dash-chart"></canvas>
+                                 </div>
+                             </div>
+                             <div class="col-sm-6 col-md-4 col-lg-4">
+                                 <div class="card text-white bg-flat-color-1 bg-gradient-gray">
+                                     <div class="d-flex justify-content-between align-items-baseline p-3 pb-0">
+                                         <h4 class="mb-0">
+                                             <span class="count" id="counter">@Html.ViewBag.Studentid</span>
+                                         </h4>
+                                         <p class="text-light mb-0">TotalCandidate</p>
+                                     </div>
+                                     <div id="counter">
+                                         <!-- counts -->
+                                     </div>
+                                     <canvas id="myTotalStudChart" class="dash-chart"></canvas>
+                                 </div>
+                             </div>
+
+                         </div>
+                 </div>
+                 <!-- /.info-box -->
+             </div>
+         </div>
+</section>
+     <div class="graph-nav col-lg-10 mx-auto mt-3">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-home-tab" onclick="myFunction()" value="Companies" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Companies</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab" value="Candidate" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Candidate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-contact-tab" value="Job" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Job</a>
+            </li>
+
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <canvas id="graphCanvas1"></canvas>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <canvas id="graphCanvas4"></canvas>
+            </div>
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                <canvas id="graphCanvas3"></canvas>
+            </div>
+        </div>
+    </div>
+ </div>
+</body>
+</html>
+<script>
+    /*/Course batch bind/*/
+    $(document).ready(function () {
+        $("#CourseName").change(function () {
+            var id = $(this).val();
+            $("#BatchName").empty();
+            $.get("/Placement/BatchBindPCAsync", { CourseCode: id }, function (data) {
+                var v = "<option>---Select---</option>";
+                $.each(data, function (i, v1) {
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                });
+                $("#BatchName").html(v);
+            });
+        });
+    });
+</script>
+<script>
+function getUniqueLabels(data) {
+    return data.map(item => item.label).filter((value, index, self) => self.indexOf(value) === index);
+}
+
+function getDataForLabel(data, label) {
+    return data.filter(item => item.label === label).map(item => item.value);
+}
+    // Function to get unique labels from data
+  function getUniqueLabels(data) {
+        var labels = [];
+        data.forEach(item => {
+            if (!labels.includes(item.label)) {
+                labels.push(item.label);
+            }
+        });
+        return labels;
+  }
+    window.onload = function () {
+        // Show Companies graph by default
+        showGraph('Companies');
+  }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#BatchName').change(function () {
+            var selectedBatch = $(this).val();
+            if (selectedBatch !== null) {
+                $.ajax({
+                    url: "/Placement/GetBatchCountsPCAsync",
+                    type: 'GET',
+                    data: { batchName: selectedBatch },
+                    success: function (data) {
+                        // Update the counts
+                        $('#studentCount').text(data.NoOfStudent);
+                        $('#placedCount').text(data.Placed);
+                        $('#activeCount').text(data.Active);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching batch counts.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script>
+    // Get the canvas element
+    var ctx = document.getElementById('myLineChart').getContext('2d');
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My Dataset',
+            data: [@Html.ViewBag.Studentid, 19, 9, 13, 30, 22, 11],
+            fill: false,
+            backgroundColor: '#63c2de',
+            borderColor: 'rgba(255,255,255,.55)',
+            borderWidth: 2,
+        }
+        ]
+    };
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+    // Create the line chart
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myActiveChart').getContext('2d');
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My Dataset',
+            data: [50, 10, 9, 11, 24, 22, 11],
+            fill: false,
+            backgroundColor: '#63c2de',
+            borderColor: 'rgba(255,255,255,.55)',
+            borderWidth: 2,
+        }
+        ]
+    };
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        legend: {
+            labels: {
+                fontColor: 'White',
+                color:'White',
+            }
+        }
+    };
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myPlacedChart').getContext('2d');
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My Dataset',
+            data: [70, 11, 19, 13, 24, 22, 11],
+            fill: false,
+            backgroundColor: '#63c2de',
+            borderColor: 'rgba(255,255,255,.55)',
+            borderWidth: 2,
+        }
+        ]
+    };
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        legend: {
+            labels: {
+                fontColor: 'White',
+                color:'White',
+            }
+        }
+    };
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myStudentChart').getContext('2d');
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My Dataset',
+            data: [60, 14, 9, 11, 24, 20, 11],
+            fill: false,
+            backgroundColor: '#63c2de',
+            borderColor: 'rgba(255,255,255,.55)',
+            borderWidth: 2,
+        }
+        ]
+    };
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        legend: {
+            labels: {
+                fontColor: 'White',
+                color:'White',
+            }
+        }
+    };
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myOpeningChart').getContext('2d');
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My Dataset',
+            data: [40, 13, 19, 17, 32, 12, 11],
+            fill: false,
+            backgroundColor: '#63c2de',
+            borderColor: 'rgba(255,255,255,.55)',
+            borderWidth: 2,
+        }
+        ]
+    };
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        legend: {
+            labels: {
+                fontColor: 'White',
+                color:'White',
+            }
+        }
+    };
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+    });
+</script>
+<script>
+    var ctx = document.getElementById('myTotalStudChart').getContext('2d');
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My Dataset',
+            data: [30, 18, 9, 17, 34, 22, 11],
+            fill: false,
+            backgroundColor: '#63c2de',
+            borderColor: 'rgba(255,255,255,.55)',
+            borderWidth: 2,
+        }
+        ]
+    };
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        legend: {
+            labels: {
+                fontColor: 'White',
+                color:'White',
+            }
+        }
+    };
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options,
+    });
+</script>
+@*Nav Tabs Graph*@
+@*Graphh for Candidate nav pills*@
+<script>
+       var data = @Html.Raw(ViewBag.Ds1);
+    var uniqueLabels = getUniqueLabels(data);
+    var barChartData = {
+        labels: uniqueLabels,
+        datasets: [
+            {
+                label: 'Placed',
+                backgroundColor: "#f990a7",
+                data: getDataForLabel(data, 'Placed')
+            },
+            {
+                label: 'Scheduled',
+                backgroundColor: "#aad2ed",
+                data: getDataForLabel(data, 'Scheduled')
+            },
+            {
+                label: 'Shortlisted',
+                backgroundColor: "#99e5e5",
+                data: getDataForLabel(data, 'Shortlisted')
+            },
+            {
+                label: 'Rejected',
+                backgroundColor: "#9966FF",
+                data: getDataForLabel(data, 'Rejected')
+            },
+            {
+                label: 'Rescheduled',
+                backgroundColor: "#f7bd83",
+                data: getDataForLabel(data, 'Rescheduled')
+            }
+            /*data: [10, 20, 30, 40, 50, 60, 70]*/
+        ]
+    };
+    var ctx1 = document.getElementById("graphCanvas4").getContext("2d");
+    window.myBar = new Chart(ctx1, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+            title: {
+                display: true,
+                text: "Candidate Status with respective Placement"
+            },
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    });
+</script>
+@*graph for job*@
+<script>
+    var data = @Html.Raw(ViewBag.DataPoints2);
+    var labels = data.map(item => item.designation);
+    var openData = data.map(item => item.open);
+    var closedData = data.map(item => item.closed);
+
+    var chartData = {
+        labels: labels,
+        datasets: [{
+            label: 'Open Jobs',
+            backgroundColor: [
+                "#f990a7",
+                "#aad2ed",
+                "#9966FF",
+                "#99e5e5",
+                "#f7bd83",
+            ],
+            data: openData
+        },
+        {
+            label: 'Closed Jobs',
+            backgroundColor: [
+                "#f990a7",
+                "#aad2ed",
+                "#9966FF",
+                "#99e5e5",
+                "#f7bd83",
+            ],
+            data: closedData
+        }]
+    };
+    var ctx2 = document.getElementById("graphCanvas3").getContext("2d");
+    window.myDoughnut = new Chart(ctx2, {
+        type: 'doughnut',
+        data: chartData,
+        options: {
+            title: {
+                display: true,
+                text: "Positionwise Job Count"
+            },
+            responsive: true,
+            maintainAspectRatio: true
+        }
+    });
+</script>
+@*graph for companies*@ 
+<script>
+    var data = @Html.Raw(ViewBag.DataPoints);
+        var barChartData = {
+            labels: data.map(item => item.label),
+            datasets: [
+                {
+                    label: 'Open Jobs',
+                    backgroundColor: "#f990a7",
+                    data: data.map(item => item.open)
+                },
+                {
+                    label: 'Closed Jobs',
+                    backgroundColor: "#aad2ed",
+                    data: data.map(item => item.closed)
+                }
+            ]
+        };
+        var ctx = document.getElementById("graphCanvas1").getContext("2d");
+        window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                title: {
+                    display: true,
+                    text: "Company-wise Open and Closed Jobs"
+                },
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+</script>

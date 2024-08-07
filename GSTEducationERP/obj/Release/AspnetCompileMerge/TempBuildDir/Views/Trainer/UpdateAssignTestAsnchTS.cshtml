@@ -1,0 +1,401 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+@{
+    ViewBag.Title = "UpdateAssignTestAsnchTS";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="path/to/jquery.min.js"></script>
+    <!-- Include Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="path/to/bootstrap.min.css">-->
+    <!-- Include Bootstrap JavaScript (make sure it comes after jQuery) -->
+    <!--<script src="path/to/bootstrap.min.js"></script>-->
+    <!-- Include locally hosted jQuery Timepicker -->
+    @*<link rel="stylesheet" href="path/to/jquery.timepicker.min.css" />
+    <script src="path/to/jquery.timepicker.min.js"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>*@
+    <style>
+        h4 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 38px;
+        }
+
+        .col-md-10 {
+            margin-top: 5px;
+        }
+
+        .row .form-group {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .bootstrap-duallistbox-container {
+            margin-top: 20px;
+        }
+
+        .box1, .box2 {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .btn-sm {
+            height: 30px;
+            font-size: 12px;
+        }
+
+        .filter {
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            font-size: 16px;
+            height: 40px;
+            width: 100px;
+        }
+
+        .spacer {
+            margin-left: 10px;
+        }
+
+        .form-group.text-center {
+            text-align: center;
+        }
+
+            .form-group.text-center .col-md-6 {
+                display: inline-block;
+            }
+
+        .form-group label {
+            margin-bottom: 5px;
+        }
+
+        .date-input {
+            width: 200px;
+            margin-right: 20px;
+        }
+
+        .date-picker {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+    @using (Html.BeginForm("UpdateAssignTestAsnchTS", "Trainer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-container">
+
+            <div class="form-horizontal">
+
+                <div class="form-horizontal" style="text-align:center,">
+                    <h4> Edit Assign  Test</h4>
+                </div>
+                @Html.AntiForgeryToken()
+
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group row">
+                    <div class="col-md-6">
+
+                        <label for="CourseName" class="control-label">Course Name</label>
+                        <br />
+
+                        @Html.DropDownListFor(model => model.CourseName, new SelectList(ViewBag.Course6, "Value", "Text"), new { style = "width: 300px;" })
+                        @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-6">
+                        <label for="BatchName" class="control-label">Batch Name</label>
+                        <br />
+
+                        @Html.DropDownListFor(model => model.BatchName, new SelectList(ViewBag.Batchlist1, "Value", "Text"), new { id = "BatchName", style = "width: 300px;" })
+
+                        @Html.ValidationMessageFor(model => model.BatchName, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-6">
+                        <label for="SectionId" class="control-label">Section Name</label>
+                        <br />
+
+                        @Html.DropDownListFor(model => model.SectionId, new SelectList(ViewBag.sectionlist3, "Value", "Text"), new { id = "SectionId", style = "width: 300px;" })
+
+                        @Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="col-md-6">
+                        @*@Html.LabelFor(model => model.TopicName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        <label for="TopicName" class="control-label">Topic Name</label>
+                        <br />
+
+                        @Html.DropDownListFor(model => model.TopicName, new SelectList(ViewBag.topic, "Value", "Text"), new { id = "TopicId", style = "width: 300px;" })
+
+                        @*<select id="TopicName" idname="TopicName" class="form-control"></select><br />*@
+                        @*@Html.EditorFor(model => model.TopicName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.TopicName, "", new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+                <div class="form-group row">
+
+                    <div class="col-md-6">
+                        @*@Html.LabelFor(model => model.TestId, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        <label for="TestId" class="control-label">Test Name</label>
+
+                        @Html.DropDownListFor(model => model.TestId, new SelectList(ViewBag.test1, "Value", "Text"), new { id = "TestId", style = "width: 300px;" })
+
+                        @*<select id="TestName" idname="TestName" class="form-control"></select><br />*@
+                        @*@ @Html.EditorFor(model => model.TestName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.ValidationMessageFor(model => model.TestName, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="CompleteTillDate" class="control-label">Complete Till Date </label>
+
+                        @* Use a simple text input for the date *@
+                        <input type="date" id="CompleteTillDate" name="CompleteTillDate" class="form-control datepicker" /><br />
+                        @Html.ValidationMessageFor(model => model.CompleteTillDate, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <br />
+            @Html.HiddenFor(model => model.AssignTestId)
+            <div class="form-group text-center">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Assign" formaction="/Trainer/UpdateAssignTestAsnchTS" class="btn btn-primary btn-success btn-custom" />
+                    <span class="spacer"></span>
+                    <input type="reset" value="CLEAR" class="btn btn-warning btn-custom" id="btnClear" onclick="clearForm()" />
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+
+    <script>
+        $(document).ready(function () {
+            $("#CourseName").change(function () {
+                var courseId = $(this).val();
+                $("#SectionName").empty(); // Clear existing sections
+                $("#BatchName").empty(); // Clear existing batches
+                // Fetch sections for the selected course
+                $.get("Section_Bind", { CourseCode: courseId }, function (data) {
+                    var sectionOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, section) {
+                        sectionOptions += "<option value='" + section.Value + "'>" + section.Text + "</option>";
+                    });
+                    $("#SectionName").html(sectionOptions);
+                });
+                // Fetch batches for the selected course
+                $.get("Batch_Bind", { CourseCode: courseId }, function (data) {
+                    var batchOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, batch) {
+                        batchOptions += "<option value='" + batch.Value + "'>" + batch.Text + "</option>";
+                    });
+                    $("#BatchName").html(batchOptions);
+                });
+            });
+
+            $("#SectionName").change(function () {
+                var sectionId = $(this).val();
+                // Fetch topics for the selected section
+                $.get("Topic_Bind", { SectionId: sectionId }, function (data) {
+                    var topicOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, topic) {
+                        topicOptions += "<option value='" + topic.Value + "'>" + topic.Text + "</option>";
+                    });
+                    $("#TopicName").html(topicOptions);
+                });
+            });
+
+            $("#TopicName").change(function () {
+                var topicId = $(this).val();
+                // Fetch tests for the selected topic
+                $.get("Test_Bind", { TopicId: topicId }, function (data) {
+                    var testOptions = "<option value=''>---Select---</option>";
+                    $.each(data, function (i, test) {
+                        testOptions += "<option value='" + test.Value + "'>" + test.Text + "</option>";
+                    });
+                    $("#TestName").html(testOptions);
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+    $(document).ready(function () {
+        // Assuming you have RegisterDate available in your model
+        var registerDate = new Date('@Model.RegisterDate.ToString("yyyy-MM-dd")');
+
+        // Get the current date
+        var currentDate = new Date();
+
+        // Initialize jQuery UI Datepicker
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',  // Set the desired date format
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: currentDate,  // Set the minimum selectable date to the current date
+            beforeShow: function(input, inst) {
+                // Hide the past dates in the calendar
+                setTimeout(function () {
+                    $('.ui-datepicker-calendar').find('a.ui-state-disabled').hide();
+                }, 0);
+            },
+            onSelect: function (selectedDate) {
+                // Ensure the selected date is not earlier than RegisterDate
+                var selected = new Date(selectedDate);
+                if (selected < registerDate) {
+                    alert('CompleteTillDate must be after RegisterDate');
+                    $(this).datepicker('setDate', currentDate);  // Set the date to the current date
+                }
+            }
+        });
+
+        // Disable the icon and make the input readonly
+        $('.datepicker').datepicker('widget').find('.ui-datepicker-trigger').hide();
+        $('.datepicker').prop('readonly', true);
+    });
+    </script>
+
+
+
+
+    <script>
+    $(document).ready(function () {
+        // Disable Course Name, Batch Name, Section Name, and Topic Name fields
+        $('#CourseName, #BatchName, #SectionId, #TopicId').prop('disabled', true);
+
+        // Assuming you have RegisterDate available in your model
+        var registerDate = new Date('@Model.RegisterDate.ToString("yyyy-MM-dd")');
+
+        // Get the current date
+        var currentDate = new Date();
+
+        // Initialize jQuery UI Datepicker for Completion Till Date field
+        $('#CompleteTillDate').datepicker({
+            dateFormat: 'yy-mm-dd',  // Set the desired date format
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            minDate: currentDate,  // Set the minimum selectable date to the current date
+            beforeShow: function(input, inst) {
+                // Hide the past dates in the calendar
+                setTimeout(function () {
+                    $('.ui-datepicker-calendar').find('a.ui-state-disabled').hide();
+                }, 0);
+            },
+            onSelect: function (selectedDate) {
+                // Ensure the selected date is not earlier than RegisterDate
+                var selected = new Date(selectedDate);
+                if (selected < registerDate) {
+                    alert('Complete Till Date must be after Register Date');
+                    $(this).datepicker('setDate', currentDate);  // Set the date to the current date
+                }
+            }
+        });
+
+        // Disable the icon and make the input readonly for Completion Till Date field
+        $('#CompleteTillDate').datepicker('widget').find('.ui-datepicker-trigger').hide();
+        $('#CompleteTillDate').prop('readonly', true);
+    });
+    </script>
+    <script>
+        function clearForm() {
+            // Reset the form fields
+            $('#CourseName').val('');
+            $('#BatchName').val('');
+            $('#SectionId').val('');
+            $('#TopicName').val('');
+            $('#TestId').val('');
+            $('#CompleteTillDate').val('');
+        }
+    </script>
+
+
+
+</body>
+</html>
+

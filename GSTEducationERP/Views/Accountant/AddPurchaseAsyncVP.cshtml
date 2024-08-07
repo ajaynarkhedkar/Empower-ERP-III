@@ -1,0 +1,1212 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    ViewBag.Title = "Add Purchase";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+    var currency = Html.Raw(ViewBag.Currency);
+    var IsitEdit = ViewBag.IsitEdit;
+    if (IsitEdit)
+    {
+        var listOfitems = ViewBag.ListofItems;
+        ViewBag.Title = "Update Purchase";
+    }
+
+}
+<html>
+<head>
+    <!--links and scripts here-->
+    <!--jquery script-->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <link href="~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/select2/js/select2.full.min.js"></script>
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+
+    <!--select2 library-->
+    <!-- Add your personal styles here -->
+
+
+    <!--table css for the total table-->
+    <style>
+        #tblpymtDtl {
+            padding: 0px 100px 0px 100px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .custom-table-row-456 {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .custom-table-header-456 {
+            text-align: left;
+            font-weight: bold;
+            width: 50%;
+            padding-left: 10vw;
+        }
+
+        .custom-table-data-456 {
+            text-align: right;
+            width: 40%;
+            padding: 10px;
+            padding-right: 10vw;
+        }
+    </style>
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+        }
+
+        .select2-container--default .select2-selection--single {
+            white-space: normal;
+            color: black !important;
+            width: 100% !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            white-space: normal !important;
+        }
+
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        h3 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            text-align: center;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        #hideforever, #hideuntilesave, #paymentModeIsBank, #accordion {
+            display: none;
+        }
+
+        #addexpbutton {
+            align-self: center;
+            text-align: center;
+        }
+    </style>
+    <style>
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th, td {
+            text-align: left;
+        }
+
+        .remove {
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="addpurchaseAsyncVP">
+        <!--this is things that are hidden-->
+        @Html.HiddenFor(model => model.BalanceAmount)
+        @Html.HiddenFor(model => model.StatusId)
+        <div class="card" id="purchasediv" style="padding:10px;margin-top:10px;">
+            <div class="card-title">
+                <h2>@ViewBag.Title</h2>
+            </div>
+            <hr />
+            <div class="card-body">
+                <!--first row for bill no , vendor name and transaction date-->
+                <div class="row justify-content-center ">
+                    <div class="col-md-3">
+                        <div class="input-group ">
+                            <label class="control-label col-md-4">Invoice No.: </label>
+                            <div class="col-md-6 justify-content-end" style="margin-left:10px">
+                                @Html.LabelFor(Model=> Model.TransactionCode, new {@id= "ptmtransactioncode" })
+                                @*<label id=""> </label>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group ">
+                            @Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    &commat;
+                                </span>
+                            </div>
+                            @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                            @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group ">
+                            @Html.LabelFor(model => model.TransactionDate, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                            <div class="input-group-prepend ">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calender-sign"></i>
+                                </span>
+                            </div>
+                            @Html.EditorFor(model => model.TransactionDate, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                            @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-body">
+                        <!--second row for the new cart body and the table for items -->
+                        <h3>List Items of purchase </h3>
+                        <!--this row contains item name,hsn category,quantity-->
+                        <div class="row">
+                            <div class="col-lg-12 form-group table-responsive">
+                                <table class="table table-bordered" id="tblpurchaseitem">
+                                    <thead>
+                                        <tr>
+                                            <th hidden style="width: 30%;">Item Id</th>
+                                            <th hidden style="width: 30%;">Transaction code</th>
+                                            <th style="width: 25%;">Item Name</th>
+                                            <th style="width: 25%;">HSN Code</th>
+                                            <th style="width: 10%;">Quantity</th>
+                                            <th style="width: 15%;">Unit Price (@currency)</th>
+                                            <th style="width: 10%;">Discount(%)</th>
+                                            <th style="width: 20%;">Applied Tax(%)</th>
+                                            <th style="width: 1%;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td hidden class="ItemId">
+                                                <input type="text" class="form-control" />
+                                            </td>
+                                            <td hidden class="TransactionCode">
+                                                <input type="text" class="form-control" />
+                                            </td>
+                                            <td class="ItemName">
+                                                <input type="text" class="form-control" />
+                                            </td>
+                                            <td class="HSNCode">
+                                                <select class="form-control">
+                                                    <option value="">-select hsn category-</option>
+                                                    @foreach (var item in ViewBag.HSNCode)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td class="Quantity">
+                                                <input type="text" class="form-control" />
+                                            </td>
+                                            <td class="UnitPrice">
+                                                <input type="text" class="form-control" />
+                                            </td>
+                                            <td class="Discount">
+                                                <input type="text" class="form-control" />
+                                            </td>
+                                            <td class="AppliedTax">
+                                                <select class="form-control">
+                                                    <option value="">-select tax-</option>
+                                                    @foreach (var item in ViewBag.AppliedTax)
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                </select>
+                                            </td>
+
+                                            <td colspan="2" class="remove" style="justify-content:center">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="col-md-6 ">
+                                    <button type="button" class="btn" id="addRowButton" style="justify-content:center;">
+                                        <img src="~/Content/Admin/icon/Add.jpeg" style="height:25px; width:25px;" />
+                                    </button>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--here the description and the colapse for the add voucher and payment details-->
+                @* description box for the purchase*@
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 2, required = "required" })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+                <!--here will the save and cancel buttons-->
+                <div class="row" style="padding:0px 10px 0px 10px">
+                    
+                    @if (IsitEdit)
+                     {
+
+                        <div class="col-md-6">
+                            <input type="button" id="btnupdate" class="btn btn-block bg-gradient-blue btn-block" value="Update" />
+
+                        </div>
+
+                     }
+                    else
+                    {
+                        <div class="col-md-6">
+                            <input type="button" id="btnsave" class="btn btn-block bg-gradient-success btn-block" value="Save" />
+
+                        </div>
+                    }
+                    <div class="col-md-6">
+                        <input type="button" class="btn btn-block bg-gradient-danger btn-block" id="btncancel" value="Cancel" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="accordion" >
+            <div class="card card-default ">
+                <div class="card-header" style="background-color: #33CCCC">
+                    <h4 class="card-title">Match Voucher</h4>
+                </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label">Purchase Invoice : </label>
+                                <label id="vchptmtransactioncode" class="control-label"> </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label">Vendor Name : </label>
+                                <label id="ptmvendorname" class="control-label"> </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label">Transaction date : </label>
+                                <label id="ptmtransactiondate" class="control-label"> </label>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" id="divptmDetails">
+                            <table id="tblpymtDtl">
+                                <tr></tr>
+                                <tr class="custom-table-row-456">
+                                    <th class="custom-table-header-456">Amount :</th>
+                                    <td class="custom-table-data-456"> <span class="currency">@currency</span> <span id="pymamt">0</span></td>
+                                </tr>
+                                <tr class="custom-table-row-456">
+                                    <th class="custom-table-header-456">Discount :</th>
+                                    <td class="custom-table-data-456"> <span class="currency">@currency</span> <span id="pymdiscount">0</span></td>
+                                </tr>
+                                <tr class="custom-table-row-456">
+                                    <th class="custom-table-header-456">Tax Amount :</th>
+                                    <td class="custom-table-data-456"><span class="currency">@currency</span> <span id="pymtotaltax">0</span></td>
+                                </tr>
+                                <tr class="custom-table-row-456">
+                                    <th class="custom-table-header-456">Total Amount :</th>
+                                    <td class="custom-table-data-456"> <span class="currency">@currency</span><span id="pymtotalamt">0</span> </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="input-group ">
+                                    @Html.LabelFor(model => model.TransactionAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-rupee-sign"></i>
+                                        </span>
+                                    </div>
+                                    @Html.EditorFor(model => model.TransactionAmount, new { htmlAttributes = new { @class = "form-control col-md-4", @onfocusout = "calculateBalance()" } })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group ">
+                                    @Html.LabelFor(model => model.PaymentMode, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-p-sign"></i>
+                                        </span>
+                                    </div>
+                                    @Html.DropDownList("PaymentMode", (IEnumerable<SelectListItem>)ViewBag.PaymentModes, "-Select Mode-", new { @class = "form-control col-md-6" })
+                                    @Html.ValidationMessageFor(model => model.PaymentMode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="row">
+                            <div class="input-group col-md-6">
+                                <label for="VoucherCode" class="label-comtrol col-md-4">Vouchers :</label>
+                                <div class="col-md-6">
+                                    <select id="VoucherCode" class="form-control" multiple="multiple">
+                                        @if (ViewBag.VoucherCode != null)
+                                        {
+                                            foreach (var voucher in ViewBag.VoucherCode)
+                                            {
+                                                <option value="@voucher.Value">@voucher.Text</option>
+                                            }
+                                        }
+
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.VoucherCode, "", new { @class = "text-danger" })
+
+                                </div>
+                                <span>
+                                    <a href="javascript:void(0);" class="refreshVoucher" onclick="fetchvoucher()">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Refresh.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="col-md-6">
+                                <table id="tblvoucherdtl">
+                                    <tr>
+                                        <td>Voucher Amount :</td>
+                                        <td>
+                                            <span>@currency</span>
+                                            <span id="totalAmountLabel">0.00</span>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <br />
+                        <!--here will the save and cancel buttons-->
+                        <div class="row" style="padding:0px 10px 0px 10px">
+                            <input type="button" id="btnptmsave" class="button success" value="Submit" />
+                            <input type="button" class="button danger" id="btnptmcancel" value="Cancel" />
+                        </div>
+                        <br />
+                    </div>
+                    <!--card body end-->
+                </div>
+            </div>
+
+        </div>
+        <!--payment div end-->
+        <div id="hideforever">
+            @Html.EditorFor(model => model.TransactionCode, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = true } })
+        </div>
+    </form>
+    <!--------------------------------------------------------------------------script here----------------------------------------------------------------------------->
+    <script>
+        $(document).ready(function () {
+
+            $('#VoucherCode').select2({
+                placeholder: 'This is my placeholder',
+                allowClear: true
+            });
+        });
+    </script>
+    <!--script for input validations and other-->
+    <script>
+
+        $(document).ready(function () {
+            $('#collapseOne').slideDown();
+            //card header loggle button for match voucher
+            $('.card-header').click(function () {
+                var cardBody = $(this).closest('.card').find('.card-body:first');
+                cardBody.slideToggle();
+                //$('#collapseOne').slideDown();
+            });
+            $('#tblpurchaseitem').on('input', '.Quantity input', function () {
+                var enteredValue = $(this).val();
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                if (parseFloat(numericValue) > 100000) {
+                    numericValue = '100000';
+                }
+                $(this).val(numericValue !== '' ? numericValue : '');
+                updateTotals();
+            });
+
+            $('#tblpurchaseitem').on('input', '.UnitPrice input', function () {
+                var enteredValue = $(this).val();
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                $(this).val(numericValue !== '' ? numericValue : '');
+                updateTotals();
+            });
+
+            $('#tblpurchaseitem').on('input', '.Discount input', function () {
+                var enteredValue = $(this).val();
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                $(this).val(numericValue !== '' ? numericValue : '');
+                updateTotals();
+            });
+            $('#TransactionAmount').on('input', function () {
+                var enteredValue = $(this).val();
+                var amount = $('#pymtotalamt').text();
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                if (numericValue.length > 10) {
+                    numericValue = numericValue.substring(0, 10);
+                }
+                if (parseFloat(numericValue) > parseFloat(amount)) {
+                    numericValue = amount;
+                }
+                $(this).val(numericValue);
+            });
+            //setting the transaction code to match voucher page
+            $('#ptmtransactioncode').text($('#TransactionCode').val());
+            $('#VendorName').on('blur', function () {
+                // Get the entered vendor name
+                var vendorName = $(this).val();
+                // Set the vendor name in the specified <td> element
+                $('#ptmvendorname').text(vendorName);
+                //sending the input date to the match voucher page
+            });
+            $('#TransactionDate').on('blur', function () {
+                // Get the entered vendor name
+                var transactionDate = $(this).val();
+                // Set the vendor name in the specified <td> element
+                $('#ptmtransactiondate').text(transactionDate);
+            });
+        });
+    </script>
+    <!--script for the add item button and calculating the total amount-->
+    <script>
+        function updateTotals() {
+            var totalAmount = 0;
+            var totalDiscount = 0;
+            var totalTax = 0;
+            var amount = 0;
+            var totalPayable = 0;
+
+            $("#tblpurchaseitem tbody tr").each(function () {
+                var quantity = parseFloat($(this).find('.Quantity input').val()) || 0;
+                var unitPrice = parseFloat($(this).find('.UnitPrice input').val()) || 0;
+                var discount = parseFloat($(this).find('.Discount input').val()) || 0;
+                // Extract the number from the tax text
+                var taxText = $(this).find('.AppliedTax select option:selected').text();
+                var taxMatch = taxText.match(/\d+(\.\d+)?/);
+                var tax = taxMatch ? parseFloat(taxMatch[0]) : 0;
+
+                amount = quantity * unitPrice;
+                var discountAmount = amount * (discount / 100);
+                var discountedAmount = amount - discountAmount;
+                var taxAmount = discountedAmount * (tax / 100);
+
+                totalAmount += amount;
+                totalDiscount += discountAmount;
+                totalTax += taxAmount;
+            });
+
+            totalPayable = totalAmount - totalDiscount + totalTax;
+
+            $("#pymamt").html(totalAmount.toFixed(2));
+            $("#pymdiscount").html(totalDiscount.toFixed(2));
+            $("#pymtotaltax").html(totalTax.toFixed(2));
+            $("#pymtotalamt").html(totalPayable.toFixed(2));
+
+            // Update the hidden input field with the total amount payable
+            $("#BalanceAmount").val(totalPayable.toFixed(2));
+        }
+
+
+        function calculateBalance() {
+            let balamount = 0;
+            const Totalamount = parseFloat(document.getElementById("pymtotalamt").innerText);
+            const Paidamount = $("#TransactionAmount").val();
+            if (Paidamount == Totalamount) {
+                //document.getElementById("BalanceAmount").innerText = 0;
+                document.getElementsByName('BalanceAmount')[0].value = 0;
+                document.getElementsByName('StatusId')[0].value = 6;
+                // document.getElementById("StatusId").innerText = 6;
+            }
+            else {
+
+                balamount = Totalamount - Paidamount;
+                if (balamount < -1) { balamount = 0; }
+                //document.getElementById("BalanceAmount").innerText = balamount.toFixed(2);
+                document.getElementsByName('BalanceAmount')[0].value = balamount.toFixed(2);
+                document.getElementsByName('StatusId')[0].value = 6;
+                //document.getElementById("StatusId").innerText = 6;
+            }
+        }
+        function addrow() {
+            // Clone the first row
+            var $clone = $("#tblpurchaseitem tbody tr:first").clone();
+
+            // Reset values of the cloned controls
+            $clone.find('input').val('');
+            $clone.find('select').prop('selectedIndex', 0); // Reset dropdowns to first option
+            $clone.find('.remove').html(`
+                <a href="javascript:void(0);" class="icon" onclick="removeRow(this, $(this).closest('tr').find('.ItemId input').val())">
+                    <video width="25" height="25" playsinline loop>
+                        <source src="@Url.Content("~/Content/Admin/icon/Delete%202.mp4")" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </a>
+            `);
+            // Append the cloned row to the table
+            $("#tblpurchaseitem tbody").append($clone);
+        }
+        //validatin the row
+        function validateRow() {
+            var isValid = true;
+            $('#tblpurchaseitem tbody tr:last').find('input, select').each(function () {
+                if ($(this).is(':visible') && $(this).val() === '') {
+                    $(this).css('border', '1px solid red'); // Highlight the empty field
+                    isValid = false;
+                } else {
+                    $(this).css('border', ''); // Remove highlight if filled
+                }
+            });
+            return isValid;
+        }
+        function removeRow(element, itemId) {
+            // Check if the item ID is zero
+            if (itemId === "") {
+                // Remove the row directly
+                $(element).closest('tr').remove();
+            } else {
+                // Show SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Accountant/DeletePurchaseItemAsyncVP', 
+                            type: 'POST',
+                            data: { itemId: itemId },
+                            success: function (response) {
+                                if (response.success) {
+                                    $(element).closest('tr').remove();
+                                    displayToast('Item successfully deleted.', "success");
+                                } else {
+                                    displayToast('Failed to delete the item.', "error");
+                                }
+                            },
+                            error: function () {
+                                displayToast('An error occurred while deleting the item.', "error");
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+
+        // Attach addrow function to the button click event
+        $(document).ready(function () {
+            $("#addRowButton").click(function () {
+                if (validateRow()) {
+                    addrow();
+                    updateTotals();
+                }
+                else {
+                    displayToast("Please fill in all the fields before adding a new row.", "error");
+                }
+                calculateTotals();
+                calculateBalance();
+            });
+            $("#tblpurchaseitem").on('change', '.AppliedTax select', function () {
+                updateTotals();
+            });
+        });
+
+        $(document).on('ready', function () {
+            updateTotals();
+            calculateBalance();
+        });
+    </script>
+    <!--validation for save button-->
+    <script>
+        function validationforSubmit() {
+            //checking the validations here
+            // Get values from modal form
+            var VendorName = $("#VendorName").val();
+            var transactiondate = $('#TransactionDate').val();
+            var Description = $('#Description').val();
+
+            //Validation for required fields
+            if (!VendorName || !transactiondate || !Description) {
+                // Show validation error
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'Please fill in all the required fields of purchase.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            return true;
+        }
+        //save purchase here
+        async function savePurchase() {
+            /*try {*/
+            // Update the BalanceAmount before creating the FormData object
+            updateTotals();
+            // Create FormData object
+            var formData = new FormData(document.getElementById('addpurchaseAsyncVP'));
+            formData.append('BalanceAmount', $('#BalanceAmount').val());
+            //formData.append('StatusId', $('#StatusId').val());
+
+            const addPurchaseResponse = await $.ajax({
+                type: 'POST',
+                url: '/Accountant/AddPurchaseAsyncVP',
+                data: formData,
+                contentType: false,
+                processData: false
+            });
+
+            if (addPurchaseResponse.success) {
+
+            }
+            else {
+                displayToast("Error in saving purchase details", "error");
+                return false;
+            }
+            // Prepare purchase items
+            var PurchaseItemsVPModels = ListPurchaseItem();
+            const addPurchaseItemResponse = await $.ajax({
+                url: '/Accountant/AddPurchaseItemAsyncVP',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ PurchaseItemsAsyncVP: PurchaseItemsVPModels })
+            });
+
+            if (addPurchaseItemResponse.success) {
+                displayToast("Purchase details and items saved successfully!", "success");
+                return true;
+            }
+            else {
+
+                displayToast("Error in saving purchase item", "error");
+                return false;
+            }
+
+            //} catch (error) {
+            //    toastr.error("Error: " + error.message);
+            //    return false;
+            //}
+        }
+
+        function ListPurchaseItem() {
+            var PurchaseItemsVPModels = [];
+            $("#tblpurchaseitem tbody tr").each(function () {
+                debugger;
+                var ItemId = $(this).find(".ItemId input").val();
+                var TransactionCode = $('#TransactionCode').val();
+                var ItemName = $(this).find(".ItemName input").val();
+                var HSNCode = $(this).find(".HSNCode select").val();
+                var Quantity = $(this).find(".Quantity input").val();
+                var UnitPrice = $(this).find(".UnitPrice input").val();
+                var Discount = $(this).find(".Discount input").val();
+                var AppliedTax = $(this).find(".AppliedTax select option:selected").val();
+
+                var PurchaseItemsVP = {
+                    ItemId: ItemId,
+                    TransactionCode: TransactionCode,
+                    ItemName: ItemName,
+                    HSNCode: HSNCode,
+                    Quantity: Quantity,
+                    UnitPrice: UnitPrice,
+                    Discount: Discount,
+                    AppliedTax: AppliedTax
+                };
+
+                PurchaseItemsVPModels.push(PurchaseItemsVP);
+            });
+            return PurchaseItemsVPModels;
+        }
+
+        $('#btnsave').click(function (e) {
+            e.preventDefault();
+            var isvalid = validationforSubmit() && validateRow();
+            if (isvalid) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "The details will be saved .",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, go ahead!',
+                    cancelButtonText: 'No, cancel!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const issavevalid = savePurchase();
+                        if (issavevalid) {
+                            displayToast("Purchase saved successfully..!", "success")
+                            Swal.fire({
+                                title: 'Want to Pay ?',
+                                text: "The details are saved , you can pay for purchase now.",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, pay now!',
+                                cancelButtonText: 'No, cancel!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    getdatatoPayment();
+                                    $('#purchasediv').hide();
+                                    $('#accordion').show(); // Show the hidden div after saving
+                                    //fetching the vouchers for the payment
+                                    fetchvoucher();
+                                }
+                                else {
+                                     window.location.href = '@Url.Action("DetailsPurchaseAsyncVP")';
+                                }
+                            });
+                        }
+                        else {
+                            displayToast("there is been problem saving purchase..!", "error")
+                        }
+                    }
+                });
+            }
+            else {
+                displayToast("there is validation problem", "error");
+            }
+        });
+       function fetchvoucher() {
+            var vendorName = $('#VendorName').val();
+            $.ajax({
+                url: '@Url.Action("ListVoucherAsyncVP", "Accountant")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    vendorName: vendorName
+                }),
+                success: function (response) {
+                    if (response.success) {
+                        var $voucherSelect = $('#VoucherCode');
+                        $voucherSelect.empty();
+                        $voucherSelect.append('<option>-select voucher-</option>');
+                        $.each(response.data, function (i, voucher) {
+                            $voucherSelect.append('<option value="' + voucher.Value + '">' + voucher.Text + '</option>');
+                        });
+                        displayToast("Fetched voucher", "success");
+                    } else {
+                        displayToast("An error occurred in ajax.", "error");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    displayToast("An error occurred while fetching the vouchers.", "error");
+                }
+            });
+           updateTotalAmount();
+       }
+
+    </script>
+    <!--div show after click on save button-->
+    <!--cancel button  -->
+    <script>
+        $('#btncancel').on('click', function () {
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be redirected to the purchase details page.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, go ahead!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '@Url.Action("DetailsPurchaseAsyncVP")';
+                }
+            });
+        });
+        $('#btnptmcancel').on('click', function () {
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be redirected to the purchase details page.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, go ahead!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '@Url.Action("DetailsPurchaseAsyncVP")';
+                }
+            });
+        });
+    </script>
+    <!--match button  -->
+    <!-- fuction for toastr -->
+    <script>
+        var lastMessage = '';
+        var lastType = '';
+
+        function displayToast(message, type) {
+            // Check if the message and type are the same as the last displayed message
+            if (message === lastMessage && type === lastType) {
+                return; // Skip displaying the message if it's the same
+            }
+
+            // Clear any existing toastr notifications
+            toastr.clear();
+
+            // Display Toastr notification
+            toastr[type](message);
+
+            // Update lastMessage and lastType
+            lastMessage = message;
+            lastType = type;
+        }
+
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            showMethod: 'slideDown',
+            timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+        };
+    </script>
+    <!--script for the voucher dropdown-->
+    <script>
+        function updateTotalAmount() {
+            var totalAmount = 0;
+            var inputAmount = parseFloat($('#pymtotalamt').text()) || 0;
+
+            // Loop through selected options to calculate the total amount
+            $('#VoucherCode option:selected').each(function () {
+                // Extract the voucher amount using regex
+                var text = $(this).text();
+                var amountMatch = text.match(/^[^-]+-[^-]+-(\d+(\.\d+)?)/);
+                if (amountMatch) {
+                    totalAmount += parseFloat(amountMatch[1]);
+                }
+            });
+
+            // Update the total amount label
+            $('#totalAmountLabel').text(totalAmount.toFixed(2));
+
+            // Check if the total amount is less than or greater than the input amount
+            if (totalAmount < inputAmount || totalAmount < 0) {
+                $('#totalAmountLabel').css('color', 'red');
+            } else {
+                $('#totalAmountLabel').css('color', 'green');
+            }
+
+            // Prevent selection of additional vouchers if total exceeds input amount
+            if (totalAmount > inputAmount) {
+                $('#VoucherCode option:not(:selected)').prop('disabled', true);
+            } else {
+                $('#VoucherCode option').prop('disabled', false);
+            }
+            if (totalAmount == 0) {
+                $('#totalAmountLabel').text(0);
+            }
+            // Refresh Select2 to apply the disabled state
+            $('#VoucherCode').select2({
+                placeholder: "Select Vouchers",
+                /*search: true,*/
+                allowClear: true
+            });
+        }
+
+        // Call the function on dropdown change
+        $('#VoucherCode').on('change', updateTotalAmount);
+        $('.refreshVoucher').on('change', fetchvoucher);
+    </script>
+    <!--script for submit button of payment-->
+    <script>
+        function validatePayment() {
+            var TransactionAmount = $("#TransactionAmount").val();
+            var amounttopay = $("#pymtotalamt").text();
+            var voucheramount = $("#totalAmountLabel").text();
+            var VoucherCode = $('#VoucherCode option:selected').val();
+
+            //Validation for required fields
+            if (!TransactionAmount || amounttopay==="0" || !voucheramount==="0" || !VoucherCode) {
+                // Show validation error
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'Please fill in all the required fields of purchase.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return false;
+            }
+            return true;
+        }
+        $('#btnptmsave').on('click', function (e) {
+                e.preventDefault();
+                var TranscationCode = $('#TransactionCode').val();
+                var selectedVouchers = $('#VoucherCode option:selected');
+                var paidAmount = parseFloat($('#TransactionAmount').val());
+
+            // Ensure that paidAmount is a valid number and greater than 0
+            if (selectedVouchers.length > 0 && !isNaN(paidAmount) && paidAmount > 0) {
+                // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to submit the selected vouchers?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'No, cancel!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    debugger;
+                    // Disable the button to prevent multiple clicks
+                    $('#SubmitAmounts').prop('disabled', true);
+                    var vouchers = [];
+
+                    // Loop through selected vouchers to gather their codes and amounts
+                    selectedVouchers.each(function () {
+                        var voucherText = $(this).text();
+                        var voucherParts = voucherText.split('-');
+                        var voucherCode = voucherParts[0];
+                        var voucherAmount = parseFloat(voucherParts[2]);
+
+                        vouchers.push({
+                            VoucherCode: voucherCode,
+                            Amount: voucherAmount
+                        });
+                    });
+
+                    // Send the data to the server
+                    $.ajax({
+                        url: '@Url.Action("MatchVouccherAsyncVB", "Accountant")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            TranscationCode : TranscationCode,
+                            TransactionAmount : paidAmount,
+                            vouchers: vouchers
+                        }),
+                        success: function (response) {
+                            if (response.success) {
+                                debugger;
+                                displayToast("Data saved successfully!", "success");
+                                if (response.redirectUrl) {
+                                    window.location.href = response.redirectUrl;
+                                }
+                            } else {
+                                debugger;
+                                displayToast(response.message || 'Error allocating amount.', "error");
+                                $('#SubmitAmounts').prop('disabled', false);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            displayToast('An error occurred while processing your request.', "error");
+                            $('#SubmitAmounts').prop('disabled', false);
+                        }
+                    });
+                }
+                    });
+                } else {
+                    toastr.warning('Please select vouchers and enter a valid paid amount.');
+            }
+        })
+    </script>
+    <!------------------------------------------------------------------------------update scripts------------------------------------------------------------>
+    <script>
+        $(document).ready(function () {
+            getPurchasedItems()
+        });
+        function addrowupdate() {
+            // Clone the first row
+            var $clone = $("#tblpurchaseitem tbody tr:first").clone();
+
+            // Reset values of the cloned controls
+            $clone.find('input').val('');
+            $clone.find('select').prop('selectedIndex', 0); // Reset dropdowns to first option
+            $clone.find('.remove').html(`
+               <a href="javascript:void(0);" class="icon" onclick="removeRow(this, $(this).closest('tr').find('.ItemId input').val())">
+                    <video width="25" height="25" playsinline loop>
+                        <source src="@Url.Content("~/Content/Admin/icon/Delete%202.mp4")" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                </a>
+            `);
+            // Append the cloned row to the table
+            $("#tblpurchaseitem tbody").append($clone);
+        }
+       function getPurchasedItems() {
+            var listOfItems = @Html.Raw(Json.Encode(ViewBag.ListofItems));
+            var $tableBody = $('#tblpurchaseitem tbody');
+
+            // Iterate through each item in the list
+           listOfItems.forEach(function (item, index) {
+
+                // If not the first row, clone the first row to create a new row
+                if (index > 0) {
+                    addrowupdate(); // Assuming this function adds a new row
+                }
+
+                // Select the row to populate
+                var $row = $tableBody.find('tr').eq(index);
+
+                // Populate the row with item data
+                $row.find('.ItemId input').val(item.ItemId);
+                $row.find('.TransactionCode input').val(item.TransactionCode);
+                $row.find('.ItemName input').val(item.ItemName);
+                $row.find('.HSNCode select').val(item.HSNCode);
+                $row.find('.Quantity input').val(item.Quantity);
+                $row.find('.UnitPrice input').val(item.UnitPrice);
+                $row.find('.Discount input').val(item.Discount);
+                $row.find('.AppliedTax select').val(item.Tax);
+
+            });
+
+            // Add an empty row at the end for user input
+           addrowupdate();
+       }
+        function getdatatoPayment() {
+            $('#ptmvendorname').text($('#VendorName').val());
+            $('#vchptmtransactioncode').text($('#TransactionCode').val());
+            $('#ptmtransactiondate').text($('#TransactionDate').val());
+        }
+    </script>
+    <!--update button code-->
+    <script>
+       $(document).ready(function() {
+            $('#btnupdate').on('click', function() {
+                // Start with the validation which is already defined
+                var isvalid = validationforSubmit() && validateRow();
+                if (isvalid) {
+                    // swal for permission for update
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Do you want to update the above details?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, update it!',
+                        cancelButtonText: 'No, cancel!'
+                    }).then((willUpdate) => {
+                        if (willUpdate) {
+                          Swal.fire({
+                            title: 'Want to Pay ?',
+                            text: "The details are saved , you can pay for purchase now.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, pay now!',
+                            cancelButtonText: 'No, cancel!'
+                        }).then((result) => {
+                            const issuccess = updatePurchase();
+                            if (issuccess) {
+                                displayToast("saved successfully..!", "success");
+                                getdatatoPayment();
+                                $('#purchasediv').hide();
+                                $('#accordion').show(); // Show the hidden div after saving
+                                //fetching the vouchers for the payment
+                                fetchvoucher();
+                            }
+                            else {
+                                 window.location.href = '@Url.Action("DetailsPurchaseAsyncVP")';
+                            }
+                        });
+                        }
+                    });
+                }
+            });
+       });
+
+        async function updatePurchase() {
+            try {
+                // Update the BalanceAmount before creating the FormData object
+                updateTotals();
+                // Create FormData object
+                var formData = getFormData();
+
+                // First AJAX request to update the purchase
+                const updatePurchaseResponse = await $.ajax({
+                    type: 'POST',
+                    url: '/Accountant/UpdatePurchaseAsyncVP',
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+
+                if (updatePurchaseResponse.success) {
+                    displayToast("Update purchase success", "success");
+
+                } else {
+                    displayToast("Error in saving purchase details", "error");
+                    return false;
+                }
+
+                // Prepare purchase items
+                var PurchaseItemsVPModels = ListPurchaseItem();
+
+                // Second AJAX request to update purchase items
+                const updatePurchaseItemResponse = await $.ajax({
+                    url: '/Accountant/UpdatePurchaseItemAsyncVP',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ PurchaseItemsAsyncVP: PurchaseItemsVPModels })
+                });
+
+                if (updatePurchaseItemResponse.success) {
+                    displayToast("Update items successfully!", "success");
+                    return true;
+                } else {
+                    displayToast("Error in saving purchase item", "error");
+                    return false;
+                }
+            } catch (error) {
+                // Log any unexpected errors
+                console.error('Error in updatePurchase:', error);
+                displayToast("Unexpected error occurred", "error");
+                return false;
+            }
+        }
+
+        // Placeholder functions for gathering form data and purchased items
+        function getFormData() {
+            var form = document.getElementById("addpurchaseAsyncVP"); // Replace with your form ID
+            var formData = new FormData(form);
+            return formData;
+        }
+
+    </script>
+</body>
+</html>

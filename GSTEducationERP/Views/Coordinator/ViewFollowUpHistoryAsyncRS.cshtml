@@ -1,0 +1,115 @@
+﻿@model IEnumerable<GSTEducationERPLibrary.Coordinator.Coordinator>
+
+<style>
+    /* Custom CSS to override table row striping */
+    .table tbody tr:nth-child(even) {
+        background-color: inherit !important; /* Set background color to match the card background */
+    }
+
+    .table tbody tr td {
+        padding: 8px !important; /* Adjust the padding to increase row height */
+    }
+</style>
+<style>
+    .control-label {
+        max-width: 100%;
+    }
+</style>
+
+<div class="container">
+        <div>
+            <h2>Follow-Up History</h2>
+        </div>
+    <hr />
+</div>
+<div class="card m-2">
+
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="control-label col-md-3">Student Name</label>
+            <div class="col-md-3">
+                @Model.FirstOrDefault().FullName
+            </div>
+            <label class="control-label col-md-3">Batch Name</label>
+            <div class="col-md-3">
+                @Model.FirstOrDefault().BatchName
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-md-3">Contact Number</label>
+            <div class="col-md-3">
+                @Model.FirstOrDefault().ContactNumber
+            </div>
+
+            <label class="control-label col-md-3">Follow-Up Count</label>
+            <div class="col-md-3">
+                @Model.FirstOrDefault().Count
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Follow-Up Date
+                        </th>
+                        <th>
+                            Next Installment Date
+                        </th>
+                        <th>
+                            Follow-Up Note
+                        </th>
+                        <th>
+                            Follow-Up Taken By
+                        </th>
+                        <th>
+                            Follow-Up Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.followupDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nextdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FollowUpNote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FollowUpTakenBy)
+            </td>
+            <td>
+                @if (item.Status == "Completed")
+                {
+    <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>}
+                @if (item.Status == "Not Reachable")
+                {
+    <span class="badge bg-warning">@Html.DisplayFor(modelItem => item.Status)</span>}
+                @if (item.Status == "Not Responding")
+                {
+    <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>}
+
+            </td>
+        </tr>}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-12">
+            <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; margin-block-start: 10px;" onclick="location.href = '@Url.Action("ListAddedFeeFollowupAsyncRs", "Coordinator")'">
+                <video width="35" height="35" playsinline loop>
+                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                </video>
+            </a>
+        </div>
+    </div>
+   
+</div>
+
+<button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>

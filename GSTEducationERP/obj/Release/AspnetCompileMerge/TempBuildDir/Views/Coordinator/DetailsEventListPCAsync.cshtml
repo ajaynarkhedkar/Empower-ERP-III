@@ -1,0 +1,76 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<style>
+    .coordinator-details {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+        .coordinator-details dl {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .coordinator-details dt {
+            flex: 1 0 30%; /* Adjust as needed */
+            font-weight: bold;
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .coordinator-details dd {
+            flex: 1 0 70%; /* Adjust as needed */
+            margin: 5px 0;
+        }
+
+    /* Style the back link */
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+    }
+</style>
+
+<div class="coordinator-details">
+    <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Event Details</h5>
+    <hr />
+    <dl>
+        <dt>Event Name:</dt>
+        <dd>@Html.DisplayFor(model => model.EventName)</dd>
+
+        <dt>Event Arranged By:</dt>
+        <dd>@Html.DisplayFor(model => model.EventArrangedBy)</dd>
+
+        <dt>Start Date:</dt>
+        <dd>@Html.DisplayFor(model => model.StartDate)</dd>
+
+        <dt>End Date:</dt>
+        <dd>@Html.DisplayFor(model => model.EndDate)</dd>
+
+        <dt>Start Time:</dt>
+        <dd>@Html.DisplayFor(model => model.StartTime)</dd>
+
+        <dt>End Time:</dt>
+        <dd>@Html.DisplayFor(model => model.EndTime)</dd>
+
+        @*<dt>@Html.DisplayNameFor(model => model.EventId)</dt>
+        <dd>@Html.DisplayFor(model => model.EventId)</dd>*@
+
+        <dt>No Of Participants:</dt>
+        <dd>@Html.DisplayFor(model => model.NoOfParticipants)</dd>
+
+        <dt>Status:</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
+    </dl>
+</div>
+
+
+

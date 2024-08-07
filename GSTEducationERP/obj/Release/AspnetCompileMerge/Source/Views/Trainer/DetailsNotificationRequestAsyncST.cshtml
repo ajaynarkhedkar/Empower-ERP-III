@@ -1,0 +1,157 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+<link href="~/Content/Coordinator/css/DetailesCSS.css" rel="stylesheet" />
+<link href="~/Content/Coordinator/css/ToolTips.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
+<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+
+
+
+
+<div class="card  col-md-12">
+        <div class="form-group">
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">Batch Name:</label>
+                <span>@Model.BatchName</span>
+            </div>
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">Course Name:</label>
+                <span>@Model.CourseName</span>
+            </div>
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">Lab Name:</label>
+                <span>@Model.LabName</span>
+            </div>
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">Staff Name:</label>
+                <span>@Model.StaffName</span>
+            </div>
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">No Of Student:</label>
+                <span>@Model.NoOfStudent</span>
+            </div>
+            <div class="form-group row justify-content-center" hidden>
+                <label class="text-md-center">Batch Schedule Date:</label>
+                <span>@Model.BatchScheduleDate</span>
+            </div>
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">Start Date:</label>
+                <span>@Model.StartDate.ToString("dd-MM-yyyy")</span>
+            </div>
+            <div class="form-group row justify-content-center">
+                <label class="text-md-center">Status:</label>
+                <span>@Model.Status</span>
+            </div>
+            <div class="form-group row justify-content-center" hidden>
+                <label class="text-md-center">Status:</label>
+                <span>@Model.ScheduleId</span>
+            </div>
+            <div class="form-group row justify-content-center" hidden>
+                <label class="text-md-center">BatchCode:</label>
+                <span>@Model.BatchCode</span>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-3 text-md-center"> </div>
+            <div class="col-md-3 text-md-center">
+                <form id="acceptForm" method="post" action="@Url.Action("NotificationRequestAcceptAsyncST", "Trainer")">
+                    @Html.HiddenFor(model => model.ScheduleId)
+                    @Html.HiddenFor(model => model.BatchCode)
+                    <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                </form>
+            </div>
+
+            <div class="col-md-3 text-md-center">
+                <form id="rejectForm" method="post" action="@Url.Action("NotificationRequestRejectAsyncST", "Trainer")">
+                    @Html.HiddenFor(model => model.ScheduleId)
+                    @Html.HiddenFor(model => model.BatchCode)
+                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+            </div>
+            <div class="col-md-3 text-md-center"> </div>
+        </div>
+            <br />
+            <div class="col-md-12">
+                <a data-toggle="tooltip" data-placement="top" title="Back" alt="Back" style="width: 60px; height: 35px; border: 0; margin-left: -20px;" onclick="location.href = '@Url.Action("ListScheduledBatchRequestAsyncST", "Trainer")'">
+                    <video width="35" height="35" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                    </video>
+                </a>
+            </div>
+        </div>
+
+<script>
+    function showCancelConfirmation() {
+        // Using SweetAlert for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            //text: 'You will not be able to undo this action!',
+            icon: 'warning',
+            //showCancelButton: true,
+            confirmButtonColor: '#d33',
+            //cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Add any form cancellation logic here if needed
+
+                // Redirect to the specified URL
+                window.location.href = '@Url.Action("ListScheduledBatchRequestAsyncST", "Trainer")';
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        // Submit form and show toastr on success
+        $("#acceptForm").submit(function (e) {
+            e.preventDefault(); // Prevent the form from submitting normally
+
+            // Perform AJAX form submission
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                data: $(this).serialize()
+            })
+                .done(function () {
+                    // Show success toastr
+                    toastr.success('Accepted successfully!', 'Success');
+                    setTimeout(function () {
+                        window.location.href = 'ListScheduledBatchRequestAsyncST'; 
+                    }, 1000);
+                })
+                .fail(function () {
+                    // Show error toastr if there's an issue with the form submission
+                    toastr.error('Error accepting request', 'Error');
+                });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        // Submit form using AJAX
+        $("#rejectForm").submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Perform your form submission here
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                data: $(this).serialize()
+            })
+                .done(function () {
+                    // Show success toastr
+                    toastr.success('Rejected successfully!', 'Success');
+                    setTimeout(function () {
+                        window.location.href = 'ListScheduledBatchRequestAsyncST';
+                    }, 1000);
+                })
+                .fail(function () {
+                    // Show error toastr if there's an issue with the form submission
+                    toastr.error('Error accepting request', 'Error');
+                });
+        });
+    });
+</script>

@@ -1,0 +1,265 @@
+﻿@model GSTEducationERPLibrary.Placement.Placement
+
+@{
+	ViewBag.Title = "UpdateExamAsyncSN";
+	//Layout = "~/Views/Shared/_LayoutPlacement.cshtml";
+}
+<html>
+<head>
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<link href="~/Content/plugins/select2/css/select2.min.css" rel="stylesheet" />
+	<script src="~/Content/plugins/select2/js/select2.min.js"></script>
+	<script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
+	<script src="~/Content/plugins/toastr/toastr.min.js"></script>
+	<style>
+		.error-field {
+			border: 2px solid red; /* Add your preferred styling for highlighting */
+		}
+
+		label:not(.form-check-label):not(.custom-file-label) {
+			font-size: 14px;
+		}
+
+		.form-control {
+			font-size: 14px !important;
+		}
+
+		.input-group > .custom-file {
+			font-size: 14px !important;
+		}
+
+		.btn:not(:disabled):not(.disabled) {
+			font-size: 14px !important;
+		}
+
+		.text-danger {
+			font-size: 12px !important;
+		}
+
+		.select2-container {
+			font-size: x-small;
+		}
+
+		.select2-container--default .select2-selection--multiple .select2-selection__choice {
+			background-color: #33CCCC;
+		}
+	</style>
+</head>
+<body>
+	@using (Html.BeginForm("UpdateExamAsyncSN", "Placement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+	{
+		@Html.AntiForgeryToken()
+		<br />
+		<div class="card pl-4">
+			<h5 style="font-size:16px;font-weight:600">Add Exam</h5>
+			@Html.HiddenFor(model => model.ExamId)
+			@Html.HiddenFor(model => model.FilePth)
+			@Html.HiddenFor(model => model.TechnologyName)
+			<div class="row">
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.CourseCode, "Course Name", htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.DropDownListFor(model => model.CourseCode, new SelectList(ViewBag.Course, "Value", "Text"), "---Select Course--- ", new { @class = "form-control col-md-12", disabled = "disabled" })
+							@Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.ExamName, htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.EditorFor(model => model.ExamName, new { htmlAttributes = new { @class = "form-control col-md-12", disabled = "disabled" } })
+							@Html.ValidationMessageFor(model => model.ExamName, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.Technology, "Technology", htmlAttributes: new { @class = "control-label col-md-4" })
+						@*<div class="col-md-8">
+			@Html.DropDownListFor(model => model.Technology, (IEnumerable<SelectListItem>)ViewBag.Technology, new { @class = "form-control col-md-12", @id = "technologyDropdown", @multiple = "multiple" })
+			@Html.ValidationMessageFor(model => model.Technology, "", new { @class = "text-danger" })
+		</div>*@
+						<div class="col-md-8">
+							@{
+								var selectedTechnologies = ViewBag.SelectedTechnologies as string;
+								var selectedTechnologiesArray = selectedTechnologies?.Split(',');
+
+								var technologyList = ViewBag.Technology as SelectList;
+							}
+							<select id="technologyDropdown" name="Technology" multiple="multiple" class="form-control col-md-12">
+								@foreach (var technology in technologyList)
+								{
+									var isSelected = selectedTechnologiesArray != null && selectedTechnologiesArray.Contains(technology.Value);
+									<option value="@technology.Value" @(isSelected ? "selected" : "")>@technology.Text</option>
+								}
+							</select>
+							@Html.ValidationMessageFor(model => model.Technology, "", new { @class = "text-danger" })
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.SelectedDuration, htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							<input type="time" id="SelectedDuration" name="SelectedDuration" value="@Model.SelectedDuration.ToString(@"hh\:mm")" />
+							@Html.ValidationMessageFor(model => model.SelectedDuration, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.TotalMarks, htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.EditorFor(model => model.TotalMarks, new { htmlAttributes = new { @class = "form-control col-md-12" } })
+							@Html.ValidationMessageFor(model => model.TotalMarks, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.PassingMarks, htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.EditorFor(model => model.PassingMarks, new { htmlAttributes = new { @class = "form-control col-md-12" } })
+							@Html.ValidationMessageFor(model => model.PassingMarks, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-4">
+					<div class="input-group">
+						@Html.LabelFor(model => model.TotalNoOfQuestion, htmlAttributes: new { @class = "control-label col-md-4" })
+						<div class="col-md-8">
+							@Html.EditorFor(model => model.TotalNoOfQuestion, new { htmlAttributes = new { @class = "form-control col-md-12" } })
+							@Html.ValidationMessageFor(model => model.TotalNoOfQuestion, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				</div>
+				@*<div class="input-group col-md-4" id="offer-section">
+				@Html.LabelFor(model => model.TestPaperFile, htmlAttributes: new { @class = "control-label col-md-4" })
+				<div class="input-group col-md-6">
+					<div class="custom-file ">
+						<input type="file" class="custom-file-input" name="TestPaperFile" id="TestPaperFile" onchange="updateFileName(this)">
+						<label class="custom-file-label" for="TestPaperFile">Choose file</label>
+					</div>
+				</div>
+				<button type="button" class="btn btn-primary btn-xs" style="margin-top:5px;margin-bottom:5px;" id="btnPreviewFile">View</button>
+				<span style="margin-left:150px" id="offerValidation" class="text-danger"></span>
+			</div>*@
+				<div class="input-group col-md-4" id="offer-section">
+					@Html.LabelFor(model => model.TestPaperFile, htmlAttributes: new { @class = "control-label col-md-4" })
+					<div class="col-md-8">
+						<input type="file" id="TestPaperFile" name="TestPaperFile" class="form-control col-md-4" />
+						@if (!string.IsNullOrEmpty(Model.FilePth))
+						{
+							<div>Current File: @Path.GetFileName(Model.FilePth)</div>
+							<a href="@Url.Action("ViewFileAsyncSN", "Placement", new { filePath = Model.FilePth })" target="_blank">View File</a>
+						}
+						@Html.ValidationMessageFor(model => model.TestPaperFile, "", new { @class = "text-danger" })
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="input-group justify-content-end " style="margin-top:10px; padding-right:40px;">
+						<div class="col-md-3">
+							<button type="submit" class="btn btn-block bg-gradient-success btn-block" onclick="return confirmSave(event)">Update</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<br />
+		</div>
+
+
+	}
+	<script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script>
+		$(document).ready(function () {
+			document.getElementById('update').addEventListener('click', confirmUpdate);
+
+			function confirmUpdate() {
+				Swal.fire({
+					title: 'Are you sure you want to update?',
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonText: 'Yes, update it!',
+					cancelButtonText: 'Cancel'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// User confirmed, proceed with the update
+						updateExam();
+					}
+				});
+			}
+
+			function updateExam() {
+				var formData = new FormData();
+
+				formData.append('ExamId', $('#ExamId').val());
+				formData.append('CourseCode', $('#CourseCode').val());
+				formData.append('ExamName', $('#ExamName').val());
+				formData.append('SelectedDuration', $('#SelectedDuration').val());
+				formData.append('TotalMarks', $('#TotalMarks').val());
+				formData.append('PassingMarks', $('#PassingMarks').val());
+				formData.append('FilePth', $('#FilePth').val());
+				// Check if the file input exists before trying to access its 'files' property
+				var fileInput = document.getElementById('TestPaperFile');
+				if (fileInput && fileInput.files.length > 0) {
+					formData.append('TestPaperFile', fileInput.files[0]);
+				}
+
+				formData.append('TotalNoOfQuestion', $('#TotalNoOfQuestion').val());
+				// Add other properties as needed
+
+				$.ajax({
+					url: '/Placement/UpdateExamAsyncSN',
+					type: 'POST',
+					processData: false,
+					contentType: false,
+					data: formData,
+					success: function (data) {
+						// Handle success
+						Swal.fire({
+							title: 'Update Successful',
+							text: 'The exam details have been successfully updated.',
+							icon: 'success',
+							confirmButtonText: 'OK'
+						}).then((result) => {
+							if (result.isConfirmed) {
+								// Redirect to ListAllExamsSNAsync action
+								window.location.href = '/Placement/ListAllExamsSNAsync';
+							}
+						});
+					},
+					error: function (error) {
+						// Handle error
+						Swal.fire({
+							title: 'Error',
+							text: 'An error occurred during the update.',
+							icon: 'error',
+							confirmButtonText: 'OK'
+						});
+					}
+				});
+
+			}
+		});
+	</script>
+
+
+</body>
+</html>
+
+

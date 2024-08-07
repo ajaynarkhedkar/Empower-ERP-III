@@ -1,0 +1,527 @@
+﻿@model GSTEducationERPLibrary.Trainer.Trainer
+
+<head>
+    <link rel="stylesheet" href="~/Content/Trainer/CSS/_forms.scss" />
+    <link href="~/Content/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css" rel="stylesheet" />
+</head>
+<style>
+    h2 {
+        padding-top: 10px;
+        margin-bottom: 10px;
+        font-family: Verdana;
+        font-weight: bold;
+        font-size: medium;
+        color: #33CCCC;
+        text-decoration: underline;
+    }
+
+    .card-body {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+   
+    .control-label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .date-input {
+        display: flex;
+    }
+
+    .bootstrap-duallistbox-container {
+        margin-top: 20px;
+    }
+
+    .bootstrap-duallistbox-container {
+        margin-top: 20px;
+    }
+
+    .box1, .box2 {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    .buttons {
+        margin-top: 10px;
+    }
+
+    .btn-custom {
+        margin-right: 10px;
+    }
+
+    .spacer {
+        margin-right: 10px;
+    }
+
+    .highlight {
+        color: #007bff;
+        font-weight: bold;
+    }
+</style>
+<h2><span class="highlight"> </span></h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="card-body">
+        <div class="form-horizontal" style="text-align: center;">
+            <h2>Update Assign Project</h2>
+            <br />
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.AssignProjectId)
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="CourceName" class="control-label">Cource Name</label>
+                    <div class="col-md-10" style="width:350px;">
+                        @Html.EditorFor(model => model.CourceName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.CourceName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="AssignTrainer" class="control-label">Assign Trainer Name</label>
+                    <div class="col-md-10" style="width:500px;">
+                        @Html.DropDownListFor(model => model.TrainerCode, (IEnumerable<SelectListItem>)ViewBag.AssignTrainer, "--SELECT --", new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.TrainerCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ProjectName" class="control-label">Project Name</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ProjectCode, (IEnumerable<SelectListItem>)ViewBag.ProjectName, "--SELECT Section--", new { @class = "form-control", id = "ddlProjectName", required = "required" })
+                @Html.ValidationMessageFor(model => model.ProjectCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="control-label col-md-2" hidden>DURATION:</label>
+            </div>
+            <label hidden id="duration" class="control-label col-md-2"></label>
+            <div class="col-md-5">
+                <label for="StartDate" class="control-label">Start Date</label>
+                <div class="col-md-12 date-input" style="width:350px;">
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker", id = "StartDate", min = DateTime.Now.ToString("yyyy-MM-dd"), required = "required" } })
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label for="TentativeEndDate" class="control-label">Tentative End Date</label>
+                <div class="col-md-12 date-input" style="width:350px;">
+                    <label id="TentetiveEndDateLabel" class="form-control"></label>
+                    @Html.ValidationMessageFor(model => model.TentetiveEndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="BatchName" class="control-label">Batch Name</label>
+                <div class="col-md-10" style="width:300px;">
+                    <label style="font-weight:normal;">@Model.BatchName</label>
+                    @Html.HiddenFor(model => model.BatchCode)
+                    @Html.ValidationMessageFor(model => model.BatchCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="MergeBatch" class="control-label">Merge Batch Name</label>
+                <div class="col-md-10" style="width:300px;">
+                    @Html.DropDownListFor(model => model.MergeBatch, (IEnumerable<SelectListItem>)ViewBag.BatchName1, "--SELECT--", new { @id = "MergeBatch", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.MergeBatch, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="bootstrap-duallistbox-container row moveonselect moveondoubleclick">
+            <div class="box1 col-md-6">
+                <span class="info">STUDENTS:</span>
+                <input class="form-control filter" type="text" placeholder="Filter Students" data-target="#AddStudents" id="AddStudentFilter">
+
+                <div class="btn-group buttons">
+                    <button type="button" class="btn moveall btn-outline-secondary" title="Move all">&gt;&gt;</button>
+                </div>
+                <select multiple="multiple" id="AddStudents" name="_helper1" style="height: 102px;" required>
+                    @foreach (var student in ViewBag.StudentsList)
+                    {
+                        <option value="@student.Value">@student.Text</option>
+                    }
+                </select>
+                @Html.HiddenFor(model => model.SelectedStudentsString)
+            </div>
+            <div class="box2 col-md-6">
+                <span class="info">SELECT STUDENTS NAME:</span>
+                <input class="form-control filter" type="text" placeholder="Filter Students" data-target="#SelectedStudents" id="SelectStudentFilter">
+                <div class="btn-group buttons">
+                    <button type="button" class="btn removeall btn-outline-secondary" title="Remove all">&lt;&lt;</button>
+                </div>
+                <select multiple="multiple" id="SelectedStudents" name="_helper2" style="height: 102px;">
+                    @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                </select>
+                @Html.HiddenFor(model => model.MergeStudentsString)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="TotalMemberOnProject" class="control-label">TEAM MEMBER ON PROJECT</label>
+                <div class="col-md-10">
+                    <label id="TotalMemberOnProject" class="form-control"></label>
+                    @Html.ValidationMessageFor(model => model.TotalMemberOnProject, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="TeamLeaderName" class="control-label">TEAM LEADER NAME </label>
+                <div class="col-md-10">
+                    <select id="TeamLeaderName" name="TeamLeaderName" class="form-control" required>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.TeamLeaderName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <div class="col-md-12">
+                <input type="submit" value="UPDATE" class="btn btn-success btn-sm" title="Update data" />
+                <span class="spacer"></span>
+                <input type="button" value="CANCEL" class="btn btn-danger btn-sm" onclick="window.location.href='@Url.Action("ListAllAssignedProjectAsyncPG")'" title="Cancle Form"/>
+            </div>
+        </div>
+    </div>
+        }
+        <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap4 Duallistbox -->
+        <script src="~/Content/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+        <script>
+            //*** get BatchName based on the selected Course //
+            $(document).ready(function () {
+                $("#ddlCourceName").change(function () {
+                    var id = $(this).val();
+                    $("#MergeBatch").empty();
+                    $.get("/Trainer/BatchName_Bind", { Coursecode: id }, function (data) {
+                        var v = "<option value=''>---Select---</option>"; // Added ---Select--- option
+                        $.each(data, function (i, v1) {
+                            v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+                        });
+                        $("#MergeBatch").html(v);
+                    });
+                });
+            });
+        </script>
+        <script>
+            //*** Function to filter students based on input value //
+            function updateDualListBox(targetId, data) {
+                var targetList = $(targetId);
+                targetList.empty();
+                $.each(data, function (index, v1) {
+                    var option = $('<option value="' + v1.Value + '">' + v1.Text + '</option>');
+                    if (v1.Selected) {
+                        option.attr('selected', true);
+                    }
+                    targetList.append(option);
+                });
+                targetList.bootstrapDualListbox('refresh');
+            }
+            function moveItems(sourceId, targetId, ajaxUrl, dataKey) {
+                var selectedOptions = $(sourceId + " option:selected");
+                if (selectedOptions.length === 0) {
+                    selectedOptions = $(sourceId + " option").clone();
+                    $(sourceId).empty();
+                }
+                $(targetId).append(selectedOptions.clone());
+                selectedOptions.remove();
+                $(sourceId).add(targetId).bootstrapDualListbox('refresh');
+                var id = $(sourceId === "#AddStudents" ? "#BatchName" : "#MergeBatch").val();
+                $.ajax({
+                    url: ajaxUrl,
+                    type: "GET",
+                    data: { [dataKey]: id },
+                    success: function (data) {
+                        updateDualListBox(sourceId, data);
+                    }
+                });
+                $.ajax({
+                    url: ajaxUrl,
+                    type: "GET",
+                    data: { [dataKey]: id },
+                    success: function (data) {
+                        updateDualListBox(targetId, data);
+                    }
+                });
+            }
+            $("#MergeBatch").change(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/Trainer/SelectBatchStudent",
+                    type: "GET",
+                    data: { AddStudent: id },
+                    success: function (data) {
+                        updateDualListBox("#SelectedStudents", data);
+                    }
+                });
+            });
+            // Event handler for moving all items
+            $(".buttons .moveall, .buttons .removeall").on("click", function () {
+                var sourceId = $(this).hasClass("moveall") ? "#AddStudents" : "#SelectedStudents";
+                var targetId = $(this).hasClass("moveall") ? "#SelectedStudents" : "#AddStudents";
+                var ajaxUrl = $(this).hasClass("moveall") ? "/Trainer/AddBatchStudent" : "/Trainer/SelectBatchStudent";
+                var dataKey = $(this).hasClass("moveall") ? "SelectStudent" : "AddStudent";
+                moveItems(sourceId, targetId, ajaxUrl, dataKey);
+            });
+            // Event handler for moving selected items
+            $(".buttons .moveallselected, .buttons .removeallselected").on("click", function () {
+                var sourceId = $(this).hasClass("moveallselected") ? "#AddStudents" : "#SelectedStudents";
+                var targetId = $(this).hasClass("moveallselected") ? "#SelectedStudents" : "#AddStudents";
+                var ajaxUrl = $(this).hasClass("moveallselected") ? "/Trainer/AddBatchStudent" : "/Trainer/SelectBatchStudent";
+                var dataKey = $(this).hasClass("moveallselected") ? "SelectStudent" : "AddStudent";
+                moveItems(sourceId, targetId, ajaxUrl, dataKey);
+            });
+        </script>
+        <script>
+            function filterStudents(filterValue, targetId) {
+                $(targetId + ' option').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(filterValue) > -1);
+                });
+            }
+            // Event handler for filter input change - AddStudents
+            $('#AddStudentFilter').on('input', function () {
+                var filterValue = $(this).val().toLowerCase();
+                filterStudents(filterValue, '#AddStudents');
+            });
+            // Event handler for filter input change - SelectedStudents
+            $('#SelectStudentFilter').on('input', function () {
+                var filterValue = $(this).val().toLowerCase();
+                filterStudents(filterValue, '#SelectedStudents');
+            });
+        </script>
+        <script>
+            //*** Refresh //
+            function resetDualListBox(targetId) {
+                var targetList = $(targetId);
+                targetList.empty();
+                targetList.bootstrapDualListbox('refresh');
+            }
+            // Event handler for refresh button
+            $('.refresh-btn').on('click', function () {
+                var targetId = $(this).data('target');
+                resetDualListBox(targetId);
+            });
+        </script>
+        <script>
+            //*** Function to update TotalMemberOnProject based on the count of selected students //
+            function updateTotalMemberCount() {
+                var selectedStudentCount = $("#AddStudents option").length;
+                $("#TotalMemberOnProject").text(selectedStudentCount);
+            }
+            // Event handler for the change event of AddStudents
+            $("#AddStudents").on("change", function () {
+                updateTotalMemberCount();
+            });
+            // Initialize TotalMemberOnProject on page load
+            $(document).ready(function () {
+                updateTotalMemberCount();
+            });
+        </script>
+        <script>
+            //*** Team Leader Name  //
+ $(document).ready(function () {
+    updateTeamLeaderDropdown();
+    $("#AddStudents").on("change", function () {
+        updateTeamLeaderDropdown();
+    });
+
+    function updateTeamLeaderDropdown() {
+        var teamLeaderDropdown = $("#TeamLeaderName");
+        var addStudentsMultiSelect = $("#AddStudents");
+        var tlNameText = "@(ViewBag.TLName)";
+        var tlNameValue = "@(ViewBag.TLCode)";
+        teamLeaderDropdown.empty();
+        teamLeaderDropdown.append($('<option>', {
+            value: tlNameValue,
+            text: tlNameText
+        }));
+
+        addStudentsMultiSelect.find("option").each(function () {
+            var optionValue = $(this).val();
+            var optionText = $(this).text();
+
+            if (optionValue !== tlNameValue) {
+                teamLeaderDropdown.append($('<option>', {
+                    value: optionValue,
+                    text: optionText
+                }));
+            }
+        });
+
+        teamLeaderDropdown.prepend($('<option>', {
+            value: "",
+            text: "---Select---"
+        }));
+
+        teamLeaderDropdown.val(tlNameValue);
+        teamLeaderDropdown.find('option[value="' + tlNameValue + '"]').prop('selected', true);
+    }
+});
+        </script>
+        <script>
+            //*** End date calculate with help of duration //
+            $(document).ready(function () {
+                function fetchProjectDuration(projectCode) {
+                    $.ajax({
+                        url: "/Trainer/ProjectDuration",
+                        type: "GET",
+                        data: { ProjectCode: projectCode },
+                        success: function (data) {
+                            $("#duration").text(data.Duration);
+                            calculateEndDate();
+                        }
+                    });
+                }
+                function calculateEndDate() {
+                    var startDateString = $("#StartDate").val();
+                    var durationString = $("#duration").text();
+                    var durationMatch = durationString.match(/\d+/);
+                    var duration = durationMatch ? parseInt(durationMatch[0]) : 0;
+                    if (startDateString && duration) {
+                        var startDate = new Date(startDateString);
+                        // Check if the start date is valid
+                        if (isNaN(startDate.getTime())) {
+                            console.error('Invalid start date');
+                            return;
+                        }
+                        // Calculate the end date
+                        var endDate = new Date(startDate.getTime());
+                        endDate.setMonth(startDate.getMonth() + duration);
+                        // Format the end date and update the TentetiveEndDateLabel
+                        var formattedEndDate = endDate.toLocaleDateString();
+                        $("#TentetiveEndDateLabel").text(formattedEndDate);
+                        // Update the hidden input for the model
+                        $("#TentetiveEndDate").val(formattedEndDate);
+                    }
+                }
+                $("#ddlProjectName").change(function () {
+                    var projectCode = $(this).val();
+                    fetchProjectDuration(projectCode);
+                });
+                // Event handler for start date change
+                $("#StartDate").change(function () {
+                    calculateEndDate();
+                });
+                // Trigger change event for project name on page load
+                $("#ddlProjectName").trigger('change');
+            });
+        </script>
+        <script>
+            //*** Multiple student in one variable //
+            $('form').submit(function () {
+                var allAddValues = $('#AddStudents').find('option').map(function () { return this.value; }).get();
+                var allAddString = allAddValues ? allAddValues.join(',') : '';
+                $('#SelectedStudentsString').val(allAddString);
+
+                var allMergeValues = $('#SelectedStudents').find('option').map(function () { return this.value; }).get();
+                var allMergeString = allMergeValues ? allMergeValues.join(',') : '';
+
+                $('#MergeStudentsString').val(allMergeString);
+            });
+        </script>
+        <script>
+    var durationLabel = document.getElementById("duration");
+    if (durationLabel) {
+        durationLabel.textContent = "@Html.Raw(Json.Encode(Model.Duration))";
+    }
+        </script>
+        <script>
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            event.preventDefault();
+            if (validateForm()) {
+                if ($('#AddStudents option').length < 5) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Please select at least 5 students for the project.',
+                        icon: 'error'
+                    });
+                    return;
+                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to update the form.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: $(this).attr('action'),
+                            type: $(this).attr('method'),
+                            data: $(this).serialize(),
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'Data updated successfully!',
+                                        icon: 'success'
+                                    }).then(() => {
+                                        // Redirect or do any other action
+                                        window.location.href = '@Url.Action("ListAllAssignedProjectAsyncPG", "Trainer")';
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: response.message,
+                                        icon: 'error'
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'An error occurred while processing your request.',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        function validateForm() {
+            var isValid = true;
+            // Check if any required fields are empty
+            $('.form-control[required]').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).addClass('is-invalid');
+                }
+            });
+            return isValid;
+        }
+    });
+        </script>
+        <script>
+    $(document).ready(function () {
+        // Get the value of BatchCode if it's not null
+        var selectedBatchCode = '@Model.BatchCode';
+        if (selectedBatchCode) {
+            // Hide the option with the selected BatchCode in MergeBatch dropdown
+            $('#MergeBatch option[value="' + selectedBatchCode + '"]').hide();
+        }
+    });
+        </script>

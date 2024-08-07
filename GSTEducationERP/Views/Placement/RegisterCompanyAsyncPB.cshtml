@@ -1,0 +1,446 @@
+﻿
+@{
+    ViewBag.Title = "RegisterCompanyAsyncPB";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+
+    <style>
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 8px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .btn-green:hover {
+            color: white;
+            background: #2b83cb;
+        }
+
+        .btn-black {
+            color: white;
+            background: rgb(169,169,169);
+        }
+        a {
+            color: #13c6e6;
+        }
+            .btn-black:hover {
+                background: black;
+            }
+
+        .addlogo {
+            width: 65%;
+            aspect-ratio: 3/2;
+            object-fit: contain;
+            /*mix-blend-mode: color-burn;*/
+        }
+
+        .sectionEditLink:hover {
+            background-color: darkturquoise;
+        }
+
+        .card {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            /*margin-right: 10px;*/
+           font:xx-small !important;
+        }
+
+        input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    @using (Html.BeginForm("RegisterCompanyPB", "Placement", new { @id = "form1", @enctype = "multipart/form-data" }))
+    {
+        <br />
+        <div class="card" style="width: 800px; border-left-width: 0px; padding-left: 50px; left: 52px; ">
+            <div class="card-body">
+                <h2>Register Company</h2>
+                <hr />
+                <div class="row col-md-12" style="width:750px;">
+                    <div class="col-md-6 form-group mt-2">
+                        <label class="col-md-5">Company Name :</label>
+                        <input class="form-control onlycharactors w-50px h-25px col-md-7" type="text" id="CompanyName" name="CompanyName" required />
+                    </div>
+
+                    <div class="col-md-6 form-group mb-4">
+                        <label class="col-md-5">Industry Name :</label>
+                        <select class="form-control select2 col-md-7" name="InduastryId" id="InduastryId" required>
+                            <option value="" disabled selected> ---select Industry--- </option>
+                            @foreach (System.Data.DataRow Data in ViewBag.Induastry.Tables[0].Rows)
+                            {
+                                <option value="@Data["InduastryId"]">@Data["InduastryName"]</option>
+                            }
+                        </select>
+                        <a href="#" id="Industry" data-url="@Url.Action("RegisterInduastryAsyncPB","Placement")" data-toggle="modal" data-target="#partialModal" title="Add Industry" class="sectionEditLink text-center">
+                            <img src="~/Content/Admin/icon/Add.jpeg" style="width:30px;height:30px;padding-left:0px;" />
+                        </a>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">Company Email :</label>
+                        <input class="form-control col-md-7" type="text" id="CompanyEmail" name="CompanyEmail" onblur="checkEmail('CompanyEmail')" required maxlength="240" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">Address :</label>
+                        <textarea class="form-control onlynumberchar col-md-7" id="Address" name="Address" required></textarea>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">Country :</label>
+                        <select class="form-control select2 col-md-7" id="Country" name="Country" required>
+                            <option value="" disabled selected title="Select Country">---Select Country---</option>
+                            @foreach (System.Data.DataRow Data in ViewBag.Country.Tables[0].Rows)
+                            {
+                                <option value="@Data["CountryId"]">@Data["CountryName"]</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5"> State :</label>
+                        <select class="form-control col-md-7" id="StateName" name="StateName" required>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 form-group w-50px h-25px">
+                        <label class="col-md-5"> City :</label>
+                        <select class="form-control col-md-7" id="City" name="City" required>
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR1 Name :</label>
+                        <input class="form-control onlycharactors col-md-7" type="text" id="HR1Name" name="HR1Name" required />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR1 Mail :</label>
+                        <input class="form-control loginCliente col-md-7" type="email" id="HR1Mail" name="HR1Mail" onblur="checkEmail('HR1Mail')" required maxlength="240" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR1 Contact :</label>
+                        <input class="form-control onlynumber col-md-7" type="text" id="HR1Contact" name="HR1Contact" min="" maxlength="10" required />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR2 Name :</label>
+                        <input class="form-control onlycharactors col-md-7" type="text" id="HR2Name" name="HR2Name" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR2 Mail :</label>
+                        <input class="form-control loginCliente col-md-7" type="email" id="HR2Mail" name="HR2Mail" onblur="checkEmail('HR2Mail')" maxlength="240" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR2 Contact :</label>
+                        <input class="form-control onlynumber" type="text" id="HR2Contact" name="HR2Contact" min="10" maxlength="10" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR3 Name:</label>
+                        <input class="form-control onlycharactors col-md-7" type="text" id="HR3Name" name="HR3Name" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR3 Mail :</label>
+                        <input class="form-control loginCliente col-md-7" type="email" name="HR3Mail" id="HR3Mail" onchange="checkEmail('HR3Mail')" maxlength="240" />
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label class="col-md-5">HR3 Contact :</label>
+                        <input class="form-control onlynumber col-md-7" type="text" name="HR3Contact" id="HR3Contact" min="10" maxlength="10" />
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2">Description :</label>
+
+                    <textarea class="form-control onlynumberchar col-md-8" id="CompanyDescription" name="CompanyDescription" required></textarea>
+                </div>
+
+                <div class="text-center pt-2 mb-2">
+                    <button type="submit" id="submit" name="submit" class="btn btn-sm btn-success">Save</button>
+                    <button type="button" name="clear" id="clear" class="btn btn-sm btn-warning" onclick="clearForm()">Clear</button>
+                    <div class="text-left">
+                        <a href="/Placement/ListAllCompanyAsyncPB" class="icon">
+                            <video width="30" height="30" playsinline loop>
+                                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4">
+                            </video>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <div class="modal fade" id="partialModal" tabindex="-1" role="dialog" aria-labelledby="SectionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="text-info modal-title">Create Industry</h2>
+                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Your modal content goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#Country').on('change', function (e) {
+                var Country = $('#Country').val();
+                $.ajax({
+                    url: "/Placement/GetStatePB",
+                    type: 'Post',
+                    data: {
+                        CountryId: Country
+                    },
+                    success: function (response) {
+                        var v = "<option disabled selected>---Select State---</option>";
+                        var result = JSON.parse(response);
+                        for (var i = 0; i < result.length; i++) {
+                            v += "<option value='" + result[i]["StateId"] + "'>" + result[i]["StateName"] + "</option>";
+                        }
+                        $("#StateName").html(v);
+                    },
+                });
+            });
+
+            $('#StateName').on('change', function (e) {
+                var state = $('#StateName').val();
+                $.ajax({
+                    url: "/Placement/GetCity",
+                    type: 'Post',
+                    data: {
+                        StateId: state
+                    },
+                    success: function (response) {
+                        var v = "<option disabled selected>---Select City---</option>";
+                        var result = JSON.parse(response);
+                        for (var i = 0; i < result.length; i++) {
+                            v += "<option value='" + result[i]["CityId"] + "'>" + result[i]["CityName"] + "</option>";
+                        }
+                        $("#City").html(v);
+                    },
+                });
+            });
+
+            $('#CompanyName').on('change', function (e) {
+                var companyname = $('#CompanyName').val();
+                $.ajax({
+                    url: "/Placement/GetCompanyNamePB",
+                    type: 'Post',
+                    data: {
+                        Company: companyname
+                    },
+                    success: function (responce) {
+
+                        var result = JSON.parse(responce);
+                        if (result.length !== 0) {
+                            if (companyname == result[0]["CompanyName"]) {
+                                alert("Record Exits")
+                                $('#CompanyName').val('');
+                            }
+                        }
+                    },
+                });
+            });
+
+            $("#Industry").on('click', function () {
+                var url = $(this).data('url');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#partialModal .modal-body').html(response);
+
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+            $(".onlycharactors").keypress(function (e) {
+                var key = e.keyCode;
+                if (key >= 48 && key <= 57) {
+
+                    e.preventDefault();
+                    //or
+                    return false;
+                }
+            });
+
+            $(".onlynumber").keyup(function (e) {
+                if (/\D/g.test(this.value)) {
+                    // Filter non-digits from input value.
+                    this.value = this.value.replace(/\D/g, '');
+                }
+            });
+
+        });
+
+        function isValidEmail(email) {
+            var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+
+        }
+
+        function checkEmail(inputId) {
+            var emailInput = document.getElementById(inputId);
+            var email = emailInput.value;
+
+            if (isValidEmail(email)) {
+                // Valid email, you can perform additional actions here if needed
+            } else {
+                $("#" + inputId).val("");
+                Swal.fire({
+                    title: "<span style='font-size: smaller;'>Please enter a valid email address.</span>",
+                    showConfirmButton: true,
+
+                });
+            }
+        }
+        function clearForm() {
+            document.getElementById("form1").reset();
+        }
+       $('#submit').click(function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+           var CompanyName = $('#CompanyName').val();
+           if (CompanyName == null || CompanyName === "") {
+                    showErrorAlert('Please Enter Company Name.');
+                    return;
+                }
+           var InduastryId = $('#InduastryId').val();
+           if (InduastryId == null || InduastryId === "") {
+                    showErrorAlert('Please Select Industry.');
+                    return;
+                }
+           var EmailId = $('#CompanyEmail').val();
+                if (EmailId == null || EmailId === "") {
+                    showErrorAlert('Please Enter Email.');
+                    return;
+                }
+           var Address = $('#Address').val();
+           if (Address == null || Address === "") {
+               showErrorAlert('Please Enter Address.');
+                    return;
+                }
+           var Country = $('#Country').val();
+                if (Country == null || Country === "") {
+                    showErrorAlert('Please Select Country.');
+                    return;
+                }
+           var State = $('#StateName').val();
+                if (State == null || State === "") {
+                    showErrorAlert('Please Select State.');
+                    return;
+                }
+           var City = $('#City').val();
+                if (City == null || City === "") {
+                    showErrorAlert('Please Select City.');
+                    return;
+                }
+           var HR1Name = $('#HR1Name').val();
+           if (HR1Name == null || HR1Name === "") {
+               showErrorAlert('Please Enter HR1 Name.');
+                    return;
+           }
+           var HR1Contact = $('#HR1Contact').val();
+           if (HR1Contact == null || HR1Contact === "") {
+               showErrorAlert('Please Enter HR1 Contact.');
+               return;
+           }
+           var CompanyDescription = $('#CompanyDescription').val();
+           if (CompanyDescription == null || CompanyDescription === "") {
+               showErrorAlert('Please Enter Description.');
+               return;
+           }
+                Swal.fire({
+                    title: "Do you want to save the changes?",
+                    showCancelButton: true,
+                    confirmButtonText: "Save",
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        var formData = new FormData(form[0]);
+                        $.ajax({
+                            type: 'POST',
+                            url: form.attr('action'),
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                if (data.success) {
+                                      Swal.fire("Saved!", "Your changes have been saved.", "success").then(function () {
+                                    window.location.href = '@Url.Action("ListAllCompanyAsyncPB", "Placement")';
+
+                                       });
+                                } else {
+                                    Swal.fire('Error', 'Unable to save the company.', 'error');
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('Error', 'Unable to communicate with the server.', 'error');
+                            }
+
+                        });
+
+                    } else if (result.isDenied) {
+                        // Handle case where changes are not saved
+                        Swal.fire("Changes are not saved", "", "info");
+                    }
+                });
+
+
+       });
+        function showErrorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Item List</title>
+    <!-- Bootstrap CSS -->
+    <script src="/Content/plugins/jquery/jquery.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Add your own styles here -->
+    <style>
+        
+        
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            font-family: sans-serif;
+            justify-content:center;
+        }
+
+        .student-card {
+            margin: 10px;
+        }
+        .scrollable-container {
+            margin-left:13px;
+            margin-top:-17px;
+            width: 95%; /* Full width */
+            height: 30vw; /* Fixed height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Disable horizontal scrolling */
+            border: 1px solid #ccc; /* Optional: border around the container */
+            padding: 10px;  /*Optional: padding inside the container */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+            background-color: #f9f9f9; /* Optional: background color */
+        }
+
+            .scrollable-container::-webkit-scrollbar {
+                width: 8px; /* Width of the scrollbar */
+            }
+
+            .scrollable-container::-webkit-scrollbar-thumb {
+                background-color: #888; /* Color of the scrollbar thumb */
+                border-radius: 4px; /* Round the edges of the scrollbar thumb */
+            }
+
+                .scrollable-container::-webkit-scrollbar-thumb:hover {
+                    background-color: #555; /* Color of the scrollbar thumb when hovered */
+                }
+        .definition-list {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px 20px;
+            align-items: center;
+        }
+
+            .definition-list dt {
+                font-weight: bold;
+            }
+
+            .definition-list dd {
+                margin: 0;
+            }
+
+    </style>
+</head>
+
+<body>
+    <div class="form-horizontal" style="padding: 15px; margin-right: -8%; margin-left: -8%; margin-top: -15px">
+        <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+        <div class="card-title" style="justify-content:center">
+            <h2 class="justify-content-center"> Purchase Item List</h2>
+        </div>
+        <div class="card-body">
+
+            <div class="scrollable-container">
+                <div class="row">
+                    <div class="input-group">
+                        <div class="input-group ">
+                            @Html.LabelFor(model => model.PurchaseCode, "Invoice No.", htmlAttributes: new { @class = "control-label col-md-4" })
+                            @Html.EditorFor(model => model.PurchaseCode, new { htmlAttributes = new { @class = "form-control col-md-5", @readonly = true } })
+                        </div>
+                    </div>
+                </div>
+                @foreach (var item in Model.lstPurchaseItemVP)
+                {
+                    <div class="col">
+                        <div class="card student-card">
+                            <div class="card-body">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
+                                <p class="card-text">    
+                                    <dl class="definition-list">
+                                        <dt>Quantity(units):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.Quantity)</dd>
+
+                                        <dt>Unit price (&#8377;):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.UnitPrice) &#8377;</dd>
+
+                                        <dt>Discount (%):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.Discount) %</dd>
+
+                                        <dt>Applied Tax (%):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.AppliedTax)</dd>
+
+                                        <dt>Discount Amount (&#8377;):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.Amount) &#8377;</dd>
+
+                                        <dt>Tax Amount (&#8377;):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.BalanceAmount) &#8377;</dd>
+
+                                        <dt>Total Amount (&#8377;):</dt>
+                                        <dd>@Html.DisplayFor(modelItem => item.TransactionAmount) &#8377;</dd>
+                                    </dl>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <a href="@Url.Action("DetailsPurchaseAsyncVP")" class="back-link">
+            <video width="45" height="45" playsinline loop>
+                <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+            </video>
+        </a>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="~/Content/plugins/jquery/jquery.slim.min.js"></script>
+    <script src="~/Content/plugins/popper/popper.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>

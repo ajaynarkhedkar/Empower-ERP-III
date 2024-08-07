@@ -1,0 +1,251 @@
+﻿@model GSTEducationERPLibrary.Coordinator.Coordinator
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    @*<link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+        <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />*@
+    <style>
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+           /* margin-top: -40px !important;*/
+        }
+
+        div.dt-buttons {
+            /*margin-top: -20px !important;*/
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+            /*margin-top: -20px !important;*/
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <div class="card-body view-all-event">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.EventId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EventName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.StaffName)
+                            </th>
+                            <th>
+                               StartDate
+                            </th>
+                            <th>
+                               EndDate
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.StartTime)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EndTime)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.NoOfParticipants)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.eventlist)
+                        {
+                            <tr>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.EventId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EventName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StaffName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StartTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EndTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NoOfParticipants)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("UpdateEventListPCAsync", new { id = item.EventId })" class="video-link" title="Edit">
+                                        <video width="30" height="30" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                        </video>
+                                    </a>
+                                    <a href="#" class="icon" data-id="@item.EventId" data-url="@Url.Action("DetailsEventListPCAsync", "Coordinator", new { id = item.EventId })" data-toggle="modal" data-target="#DetailTaskModal" title="View">
+                                        <video width="30" height="30" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4" />
+                                        </video>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- END DATA TABLE-->
+    @*Modal For Detail View*@
+<div class="modal" id="DetailTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Event Details</h5>
+                <button type="button" class="btn-sm close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <a href="@Url.Action("ListAllEventPCAsync")" class="back-link">
+                    <video width="45" height="45" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                    </video>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+    
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#example1').on('click', '.icon', function () {
+            debugger;
+            var EventId = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    debugger;
+                    $('#DetailTaskModal .modal-body').html(data);
+                    $('#DetailTaskModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+
