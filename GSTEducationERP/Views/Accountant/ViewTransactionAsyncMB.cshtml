@@ -1,0 +1,371 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    ViewBag.Title = "ViewTransactionAsyncMB";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+    var currency = Html.Raw(ViewBag.Currency);
+    var mode = ViewBag.Mode;
+    var lsttransaction = ViewBag.transactionList;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Purchase | Invoice</title>
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    @*<link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css">*@
+    <style>
+        a {
+            color: #33CCCC;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+            align-content: center;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form id="ViewExpenseFormAsyncMB">
+        <div class="invoice p-3 mb-3">
+            <!-- title row -->
+            <div class="row">
+                <div class="col-12">
+                    <h4>
+                        <img src="~/Content/Admin/img/GyaSoftLogo.png" height="35" /> GayaSoft, Limited.
+                        <small class="float-right">Date: @ViewBag.TransactionDate</small>
+                    </h4>
+                </div>
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                    From
+                    <address>
+                        <strong>Rahitech It Solution.</strong><br>
+                        09, 3rd Floor, Upendra1<br>
+                        Nal Stop, Erandwane, Pune, Maharashtra 411004<br>
+                        Phone: 094217 76337<br>
+                        Website: rahitech.com
+                    </address>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    To
+                    <address>
+                        @if (Model.ExpID == "1")
+                        {
+                            <strong>@ViewBag.VendorName</strong><br>
+                        }
+                        @if (Model.ExpID == "2")
+                        {
+                            <strong>@ViewBag.RefundCandidate</strong><br>
+                        }
+                        @if (Model.ExpID == "3")
+                        {
+                            <strong>@ViewBag.ReferenceToCandidate</strong><br>
+                        }
+                        @if (Model.ExpID == "5")
+                        {
+                            <strong>@ViewBag.Description</strong><br>
+                        }
+
+                    </address>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    <b>Invoice No. @ViewBag.TransactionCode</b><br>
+                    <b>Payment Date:</b> @ViewBag.TransactionDate<br>
+                </div>
+            </div>
+
+            <!-- Table row -->
+            <div class="row">
+
+                <div class="col-12 table-responsive">
+                    <table class="table table-striped" id="tblPurchasedItem">
+                        <thead>
+                            <tr>
+                                <th>Transaction Code</th>
+
+                                @if (Model.ExpID == "3")
+                                {
+
+                                    <th>Amount Paid Against</th>
+                                }
+                                @if (Model.ExpID == "2")
+                                {
+                                    <th>Full Name</th>
+                                }
+                                @if (Model.ExpID == "1")
+                                {
+                                    <th>Vendor Name</th>
+                                }
+                                @if (Model.ExpID == "5")
+                                {
+                                    <th>Description</th>
+                                }
+
+
+                                <th>Amount (@currency)</th>
+
+                                <th>Balance (@currency)</th>
+
+                                <th>Transaction Amount (@currency)</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.ListGiveExpenseMB != null)
+                            {
+                                for (int i = 0; i < Model.ListGiveExpenseMB.Count; i++)
+                                {
+                                    var item = Model.ListGiveExpenseMB[i];
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TransactionCode)
+                                        </td>
+                                        <td>
+                                            @if (Model.ExpID == "1")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.VendorName)
+
+                                            }
+                                            @if (Model.ExpID == "2")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.StudentName)
+
+                                            }
+                                            @if (Model.ExpID == "3")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.ReferenceToName)
+
+                                            }
+                                            @if (Model.ExpID == "5")
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Description)
+
+                                            }
+
+                                        </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Amount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Balance)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TransactionAmount)
+                                                <span data-amount="@item.TransactionAmount"></span>
+                                            </td>
+
+                                        </tr>
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <!-- this row will not appear when printing -->
+            <div class="row no-print">
+                <div class="col-12">
+                    <input type="button" href="ViewExpenseFormAsyncMB.cshtml" value="Print this page" onClick="printForm('ViewExpenseFormAsyncMB')">
+
+
+                </div>
+            </div>
+
+            <!--div for transactions here -->
+            <div class="card" id="divtransaction">
+                <!--show the transactions in table -->
+                <div class="card-title">
+                    <h2>
+                        Transactions
+                    </h2>
+                </div>
+                <hr />
+                <div class="card-body">
+                    <table class="table" id="tbltransactions">
+                        <thead>
+                            <tr>
+                                <th>Date </th>
+                                <th>Voucher Code</th>
+                                <th>Payment Mode</th>
+                                <th>TransactionId/Cheque No.</th>
+                                <th hidden>Cheque Date</th>
+                                <th hidden>Cheque Clearence Date</th>
+                                <th>Paid (@currency)</th>
+                                <th>Remaning(@currency)</th>
+                                <th>Total Amount (@currency)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="back-link">
+                <video width="45" height="45" playsinline loop>
+                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                </video>
+            </a>
+
+        </div>
+    </form>
+   
+    <!--scripts here-->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!--scripts for pdf-->
+    <script src="~/Content/plugins/pdfmake/pdfmake.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Function to calculate the totals
+            function calculateTotals() {
+                var discountTotal = 0;
+                var taxTotal = 0;
+                var transactionTotal = 0;
+
+                // Iterate through each row in the table
+                $('#tblPurchasedItem tbody tr').each(function () {
+                    var discountAmount = parseFloat($(this).find('td:eq(5)').text()) || 0;
+                    var taxAmount = parseFloat($(this).find('td:eq(6)').text()) || 0;
+                    var transactionAmount = parseFloat($(this).find('td:eq(7)').text()) || 0;
+
+                    discountTotal += discountAmount;
+                    taxTotal += taxAmount;
+                    transactionTotal += transactionAmount;
+                });
+
+                // Update the summary table
+                $('.lbldiscountedAmount').text(discountTotal.toFixed(2));
+                $('.lbltaxAmount').text(taxTotal.toFixed(2));
+                $('.lblsubtotalAmount').text((transactionTotal - discountTotal - taxTotal).toFixed(2));
+                totalamt = transactionTotal.toFixed(2);
+                $('.lbltotalAmount').text(transactionTotal.toFixed(2));
+            }
+
+            // Call the function to calculate the totals on page load
+            calculateTotals();
+        });
+    </script>
+    <!--script for the print button-->
+    <script>
+        $(document).ready(function () {
+            $('#printButton').on('click', function (event) {
+                event.preventDefault();
+                var printWindow = window.open(window.location.href, '_blank', 'noopener,noreferrer');
+                printWindow.addEventListener('load', function () {
+                    printWindow.print();
+                });
+            });
+        });
+        function printForm(divName) {
+            
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+    </script>
+    <!--script for table of transaction-->
+    <script>
+        $(document).ready(function () {
+
+            // Replace 'transactionList' with the actual data from ViewBag.transactionList
+            var transactionList = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.transactionList));
+            var currency = "@currency";
+
+            function formatDate(dateString) {
+                var date = new Date(dateString);
+
+                var day = ("0" + date.getDate()).slice(-2);
+
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+
+                var year = date.getFullYear();
+
+                return `${day}-${month}-${year}`;
+
+}
+
+            function addTransactionRows(transactionList) {
+
+                var tbody = $('#tbltransactions tbody');
+
+                tbody.empty(); // Clear existing rows
+
+
+                // var totalAmount = parseFloat($('#TAm').val()) || 0;
+
+                var totalAmount = parseFloat($('span[data-amount]').data('amount')) || 0;
+
+                var remainingAmount = totalAmount;
+
+
+                if (transactionList && transactionList.length > 0) {
+
+                    transactionList.forEach(function (item) {
+
+                        remainingAmount -= item.TransactionAmount;
+
+                        var row = '<tr>' +
+
+                            '<td>' + formatDate(item.Date) + '</td>' +
+
+                            '<td>' + item.VoucherCode + '</td>' +
+                            '<td>' + item.PaymentMode + '</td>' +
+                            '<td>' + (item.TransactionId || '') + '</td>' +
+                            '<td hidden>' + (item.ChequeDate ? formatDate(item.ChequeDate) : '') + '</td>' +
+                            '<td hidden>' + (item.ChequeClearenceDate ? formatDate(item.ChequeClearenceDate) : '') + '</td>' +
+                            '<td>' + item.TransactionAmount.toFixed(2) + '</td>' +
+                            '<td>' + remainingAmount.toFixed(2) + '</td>' +
+                            '<td>' + totalAmount.toFixed(2) + '</td>' +
+                            '</tr>';
+
+                        tbody.append(row);
+
+                    });
+
+                } else {
+
+                    tbody.append('<tr><td colspan="9">No data found...</td></tr>');
+
+                }
+
+            }
+
+
+            // Call the function to add rows on page load
+
+            addTransactionRows(transactionList);
+
+
+        });
+
+    </script>
+
+
+</body>
+
+ 
+
+
+</html>
+        
+       

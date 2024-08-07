@@ -1,0 +1,771 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<html>
+<head>
+    <!--link for css-->
+    <!-- BS Stepper -->
+    <link href="~/Content/plugins/bs-stepper/css/bs-stepper.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/bs-stepper/css/bs-stepper.css" rel="stylesheet" />
+    <script src="~/Content/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+    <script src="~/Content/plugins/bs-stepper/js/bs-stepper.js"></script>
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <link href="~/Content/Accountant/Plugins/Select-2/Bootstrap/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/Accountant/Plugins/Select-2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Content/Accountant/Plugins/Select-2/Js/select2.full.min.js"></script>
+    <link href="~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+
+    <style>
+
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+
+        .select2 select2-container select2-container--default select2-container--below select2-container--focus {
+            width: 400px !important;
+        }
+
+        #Comment{
+            height:100%;
+            width:100% !important;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: red;
+            margin-left: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <form id="AddExpenseform" action="/Accountant/AddExpensesAsyncMB" method="post" enctype="multipart/form-data">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">ADD EXPENSE</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="bs-stepper">
+                    <div class="bs-stepper-header" role="tablist">
+                        <!-- your steps here -->
+                        <div class="step" data-target="#AddExpense-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="AddExpense-part" id="AddExpense-part-trigger">
+                                <span class="bs-stepper-circle">1</span>
+                                <span class="bs-stepper-label">Add Expense</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#ExpPayment-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="ExpPayment-part" id="ExpPayment-partpayment-parttrigger">
+                                <span class="bs-stepper-circle">2</span>
+                                <span class="bs-stepper-label">Payment information</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bs-stepper-content">
+
+                        <!-- Here our Expense view Stepper one start-->
+                        <div id="AddExpense-part" class="content" role="tabpanel" aria-labelledby="payment-part-trigger">
+
+                            <!-- Here we can select the Expense Category-->
+                            <div class="row justify-content-center ">
+                                <div class="col-md-8 ">
+                                    @Html.LabelFor(model => model.ExpID, "Expense Category", new { @class = "required-field" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownListFor(model => model.ExpID, new SelectList(ViewBag.CourseList, "Value", "Text"), "Select", new { @id = "ExpenseCategory", @class = "form-control", @required = "required" })
+                                        @Html.ValidationMessageFor(model => model.ExpID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br />
+                            <div id="ExpenseView">
+                                <div class="row">
+                                    <div class="input-group">
+                                        <label for="ExpenseType" class="form-check-control col-md-4 ">Expense Type :</label>
+
+                                        @Html.EditorFor(model => model.ExpenseType, new { htmlAttributes = new { @id = "ExpenseType", @class = "form-control col-md-6", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.ExpenseType, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <br />
+                               
+                                <div class="row">
+                                    <div id="venderName" class="input-group">
+                                        <label for="VendorName" class="form-check-control col-md-4 required-field">Vendor Name:</label>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <!-- Optional icon can be added here -->
+                                            </span>
+                                        </div>
+                                        @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                                        @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div id="RefundStudentName" class="col-md-6">
+                                        @Html.LabelFor(model => model.StudentName, "Student Name :", new {@class= "required-field" })
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.StaffCode_CandidateCode, new SelectList(ViewBag.RefundCandidatelst, "Value", "Text"), "Select", new { @id = "RefundCandidatelst", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div id="RefundPaidAmount" class="col-md-6">
+                                        @Html.LabelFor(model => model.PaidFee, "Paid Fee")
+                                        <div class="col-md-12">
+                                            @Html.EditorFor(model => model.PaidFee, new { htmlAttributes = new { @id = "CandidatePaidFee", @class = "form-control", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => model.PaidFee, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="Reference" class="row">
+                                    <div id="ReferenceByName" class="col-md-6">
+                                        @Html.LabelFor(model => model.ReferenceByName, "Reference By Name :", new { @class = "required-field" })
+                                        <div class="col-md-12">
+                                            @Html.DropDownListFor(model => model.ReferenceByName, new SelectList(ViewBag.ReferenceByStudentlst, "Value", "Text"), "Select", new { @id = "ReferenceByStudentlst", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.ReferenceByName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div id="ReferenceToName" class="col-md-6">
+                                        @Html.LabelFor(model => model.ReferenceToName, "Reference To Name :", new { @class = "required-field" })
+                                        <div class="col-md-12">
+                                            <select class="form-control" id="ReferenceToStudents" name="ReferenceToStudents">
+                                                <option value="">--Select -------</option>-->
+                                                <!-- This select element will be populated dynamically based on AJAX response -->
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.ReferenceToName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div id="EmployeesForOther" class="input-group">
+                                        <label for="EmployeesForOther" class="form-check-control col-md-4 required-field">Employee Name :</label>
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">
+                                                🤵
+                                            </span>
+                                        </div>
+                                        <select id="Employees" class="form-control" style="width:20vw; height:10vw;">
+                                            <option></option>
+                                            @foreach (var item in ViewBag.lstStaff)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+
+                                    <div class="input-group">
+                                        <label for="TransactionAmount" class="form-check-control col-md-4 required-field">Amount to pay :</label>
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-rupee-sign"></i>
+                                            </span>
+                                        </div>
+                                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @id = "TranscationAmount", @class = "form-control col-md-6" } })
+                                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+
+                                    </div>
+
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="input-group">
+                                        <label for="Date" class="form-check-control col-md-4 required-field">Payment Date:</label>
+
+                                        @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @id = "Date", @class = "form-control col-md-6" } })
+                                        @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+
+                                    <div class="input-group">
+                                        <label for="Date" class="form-check-control col-md-4">Description:</label>
+
+                                        @Html.TextAreaFor(model => model.Comment, new { htmlAttributes = new { @id = "Comment", @class = "form-control " } })
+                                        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+
+                                    </div>
+
+                                </div>
+
+
+                                <br />
+                                <br />
+
+                                <div class="form-group" style="text-align: center;">
+                                    <button class="btn btn-primary" id="SaveExpAndNext" style="margin-right:30px; width:25%;">SAVE & NEXT</button>
+                                    <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="btn btn-danger" style="width:25%;">CANCEL</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Here our Expense view Stepper one End-->
+
+
+                        <!---  Here our payment Stepper view will be started -->
+                        <div id="ExpPayment-part" class="content" role="tabpanel" aria-labelledby="payment-part-trigger">
+                            <div class="form-group">
+                                <div class=card-body>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <label for="TransactionCode" class="form-check-control col-md-4">Invoice Number :</label>
+                                            @Html.EditorFor(model => model.TransactionCode, new { htmlAttributes = new { @class = "form-control col-md-7", @readonly = "true" } })
+                                            @Html.ValidationMessageFor(model => model.TransactionCode, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <label for="TransactionAmount" class="form-check-control col-md-4">Amount to pay :</label>
+                                            <div class="input-group-prepend ">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-rupee-sign"></i>
+                                                </span>
+                                            </div>
+                                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @id = "Amounts", @class = "form-control col-md-6", @readonly = "readonly" } })
+                                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                    <hr />
+
+                                    <div class="container">
+                                        <div class="row">
+                                            <label for="VoucherCode" class="label-comtrol col-md-4 required-field">Vouchers :</label>
+                                        </div>
+                                        <div class="col-md-18">
+                                            <select id="VoucherCode" class="form-control" multiple="multiple">
+                                                <option>-select voucher-</option>
+                                                @foreach (var voucher in ViewBag.VoucherCode)
+                                                {
+                                                    <option value="@voucher.Value">@voucher.Text</option>
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.VoucherCode, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="row">
+                                        <div class="col-md-4 ">
+                                            <label>Total Amount:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <span>&#8377;</span>
+                                            <span id="totalAmountLabel">0.00</span>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <label for="TransactionAmount" class="form-check-control col-md-4 required-field">Match Amount:</label>
+                                            <div class="input-group-prepend ">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-rupee-sign"></i>
+                                                </span>
+                                            </div>
+                                            @Html.EditorFor(model => model.TransactionAmount, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                                            @Html.ValidationMessageFor(model => model.TransactionAmount, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" style="text-align: center;">
+                               
+                                <button class="btn btn-success" id="SubmitAmounts" style="margin-right:30px; width:25%;">Submit</button>
+                                <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="btn btn-danger" style=" width:25%;">Cancel</a>
+                            </div>
+
+                        </div>
+                        <!---  Here our payment Stepper view will be End -->
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 25px; right: 25px;">&times;</button>
+            <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="back-link">
+                <video width="45" height="45" playsinline loop>
+                    <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                </video>
+            </a>
+        </div>
+
+
+
+    </form>
+
+
+    <script>
+
+        $(document).ready(function () { 
+
+            $('#VoucherCode').select2({
+                placeholder: "Select Vouchers",
+                /*search: true,*/
+                allowClear: true
+            });
+            function updateTotalAmount() {
+                var totalAmount = 0;
+                var inputAmount = parseFloat($('#Amounts').val()) || 0;
+                // Loop through selected options to calculate the total amount
+                $('#VoucherCode option:selected').each(function () {
+                 // Extract the voucher amount using regex
+                    var text = $(this).text();
+                    var amountMatch = text.match(/^[^-]+-[^-]+-(\d+(\.\d+)?)/);
+                    if (amountMatch) {
+                        totalAmount += parseFloat(amountMatch[1]);
+                    }
+                });
+                // Update the total amount label
+                $('#totalAmountLabel').text(totalAmount.toFixed(2));
+                // Check if the total amount is less than or greater than the input amount
+                if (totalAmount < inputAmount || totalAmount < 0) {
+                    $('#totalAmountLabel').css('color', 'red');
+                } else {
+                    $('#totalAmountLabel').css('color', 'green');
+                }
+               // Prevent selection of additional vouchers if total exceeds input amount
+                if (totalAmount > inputAmount) {
+                    $('#VoucherCode option:not(:selected)').prop('disabled', true);
+                } else {
+                    $('#VoucherCode option').prop('disabled', false);
+                }
+               // Refresh Select2 to apply the disabled state
+                $('#VoucherCode').select2();
+            }
+            // Call the function on dropdown change
+            $('#VoucherCode').on('change', updateTotalAmount);
+        });
+
+
+
+        $('#SubmitAmounts').on('click', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            var selectedVouchers = $('#VoucherCode').val();
+            var paidAmount1 = parseFloat($('#TransactionAmount').val());
+            var TranscationCode = $('#TransactionCode').val();
+            // Ensure that paidAmount1 is a valid number and greater than 0
+            if (selectedVouchers && selectedVouchers.length > 0 && !isNaN(paidAmount1) && paidAmount1 > 0) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to proceed with the payment?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, proceed!',
+                    cancelButtonText: 'No, cancel!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Disable the button to prevent multiple clicks
+                        $('#SubmitAmounts').prop('disabled', true);
+                        $.ajax({
+                            url: '@Url.Action("UpdateTheVoucherAmountAsyncMB", "Accountant")',
+                            type: 'POST',
+                            data: { paidAmount: paidAmount1, voucherCodes: selectedVouchers, TranscationCode: TranscationCode },
+                            traditional: true,
+                            success: function (response) {
+                                if (response.success) {
+                                    toastr.success("Payment Done successfully!", "success");
+                                    if (response.redirectUrl) {
+                                        window.location.href = '@Url.Action("ExpenseDashboardAsyncMB", "Accountant")';
+                                    }
+                                } else {
+                                    $('#updatedBalances').html(response.message || 'Error allocating amount.');
+                                    $('#SubmitAmounts').prop('disabled', false);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log("Error: " + error);
+                                $('#updatedBalances').html('An error occurred while processing your request.');
+                                $('#SubmitAmounts').prop('disabled', false);
+                            }
+                        });
+                    }
+                });
+            } else {
+                displayToast("Please select vouchers and enter a valid paid amount", "error");
+            }
+        });
+    </script>
+    <!--mukesh done this script-->
+    <script>
+        $(document).ready(function () {
+            $('#TransactionAmount').on('input', function () {
+                var enteredValue = $(this).val();
+                var amount = $('#Amounts').val();
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                if (numericValue.length > 10) {
+                    numericValue = numericValue.substring(0, 10);
+                }
+                if (parseFloat(numericValue) > parseFloat(amount)) {
+                    numericValue = amount;
+                }
+                $(this).val(numericValue);
+            });
+
+        });
+    </script>
+    <!--toastr-->
+    <script>
+        var lastMessage = '';
+        var lastType = '';
+
+        function displayToast(message, type) {
+            // Check if the message and type are the same as the last displayed message
+            if (message === lastMessage && type === lastType) {
+                return; // Skip displaying the message if it's the same
+            }
+            toastr.clear();
+            toastr[type](message);
+            lastMessage = message;
+            lastType = type;
+        }
+
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            showMethod: 'slideDown',
+            timeOut: 4000 // How long the toast will be displayed (in milliseconds)
+        };
+    </script>
+
+    <!--scripts here-->
+    <script>
+
+        $(document).ready(function () {
+            $("#Employees").select2({
+                tags: true,
+                placeholder: "Select Employee or Add New"
+
+
+            });
+
+        });
+
+
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            
+            // Here we can fetch the Expense type which select Expensecategory-----------
+
+            $('#ExpenseCategory').on('change', function (e) {
+                var ExpCategory = $(this).val();
+                $.ajax({
+                    url: "/Accountant/GetExpenceTypeAsynMB",
+                    type: 'GET',
+                    data: {
+                        ExpCategoryId: ExpCategory
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#ExpenseType').val(response.expenseType);
+                        } else {
+                            displayToast()
+      
+                            console.error("Error: Unable to fetch expense type.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed: ", status, error);
+                    }
+                });
+            });
+
+        });
+    </script>
+
+
+    <!-- Call the event using script-->
+    <script>
+        $(document).ready(function () {
+
+            var stepper = new Stepper($('.bs-stepper')[0])
+            stepper.to(1)
+            $("#ExpenseView").hide();
+
+
+            $("#SaveExpAndNext").off('click').on('click', function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                var requiredFields = [];
+                var validationMessage = '';
+                
+                // Determine which fields are required based on selectedValue
+                if (selectedValue == "1") {
+                    requiredFields = [$("#VendorName"), $("#TranscationAmount")];
+                    validationMessage = 'Please ensure that all required fields are completed before proceeding. Specifically, provide the Vendor Name And Amount.';
+                } else if (selectedValue == "2") {
+                    requiredFields = [$("#RefundCandidatelst"), $("#CandidatePaidFee"), $("#TranscationAmount")];
+                    validationMessage = 'Please ensure that all required fields are completed before proceeding. Specifically, provide the Student Name And Amount.';
+                } else if (selectedValue == "3") {
+                    requiredFields = [$("#ReferenceByStudentlst"), $("#ReferenceToStudents"), $("#TranscationAmount")];
+                    validationMessage = 'Please ensure that all required fields are completed before proceeding. Specifically, provide the Reference By Student,Reference To Student and Amount.';
+                } else if (selectedValue == "4") {
+                    requiredFields = [$("#Employees"), $("#TranscationAmount")];
+                    validationMessage = 'Please ensure that all required fields are completed before proceeding. Specifically, provide the Employee Name and Amount.';
+                } else if (selectedValue == "5") {
+                    requiredFields = [$("#Comment"), $("#TranscationAmount")];
+                    validationMessage = 'Please ensure that all required fields are completed before proceeding. Specifically, provide the Employee Name OR Comment and Amount.';
+                }
+
+                // Check if all required fields are filled
+                var allFieldsFilled = requiredFields.every(function (field) {
+                    return field.val()!== '';
+                });
+
+                // If required fields are not filled, show alert
+                if (!allFieldsFilled) {
+                    displayToast("Incomplete Information", "error");
+                    Swal.fire({
+                        title: 'Incomplete Information',
+                        text: validationMessage,
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                       
+                    });
+                    return; // Stop further execution
+                }
+
+                var ReferenceToCandidateCode = $("#ReferenceToStudents").val();
+                if (selectedValue == "5") {
+                   // var employeeValue = $("#Employees").text();
+                    var employeeValue = $("#Employees option:selected").text(); // Get the text of the selected option
+                    var comment = $("#Comment").val(); // Get the comment from the textarea
+
+                    // Concatenate the employee value and comment
+                   var EmployeeCode = employeeValue + " - " + comment;
+                }
+                if (selectedValue == "4") {
+                    var EmployeeCode = $("#Employees").val();
+                }
+               
+                // Serialize the form data and append the additional value
+                var formData = $("#AddExpenseform").serializeArray();
+                formData.push({ name: "ReferenceToCandidateCode", value: ReferenceToCandidateCode });
+                formData.push({ name: "EmployeeCode", value: EmployeeCode });
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to save this expense?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, save it!',
+                    cancelButtonText: 'No, cancel!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with saving the expense
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("AddExpensesAsyncMB", "Accountant")',
+                            data: $.param(formData), // Serialize the form data
+                            success: function (response) {
+                                if (response.success) {
+                                    toastr.success('Expense saved successfully!');
+                                    $('#TransactionCode').val(response.newCode);
+                                    // Ask if the user wants to pay for the transaction
+                                    Swal.fire({
+                                        title: 'Do you want to pay for this transaction?',
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Yes, proceed!',
+                                        cancelButtonText: 'No, later'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            gotonext(); // Navigate to the next step
+                                        }
+                                        else {
+                                             window.location.href = '@Url.Action("ExpenseDashboardAsyncMB")';
+                                        }
+                                    });
+                                } else if (response.redirect) {
+                                    window.location.href = '@Url.Action("ListOfRegularExpenseAsyncMB", "Accountant")';
+                                } else {
+                                    toastr.error("Failed to save the voucher match. Message: " + response.message);
+                                    $("#result").html("An error occurred while saving data: " + response.message);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error: " + error);
+                                toastr.error("An error occurred while saving data.");
+                                $("#result").html("An error occurred while saving data.");
+                            }
+                        });
+                    }
+                });
+            });
+
+           
+
+            // This function for go to payment details
+            function gotonext() {
+
+                senddatatopayment();//sending the data to next form
+                stepper.to(2); // Move to the information step (step 2)
+
+            }
+
+           
+
+            // this for to coolect from 1 st stepper and send for payment details
+            function senddatatopayment() {
+                var tcode = $("#TransactionCode").val();
+                var padiamt = $("#TranscationAmount").val();
+                $("#Amounts").val(parseFloat(padiamt));
+
+            }
+
+            // Here we can start to hide show the controller ------------
+            var selectedValue = '';
+            $("#ExpenseCategory").change(function () {
+                 selectedValue = $(this).val();
+                if (selectedValue === "1") {
+                    $("#ExpenseView").show();
+                    $("#venderName").show();
+                    $("#Reference").hide();
+                    $("#RefundStudentName").hide();
+                    $("#RefundPaidAmount").hide();
+                    $("#EmployeesForOther").hide();
+                    $("#btnAddExpense").show();
+                    document.getElementById('TranscationAmount').value = '';
+                    document.getElementById('Comment').value = '';
+                } if (selectedValue === "2") {
+                    $("#ExpenseView").show();
+                    $("#Reference").hide();
+                    $("#RefundStudentName").show();
+                    $("#RefundPaidAmount").show();
+                    $("#EmployeesForOther").hide();
+                    $("#venderName").hide();
+                    $("#btnAddExpense").show();
+                    document.getElementById('TranscationAmount').value = '';
+                    document.getElementById('Comment').value = '';
+                } if (selectedValue === "3") {
+                    $("#ExpenseView").show();
+                    $("#Reference").show();
+                    $("#RefundStudentName").hide();
+                    $("#RefundPaidAmount").hide();
+                    $("#EmployeesForOther").hide();
+                    $("#venderName").hide();
+                    $("#btnAddExpense").show();
+                    document.getElementById('TranscationAmount').value = '';
+                    document.getElementById('Comment').value = '';
+                } if (selectedValue === "4") {
+                    $("#ExpenseView").show();
+                    $("#Reference").hide();
+                    $("#RefundStudentName").hide();
+                    $("#RefundPaidAmount").hide();
+                    $("#EmployeesForOther").show();
+                    $("#venderName").hide();
+                    $("#btnAddExpense").show();
+                    document.getElementById('TranscationAmount').value = '';
+                    document.getElementById('Comment').value = '';
+                } if (selectedValue === "5") {
+                    $("#ExpenseView").show();
+                    document.getElementById('TranscationAmount').value = '';
+                    $("#ReferenceToName").hide();
+                    $("#ReferenceByName").hide();
+                    $("#RefundStudentName").hide();
+                    $("#RefundPaidAmount").hide();
+                    $("#EmployeesForOther").show();
+                    $("#venderName").hide();
+                    $("#btnAddExpense").show();
+                    document.getElementById('Comment').value = '';
+
+                }
+            });
+
+
+
+
+
+
+            // Here we can show the refund student paid fees
+            $('#RefundCandidatelst').on('change', function (e) {
+                
+                var CandidateCode = $(this).val();
+                
+                $.ajax({
+                    url: "/Accountant/GetRefundCandidatesPaidFee",
+                    type: 'GET',
+                    data: {
+                        CandidateCode: CandidateCode
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#CandidatePaidFee').val(response.CandidatePaidFee);
+                        } else {
+                            console.error("Error: Unable to fetch expense type.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed: ", status, error);
+                    }
+                });
+            });
+
+
+            /// Here we can show the reference To list
+            $('#ReferenceByStudentlst').on('change', function (e) {
+                var CandidateCode = $(this).val();
+                $.ajax({
+                    url: "/Accountant/GettheReferenceToCandidateAsyncMB",
+                    type: 'GET',
+                    data: {
+                        CandidateCode: CandidateCode
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            var selectElement = $('#ReferenceToStudents');
+                            selectElement.empty(); // Clear existing options
+                            selectElement.append('<option value="">--Select -------</option>'); // Add default option
+
+                            $.each(response.candidates, function (index, item) {
+                                selectElement.append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                            });
+                        } else {
+                            console.error("Failed to fetch candidates.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request failed: ", status, error);
+                    }
+                });
+            });
+
+
+
+        });
+
+
+
+    </script>
+</body>
+</html>
