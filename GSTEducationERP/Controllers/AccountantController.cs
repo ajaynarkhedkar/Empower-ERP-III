@@ -1110,6 +1110,26 @@ namespace GSTEducationERP.Controllers
         /// </summary>
         /// <returns>List of bank Accounts</returns>
         /// 
+
+        // My New Comment
+
+        // Hello This is Updates
+        public async Task<ActionResult> BankAccountListAsyncAN1(Accountant obj1)
+        {
+            return View();
+        }
+
+        public async Task<ActionResult> BankAccountListAsyncAN2(Accountant obj1)
+        { return View(); }
+
+        public async Task<ActionResult> BankAccountListAsyncAN3(Accountant obj1)
+        { return View(); }
+
+        public async Task<ActionResult> BankAccountListAsyncAN4(Accountant obj1)
+        { return View(); }
+
+        public async Task<ActionResult> BankAccountListAsyncAN5(Accountant obj1)
+        { return View(); }
         [HttpGet]
         public async Task<ActionResult> BankAccountListAsyncAN(Accountant obj1)
         {
