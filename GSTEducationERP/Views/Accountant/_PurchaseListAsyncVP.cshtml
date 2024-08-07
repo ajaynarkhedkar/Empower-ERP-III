@@ -1,0 +1,163 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    var currency = Html.Raw(ViewBag.Currency);
+}
+<div class="card" style="margin:1vw">
+    <div class="card-body">
+        <table id="PurchaseList" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Purchase Code
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VendorName)
+                    </th>
+                    <th>
+                        Items
+                    </th>
+                    <th hidden>
+                        Items Count
+                    </th>
+                    <th>
+                        Purchase Date
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.TransactionAmount) (@currency)
+                    </th>
+                    <th>
+                        Balance (@currency)
+                    </th>
+                    <th>
+                        Total Amount (@currency)
+                    </th>
+                    <th class="destbl">
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    @*<th hidden>
+            @Html.DisplayNameFor(model => model.PaymentMode)
+        </th>
+        <th hidden>
+            @Html.DisplayNameFor(model => model.TranId_CheqNo)
+        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.lstPurchaseVP != null)
+                {
+                    for (int i = 0; i < Model.lstPurchaseVP.Count; i++)
+                    {
+                        var item = Model.lstPurchaseVP[i];
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TransactionCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VendorName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ItemName)
+                            </td>
+                            <td hidden>
+                                <a href="#" class="icon" id="PopUpitem" data-id="@item.TransactionCode" data-url="@Url.Action("ListPurchasedItemsAsyncVP", "Accountant", new { PurchaseCode = item.TransactionCode  })"
+                                   data-toggle="modal" data-target="#StudentModal" title="Items List">
+                                    <video width="25" height="25" playsinline loop>
+                                        <source src="~/Content/Admin/icon/notebook_3.mp4" type="video/mp4" />
+                                    </video>
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TransactionDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TransactionAmount)
+                            </td>
+                            <td>
+                                @if (item.Status == "Pending")
+                                {
+                                    <span style="color:red;"> @Html.DisplayFor(modelItem => item.BalanceAmount)</span>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.BalanceAmount)
+                                }
+                            </td>
+                            <td>
+                                @(
+                                     item.TransactionAmount + item.BalanceAmount
+                                 )
+                            </td>
+                            @*<td hidden>
+                                    @Html.HiddenFor(modelItem => item.PaymentMode)
+                                </td>
+                                <td hidden>
+                                    @Html.HiddenFor(modelItem => item.TranId_CheqNo)
+                                </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                @if (item.Status == "Completed")
+                                {
+                                    <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>
+                                }
+                                @if (item.Status == "Pending")
+                                {
+                                    <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+                                }
+                            </td>
+                            <td style="text-align: center;">
+                                @if (item.Status == "Completed")
+                                {
+                                    <a href="javascript:void(0);" class="icon" id="ViewPurchase" data-toggle="tooltip" title="View Purchase Invoice" data-PurchaseCode="@item.TransactionCode">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                }
+                                @if (item.Status == "Pending")
+                                {
+                                    <span>
+                                        <!--pay button-->
+                                        <a href="#" class="icon" id="Matchicon" data-id="@item.TransactionCode" data-action="@Url.Action("MatchVoucherAsyncVM", "Accountant", new { TCode = item.TransactionCode +"-" +item.VendorName ,Amount = item.BalanceAmount})"
+                                           data-toggle="modal" data-target="#MatchVoucherModal" title="Pay">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/payment.mp4" type="video/mp4">
+                                            </video>
+                                        </a>
+                                    </span>
+                                    if (item.TransactionAmount == 0)
+                                    {
+                                        <span>
+                                            <!--edit button-->
+                                            <a href="@Url.Action("UpdatePurchaseAsyncVP", "Accountant", new { PurchaseCode = item.TransactionCode })" class="icon" data-toggle="tooltip" title="Edit Purchase">
+                                                <video width="25" height="25" playsinline loop>
+                                                    <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                                </video>
+                                            </a>
+                                        </span>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11" class="text-center">No data available</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--scripts herer for icons-->
+<script src="~/Content/Admin/js/Icon.js"></script>
+
+<!----->

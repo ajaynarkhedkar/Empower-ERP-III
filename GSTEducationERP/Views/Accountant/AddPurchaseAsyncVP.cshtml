@@ -23,19 +23,25 @@
     <script src="~/Content/plugins/sweetalert2/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
     <script src="~/Content/plugins/toastr/toastr.min.js"></script>
-
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
     <!--select2 library-->
-    <!-- Add your personal styles here -->
-
-
-    <!--table css for the total table-->
     <style>
+        #btnupdate, #btnsave, #btncancel, #btnptmsave, #btnptmcancel {
+            display: flex;
+            width: 10vw;
+            height: fit-content;
+            margin: 0 10px 0 10px;
+        }
+
         #tblpymtDtl {
             padding: 0px 100px 0px 100px;
             border-collapse: collapse;
             width: 100%;
         }
-
+        .mandatoryField{
+            color:red;
+        }
         .custom-table-row-456 {
             display: flex;
             justify-content: space-between;
@@ -157,20 +163,25 @@
                 <div class="row justify-content-center ">
                     <div class="col-md-3">
                         <div class="input-group ">
-                            <label class="control-label col-md-4">Invoice No.: </label>
-                            <div class="col-md-6 justify-content-end" style="margin-left:10px">
-                                @Html.LabelFor(Model=> Model.TransactionCode, new {@id= "ptmtransactioncode" })
-                                @*<label id=""> </label>*@
-                            </div>
+                            <label class="control-label col-md-4" for="BillNumber">Bill No.: </label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        #
+                                    </span>
+                                </div>
+                                @Html.EditorFor(model => model.BillNumber, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                                @*@Html.LabelFor(Model => Model.TransactionCode, new { @id = "ptmtransactioncode" })*@
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="input-group ">
-                            @Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-4" })
-
+                            <label for="VendorName" class="control-label col-md-4">
+                                Vendor Name <span class="mandatoryField">*</span> :
+                            </label>
+                            @*@Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-4" })*@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    &commat;
+                                    🤵🏿
                                 </span>
                             </div>
                             @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control col-md-6" } })
@@ -179,37 +190,39 @@
                     </div>
                     <div class="col-md-4">
                         <div class="input-group ">
-                            @Html.LabelFor(model => model.TransactionDate, htmlAttributes: new { @class = "control-label col-md-4" })
-
+                            <label for="TransactionDate" class="control-label col-md-5">
+                                Transaction Date <span class="mandatoryField">*</span> :
+                            </label>                           
                             <div class="input-group-prepend ">
                                 <span class="input-group-text">
-                                    <i class="fas fa-calender-sign"></i>
+                                    <i class="far fa-calendar-alt"></i>
                                 </span>
                             </div>
-                            @Html.EditorFor(model => model.TransactionDate, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                            @Html.EditorFor(model => model.TransactionDate, new { htmlAttributes = new { @class = "form-control col-md-4", @id = "TransactionDate", @type = "text" } })
                             @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
                 <br />
                 <div class="card">
-                    <div class="card-body">
-                        <!--second row for the new cart body and the table for items -->
+                    <div class="card-title">
                         <h3>List Items of purchase </h3>
+                    </div>
+                    <div class="card-body">
                         <!--this row contains item name,hsn category,quantity-->
                         <div class="row">
                             <div class="col-lg-12 form-group table-responsive">
                                 <table class="table table-bordered" id="tblpurchaseitem">
                                     <thead>
                                         <tr>
-                                            <th hidden style="width: 30%;">Item Id</th>
+                                            <th hidden style="width: 30%;">Item Id </th>
                                             <th hidden style="width: 30%;">Transaction code</th>
-                                            <th style="width: 25%;">Item Name</th>
-                                            <th style="width: 25%;">HSN Code</th>
-                                            <th style="width: 10%;">Quantity</th>
-                                            <th style="width: 15%;">Unit Price (@currency)</th>
-                                            <th style="width: 10%;">Discount(%)</th>
-                                            <th style="width: 20%;">Applied Tax(%)</th>
+                                            <th style="width: 25%;">Item Name  <span class="mandatoryField">*</span></th>
+                                            <th style="width: 20%;">HSN Code <span class="mandatoryField">*</span></th>
+                                            <th style="width: 10%;">Quantity <span class="mandatoryField">*</span></th>
+                                            <th style="width: 15%;">Unit Price (@currency) <span class="mandatoryField">*</span></th>
+                                            <th style="width: 12%;">Discount(%) <span class="mandatoryField">*</span></th>
+                                            <th style="width: 30%;">Applied Tax(%) <span class="mandatoryField">*</span></th>
                                             <th style="width: 1%;">Action</th>
                                         </tr>
                                     </thead>
@@ -222,34 +235,70 @@
                                                 <input type="text" class="form-control" />
                                             </td>
                                             <td class="ItemName">
-                                                <input type="text" class="form-control" />
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ">
+                                                        <span class="input-group-text">
+                                                           #
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control" />
+                                                </div>
                                             </td>
                                             <td class="HSNCode">
-                                                <select class="form-control">
-                                                    <option value="">-select hsn category-</option>
-                                                    @foreach (var item in ViewBag.HSNCode)
-                                                    {
-                                                        <option value="@item.Value">@item.Text</option>
-                                                    }
-                                                </select>
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ">
+                                                        <span class="input-group-text">
+                                                           #
+                                                        </span>
+                                                    </div>
+                                                    <select class="form-control">
+                                                        <option value="">-select hsn category-</option>
+                                                        @foreach (var item in ViewBag.HSNCode)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+
                                             </td>
                                             <td class="Quantity">
                                                 <input type="text" class="form-control" />
                                             </td>
                                             <td class="UnitPrice">
-                                                <input type="text" class="form-control" />
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ">
+                                                        <span class="input-group-text">
+                                                            @currency
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control" />
+                                                </div>
                                             </td>
                                             <td class="Discount">
-                                                <input type="text" class="form-control" />
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ">
+                                                        <span class="input-group-text">
+                                                            %
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control" />
+                                                </div>
                                             </td>
                                             <td class="AppliedTax">
-                                                <select class="form-control">
-                                                    <option value="">-select tax-</option>
-                                                    @foreach (var item in ViewBag.AppliedTax)
-                                                    {
-                                                        <option value="@item.Value">@item.Text</option>
-                                                    }
-                                                </select>
+                                                <div class="input-group ">
+                                                    <div class="input-group-prepend ">
+                                                        <span class="input-group-text">
+                                                            %
+                                                        </span>
+                                                    </div>
+                                                    <select class="form-control">
+                                                        <option value="">-select tax-</option>
+                                                        @foreach (var item in ViewBag.AppliedTax)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
                                             </td>
 
                                             <td colspan="2" class="remove" style="justify-content:center">
@@ -257,50 +306,47 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="col-md-6 ">
-                                    <button type="button" class="btn" id="addRowButton" style="justify-content:center;">
+                                <div class="row" style="justify-content:center">
+                                    <button type="button" class="btn" id="addRowButton" style="display:flex">
                                         <img src="~/Content/Admin/icon/Add.jpeg" style="height:25px; width:25px;" />
                                     </button>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
                 </div>
+                <!---->
                 <!--here the description and the colapse for the add voucher and payment details-->
                 @* description box for the purchase*@
-                <div class="form-group col-md-12">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                <span class="mandatoryField">*</span>
+                <div>
                     @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 2, required = "required" })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
+            </div>
                 <!--here will the save and cancel buttons-->
-                <div class="row" style="padding:0px 10px 0px 10px">
-                    
+                <div class="row" style="justify-content:center;">
+
                     @if (IsitEdit)
-                     {
+                    {
+                        <input type="button" id="btnupdate" class="btn btn-block bg-gradient-blue btn-block" value="Update" />
 
-                        <div class="col-md-6">
-                            <input type="button" id="btnupdate" class="btn btn-block bg-gradient-blue btn-block" value="Update" />
-
-                        </div>
-
-                     }
+                    }
                     else
                     {
-                        <div class="col-md-6">
-                            <input type="button" id="btnsave" class="btn btn-block bg-gradient-success btn-block" value="Save" />
-
-                        </div>
+                        <input type="button" id="btnsave" class="btn btn-block bg-gradient-success btn-block" value="Save" />
+                      
                     }
-                    <div class="col-md-6">
-                        <input type="button" class="btn btn-block bg-gradient-danger btn-block" id="btncancel" value="Cancel" />
 
-                    </div>
+                    <input type="button" class="btn btn-block bg-gradient-danger btn-block" id="btncancel" value="Cancel" />
+                   
                 </div>
             </div>
         </div>
-        <div id="accordion" >
+        <div id="accordion">
             <div class="card card-default ">
                 <div class="card-header" style="background-color: #33CCCC">
                     <h4 class="card-title">Match Voucher</h4>
@@ -417,8 +463,8 @@
                         <br />
                         <!--here will the save and cancel buttons-->
                         <div class="row" style="padding:0px 10px 0px 10px">
-                            <input type="button" id="btnptmsave" class="button success" value="Submit" />
-                            <input type="button" class="button danger" id="btnptmcancel" value="Cancel" />
+                            <input type="button" id="btnptmsave" class="btn btn-block bg-gradient-success btn-block" value="Submit" />
+                            <input type="button" class="btn btn-block bg-gradient-danger btn-block" id="btnptmcancel" value="Cancel" />
                         </div>
                         <br />
                     </div>
@@ -432,14 +478,36 @@
             @Html.EditorFor(model => model.TransactionCode, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = true } })
         </div>
     </form>
+    <!--scripts here by vishal pardeshi-->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!--datatable scripts here-->
+    <!-- Other necessary scripts -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/moment/moment.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js" type="text/javascript"></script>
     <!--------------------------------------------------------------------------script here----------------------------------------------------------------------------->
     <script>
         $(document).ready(function () {
-
             $('#VoucherCode').select2({
                 placeholder: 'This is my placeholder',
                 allowClear: true
             });
+            if (!IsitEdit) {
+                $('#TransactionDate').disabled = true;
+                $('#VendorName').disabled = true;
+            }
         });
     </script>
     <!--script for input validations and other-->
@@ -503,7 +571,40 @@
                 // Set the vendor name in the specified <td> element
                 $('#ptmtransactiondate').text(transactionDate);
             });
+            function preventBack() {
+                window.history.forward();
+            }
+            setTimeout("preventBack()", 0);
+            window.onunload = function () { null };
         });
+
+        //date validation here
+        $(document).ready(function () {
+            var check = '@IsitEdit'.toString();
+            if (check == "False") {
+                var today = new Date();
+                function formatDate(date) {
+                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                    var day = String(date.getDate()).padStart(2, '0');
+                    var year = date.getFullYear();
+
+                    return day + '-' + month + '-' + year;
+                }
+                var formattedToday = formatDate(today);
+                // Set the default value to today's date
+                $('#TransactionDate').val(formattedToday);
+                $('#TransactionDate').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'DD-MM-YYYY',
+                    },
+                    maxDate: formattedToday // Disable future dates
+                });
+            }
+
+        });
+
     </script>
     <!--script for the add item button and calculating the total amount-->
     <script>
@@ -614,7 +715,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '/Accountant/DeletePurchaseItemAsyncVP', 
+                            url: '/Accountant/DeletePurchaseItemAsyncVP',
                             type: 'POST',
                             data: { itemId: itemId },
                             success: function (response) {
@@ -759,57 +860,92 @@
             });
             return PurchaseItemsVPModels;
         }
-
         $('#btnsave').click(function (e) {
             e.preventDefault();
+
             var isvalid = validationforSubmit() && validateRow();
             if (isvalid) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "The details will be saved .",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, go ahead!',
-                    cancelButtonText: 'No, cancel!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const issavevalid = savePurchase();
-                        if (issavevalid) {
-                            displayToast("Purchase saved successfully..!", "success")
+                debugger;
+                // Validate purchase
+                var PurchaseCode = $('#TransactionCode').val();
+                $.ajax({
+                    url: '/Accountant/ValidatePurchaseAsyncVP',
+                    type: 'POST',
+                    data: { PurchaseCode: PurchaseCode },
+                    success: function (response) {
+                        if (response.success) {
+                           // Confirm save
                             Swal.fire({
-                                title: 'Want to Pay ?',
-                                text: "The details are saved , you can pay for purchase now.",
+                                title: 'Are you sure?',
+                                text: "The details will be saved.",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, go ahead!',
+                                cancelButtonText: 'No, cancel!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    const issavevalid = savePurchase();
+                                    if (issavevalid) {
+                                        displayToast("Purchase saved successfully!", "success");
+                                        Swal.fire({
+                                            title: 'Want to pay?',
+                                            text: "The details are saved, you can pay for the purchase now.",
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, pay now!',
+                                            cancelButtonText: 'No, cancel!'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                getdatatoPayment();
+                                                $('#purchasediv').hide();
+                                                $('#accordion').show();
+                                                fetchvoucher();
+                                            } else {
+                                               //nothing happens
+                                            }
+                                        });
+                                    } else {
+                                        displayToast("There was a problem saving the purchase.", "error");
+                                    }
+                                }
+                            });
+                        } else {
+                            // If not successful, show a Swal to pay or go back
+                            Swal.fire({
+                                title: 'Purchase already saved?',
+                                text: "You can pay for the purchase now or later.",
                                 icon: 'warning',
                                 showCancelButton: true,
                                 confirmButtonColor: '#3085d6',
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'Yes, pay now!',
-                                cancelButtonText: 'No, cancel!'
+                                cancelButtonText: 'No, pay later!'
                             }).then((result) => {
                                 if (result.isConfirmed) {
+                                    // Show payment section and fetch vouchers
                                     getdatatoPayment();
                                     $('#purchasediv').hide();
-                                    $('#accordion').show(); // Show the hidden div after saving
-                                    //fetching the vouchers for the payment
+                                    $('#accordion').show();
                                     fetchvoucher();
-                                }
-                                else {
-                                     window.location.href = '@Url.Action("DetailsPurchaseAsyncVP")';
+                                } else {
+                                    window.location.href = '@Url.Action("DetailsPurchaseAsyncVP")';
                                 }
                             });
                         }
-                        else {
-                            displayToast("there is been problem saving purchase..!", "error")
-                        }
+                    },
+                    error: function () {
+                        displayToast("An error occurred during validation.", "error");
                     }
                 });
-            }
-            else {
-                displayToast("there is validation problem", "error");
+            } else {
+                displayToast("please fill the apropriate details..!", "error");
             }
         });
+
        function fetchvoucher() {
             var vendorName = $('#VendorName').val();
             $.ajax({
@@ -1047,7 +1183,10 @@
     <!------------------------------------------------------------------------------update scripts------------------------------------------------------------>
     <script>
         $(document).ready(function () {
-            getPurchasedItems()
+            var check = '@IsitEdit'.toString();
+            if (check === "True") {
+                getPurchasedItems();
+            }
         });
         function addrowupdate() {
             // Clone the first row
@@ -1067,7 +1206,8 @@
             // Append the cloned row to the table
             $("#tblpurchaseitem tbody").append($clone);
         }
-       function getPurchasedItems() {
+        function getPurchasedItems() {
+            debugger;
             var listOfItems = @Html.Raw(Json.Encode(ViewBag.ListofItems));
             var $tableBody = $('#tblpurchaseitem tbody');
 
@@ -1120,6 +1260,8 @@
                         cancelButtonText: 'No, cancel!'
                     }).then((willUpdate) => {
                         if (willUpdate) {
+                            const issuccess = updatePurchase();
+                            displayToast("saved successfully..!", "success");
                           Swal.fire({
                             title: 'Want to Pay ?',
                             text: "The details are saved , you can pay for purchase now.",
@@ -1129,14 +1271,11 @@
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Yes, pay now!',
                             cancelButtonText: 'No, cancel!'
-                        }).then((result) => {
-                            const issuccess = updatePurchase();
-                            if (issuccess) {
-                                displayToast("saved successfully..!", "success");
+                          }).then((result) => {
+                              if (result.isConfirmed) {
                                 getdatatoPayment();
                                 $('#purchasediv').hide();
                                 $('#accordion').show(); // Show the hidden div after saving
-                                //fetching the vouchers for the payment
                                 fetchvoucher();
                             }
                             else {
